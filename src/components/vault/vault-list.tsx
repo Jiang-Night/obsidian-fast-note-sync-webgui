@@ -4,6 +4,7 @@ import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { handleStorage } from "@/components/api-handle/storage-handle";
 import { StorageConfig, StorageTypeValue } from "@/lib/types/storage";
 import { ChangePassword } from "@/components/user/change-password";
+import { handleUser } from "@/components/api-handle/user-handle";
 import { Cloudflare, Aws, AlibabaCloud } from "@lobehub/icons";
 import { useAuth } from "@/components/context/auth-context";
 import { StorageForm } from "@/components/vault/vault-form";
@@ -15,12 +16,13 @@ import env from "@/env.ts";
 
 export function VaultList() {
   useEffect(() => {
-    reloadList()
+    handleUserInfo(logout)
   }, [])
 
   // 语言包
   const { t } = useTranslation()
 
+  const { handleUserInfo } = handleUser()
   const { logout } = useAuth()
 
   const [configs, setConfigs] = useState<StorageConfig[]>([])

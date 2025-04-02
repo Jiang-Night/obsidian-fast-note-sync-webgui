@@ -1,19 +1,18 @@
+import { changePasswdSchema } from "@/lib/validations/user-schema";
+import { handleUser } from "@/components/api-handle/user-handle";
+import type { ChangePassword } from "@/lib/types/user";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 // src/components/ChangePassword.tsx
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useTranslation } from "react-i18next"
-import { handleUser } from "@/components/api-handle/user-handle"
-import type { ChangePassword } from "@/lib/types/user"
-import { changePasswdSchema } from "@/lib/validations/user-schema"
+import { useForm } from "react-hook-form";
 
-export function ChangePassword({close}: {close: () => void}) {
+
+export function ChangePassword({ close }: { close: () => void }) {
   const { t } = useTranslation()
-    const { handleChangePassword } = handleUser()
-
-
+  const { handleUserChangePassword } = handleUser()
 
   // prettier-ignore
 
@@ -22,7 +21,7 @@ export function ChangePassword({close}: {close: () => void}) {
     defaultValues: {},
   })
   const onFormSubmit = (data: ChangePassword) => {
-    handleChangePassword(data, () => {
+    handleUserChangePassword(data, () => {
       close()
     })
   }
