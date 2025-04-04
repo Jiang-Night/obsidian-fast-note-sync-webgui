@@ -1,15 +1,15 @@
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
-import { StorageConfig } from "@/lib/types/storage";
 import { getBrowserLang } from "@/lib/i18n/utils";
+import { VaultType } from "@/lib/types/vault";
 import env from "@/env.ts";
 
 
-export function handleStorage() {
+export function handleVault() {
   const { openConfirmDialog } = useConfirmDialog() // 使用 useContext 来获取上下文值
   const token = localStorage.getItem("token")!
 
   const handleVaultList = async (callback: (key: any) => void) => {
-    const response = await fetch(env.API_URL + "/api/user/cloud_config?limit=100", {
+    const response = await fetch(env.API_URL + "/api/vault?limit=100", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -29,11 +29,11 @@ export function handleStorage() {
     }
   }
 
-  const handleStorageDelete = async (id: string) => {
+  const handleVaultDelete = async (id: string) => {
     const data = {
       id: id,
     }
-    const response = await fetch(env.API_URL + "/api/user/cloud_config", {
+    const response = await fetch(env.API_URL + "/api/vault", {
       method: "DELETE",
       body: JSON.stringify(data),
       headers: {
@@ -52,12 +52,12 @@ export function handleStorage() {
     }
   }
 
-  const handleStorageUpdate = async (data: StorageConfig, callback: (data2: StorageConfig) => void) => {
-    const formData = { ...data, isEnabled: data.isEnabled ? 1 : 0 } as Omit<StorageConfig, "isEnabled"> & { isEnabled: number }
+  const handleVaultUpdate = async (data: VaultType, callback: (data2: VaultType) => void) => {
 
-    const response = await fetch(env.API_URL + "/api/user/cloud_config", {
+
+    const response = await fetch(env.API_URL + "/api/vault", {
       method: "POST",
-      body: JSON.stringify(formData),
+      body: JSON.stringify(data),
       headers: {
         "Content-Type": "application/json",
         Domain: window.location.origin,
@@ -78,7 +78,7 @@ export function handleStorage() {
     }
   }
 
-  const handleStorageTypes = async (callback: (data2: Array<string>) => void) => {
+  const handleVaultTypes = async (callback: (data2: Array<string>) => void) => {
 
     const response = await fetch(env.API_URL + "/api/user/cloud_config_enabled_types", {
       method: "GET",
@@ -104,8 +104,7 @@ export function handleStorage() {
 
   return {
     handleVaultList,
-    handleStorageDelete,
-    handleStorageUpdate,
-    handleStorageTypes,
+    handleVaultDelete,
+    handleVaultUpdate,
   }
 }

@@ -1,15 +1,16 @@
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
-import { storageSchema } from "@/lib/validations/storage-schema"
-import { handleStorage } from "@/components/api-handle/storage-handle"
-import type { StorageConfig } from "@/lib/types/storage"
-import { useState } from "react"
-import { useTranslation } from "react-i18next"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { handleVault } from "@/components/api-handle/vault-handle";
+import { storageSchema } from "@/lib/validations/storage-schema";
+import type { StorageConfig } from "@/lib/types/storage";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+
 
 interface StorageFormProps {
   config?: StorageConfig
@@ -22,7 +23,7 @@ export function StorageForm({ config, types, onSubmit }: StorageFormProps) {
 
   const [storageType, setStorageType] = useState<StorageConfig["type"] | undefined>(config?.type)
 
-  const { handleStorageUpdate } = handleStorage()
+  const { handleVaultUpdate } = handleVault()
 
   // prettier-ignore
   const { register, handleSubmit, formState: { errors }, setValue } = useForm<StorageConfig>({
@@ -35,7 +36,7 @@ export function StorageForm({ config, types, onSubmit }: StorageFormProps) {
       data.id = config.id
     }
     console.log(data)
-    handleStorageUpdate(data, () => {
+    handleVaultUpdate(data, () => {
       onSubmit()
     })
   }

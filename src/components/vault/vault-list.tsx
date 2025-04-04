@@ -1,8 +1,8 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { CirclePlus, Pencil, Trash2, Check, User, LogOut, Clipboard, Info } from "lucide-react";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
-import { handleStorage } from "@/components/api-handle/storage-handle";
 import { StorageConfig, StorageTypeValue } from "@/lib/types/storage";
+import { handleVault } from "@/components/api-handle/vault-handle";
 import { ChangePassword } from "@/components/user/change-password";
 import { handleUser } from "@/components/api-handle/user-handle";
 import { Cloudflare, Aws, AlibabaCloud } from "@lobehub/icons";
@@ -39,10 +39,9 @@ export function VaultList() {
 
   const { openConfirmDialog } = useConfirmDialog() // 使用 useContext 来获取上下文值
 
-  const { handleVaultList, handleStorageDelete, handleStorageTypes } = handleStorage()
+  const { handleVaultList, handleVaultDelete } = handleVault()
 
   const reloadList = async () => {
-    handleStorageTypes(setStorageTypes)
     handleVaultList(setConfigs)
   }
 

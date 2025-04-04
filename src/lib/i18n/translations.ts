@@ -77,7 +77,7 @@ const translations = {
     passwordMinLength: "Password must be at least 6 characters long",
     usernameMinLength: "Username must be at least 3 characters long",
     emailInvalid: "Please enter a valid email address",
-    passwordMismatch: "The two passwords entered do not match",
+    passwordMismatch: "Passwords do not match",
     oss: "OSS",
     s3: "S3",
     r2: "R2",
@@ -92,6 +92,9 @@ const translations = {
     currentPassword: "Current Password",
     newPassword: "New Password",
     confirmNewPassword: "Confirm New Password",
+    passwordChangedSuccess: "Password changed successfully",
+    passwordChangeFailed: "Failed to change password",
+    submitting: "Submitting...",
   },
   zh: {
     title: "用户登录",
@@ -152,7 +155,10 @@ const translations = {
     changePassword: "修改密码",
     currentPassword: "当前密码",
     newPassword: "新密码",
-    confirmNewPassword: "确认密码",
+    confirmNewPassword: "确认新密码",
+    passwordChangedSuccess: "密码修改成功",
+    passwordChangeFailed: "密码修改失败",
+    submitting: "提交中...",
   },
 }
 
