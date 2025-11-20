@@ -1,0 +1,58 @@
+import { addCacheBuster } from "@/lib/utils/cache-buster";
+import { getBrowserLang } from "@/lib/i18n/utils";
+import { useState, useEffect } from "react";
+import env from "@/env.ts";
+
+
+export interface VersionInfo {
+    buildTime: string;
+    gitTag: string;
+    version: string;
+}
+
+export function useVersion() {
+    const [versionInfo, setVersionInfo] = useState<VersionInfo | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        const fetchVersion = async () => {
+            setIsLoading(true);
+            setError(null);
+            try {
+                const response = await fetch(addCacheBuster(env.API_URL + "/api/version"), {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Domain: window.location.origin,
+                        Lang: getBrowserLang(),
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const res = await response.json();
+                if (res.code < 100 && res.code > 0 && res.data) {
+                    setVersionInfo(res.data);
+                } else {
+                    setError(res.message || "Failed to fetch version info");
+                }
+            } catch (error) {
+                setError("Failed to fetch version info");
+                console.error("Version fetch error:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        fetchVersion();
+    }, []);
+
+    return {
+        versionInfo,
+        isLoading,
+        error,
+    };
+}

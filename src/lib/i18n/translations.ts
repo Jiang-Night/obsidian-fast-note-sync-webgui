@@ -6,7 +6,9 @@ import i18n from "i18next";
 const translations = {
   en: {
     title: "User Login",
-    subtitle: "Obsidian Fast Note Sync Service - High-performance real-time note synchronization service built with Golang + Websocket",
+    subtitle: "A high-performance, low-latency note synchronization service built with Golang + Websocket + Sqlite + React, requires Obsidian Fast Note Sync Plugin",
+    subtitlePrefix: "A high-performance, low-latency note synchronization service built with Golang + Websocket + Sqlite + React, requires",
+    subtitlePluginName: "Obsidian Fast Note Sync Plugin",
     credentials: "Username (or Email)",
     username: "Username",
     password: "Password",
@@ -111,7 +113,10 @@ const translations = {
   },
   zh: {
     title: "用户登录",
-    subtitle: "Obsidian Fast Note Sync Service 服务端,基于 Golang + Websocket 构建的高性能笔记实时同步服务",
+    subtitle: "基于 Golang + Websocket + Sqlite + React 构建的高性能 低延迟 笔记同步服务, 需要 Obsidian Fast Note Sync Plugin 配合使用",
+    subtitlePrefix: "基于 Golang + Websocket + Sqlite + React 构建的高性能 低延迟 笔记同步服务, 需要和",
+    subtitlePluginName: "Obsidian Fast Note Sync Plugin",
+    subtitleSuffix: "配合使用",
     credentials: "用户名 ( 或 邮箱 )",
     username: "用户名",
     password: "密码",

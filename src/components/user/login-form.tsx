@@ -1,14 +1,15 @@
-import { createLoginSchema, type LoginFormData } from "@/lib/validations/user-schema"
-import { useConfirmDialog } from "@/components/context/confirm-dialog-context"
-import { useAuth } from "@/components/api-handle/use-auth"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Button } from "@/components/ui/button"
-import { useTranslation } from "react-i18next"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { changeLang } from "@/lib/i18n/utils"
-import { useForm } from "react-hook-form"
-import { Languages } from "lucide-react"
+import { createLoginSchema, type LoginFormData } from "@/lib/validations/user-schema";
+import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
+import { useAuth } from "@/components/api-handle/use-auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { changeLang } from "@/lib/i18n/utils";
+import { useForm } from "react-hook-form";
+import { Languages } from "lucide-react";
+
 
 interface LoginFormProps {
   onSuccess: () => void
@@ -61,7 +62,18 @@ export function LoginForm({ onSuccess, onRegister }: LoginFormProps) {
           <Button variant="link" onClick={onSoft} type="button" className="text-gray-500 p-0 pr-2">
             Obsidian Fast Note Sync Service
           </Button>
-          <p className="text-gray-400 text-xs italic ">{t("subtitle")}</p>
+          <p className="text-gray-400 text-xs italic ">
+            {t("subtitlePrefix")}{" "}
+            <a
+              href="https://github.com/haierkeys/obsidian-fast-note-sync"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-500 hover:text-blue-600 underline"
+            >
+              {t("subtitlePluginName")}
+            </a>
+            {i18n.language === "zh" && ` ${t("subtitleSuffix")}`}
+          </p>
         </div>
       </div>
 

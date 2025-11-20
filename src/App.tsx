@@ -1,18 +1,21 @@
-import { useConfirmDialog } from "@/components/context/confirm-dialog-context"
-import { ChangePassword } from "@/components/user/change-password"
-import { RegisterForm } from "@/components/user/register-form"
-import { VaultList } from "@/components/vault/vault-list"
-import { LogOut, Menu, X, Clipboard } from "lucide-react"
-import { LoginForm } from "@/components/user/login-form"
-import { useTranslation } from "react-i18next"
-import { useState } from "react"
-import env from "@/env.ts"
+import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
+import { ChangePassword } from "@/components/user/change-password";
+import { RegisterForm } from "@/components/user/register-form";
+import { VaultList } from "@/components/vault/vault-list";
+import { LogOut, Menu, X, Clipboard } from "lucide-react";
+import { LoginForm } from "@/components/user/login-form";
+import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import env from "@/env.ts";
 
-import { useAuth } from "./components/context/auth-context"
+import { useVersion } from "./components/api-handle/use-version";
+import { useAuth } from "./components/context/auth-context";
+
 
 function App() {
   const { t } = useTranslation()
   const { isLoggedIn, login, logout } = useAuth()
+  const { versionInfo } = useVersion()
 
   const [isRegistering, setIsRegistering] = useState(false)
   const [activeMenu, setActiveMenu] = useState("vaults")
@@ -90,7 +93,7 @@ function App() {
             <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xs sm:text-base">OS</span>
             </div>
-            <span className="text-sm sm:text-xl font-semibold">Obsidian Fast Note Sync Service</span>
+            <span className="text-sm sm:text-xl font-semibold">Obsidian Fast Note Sync</span>
           </div>
 
           {/* User Actions */}
@@ -198,6 +201,15 @@ function App() {
             <a href="https://github.com/haierkeys/fast-note-sync-service" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline">
               GitHub
             </a>
+            {versionInfo && (
+              <>
+                <span className="hidden sm:inline">•</span>
+                <span className="text-gray-500">
+                  v{versionInfo.version}
+                  {versionInfo.gitTag && ` ( ${versionInfo.gitTag} / ${versionInfo.buildTime} )`}
+                </span>
+              </>
+            )}
           </div>
         </div>
       </div>
