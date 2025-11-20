@@ -76,7 +76,7 @@ function App() {
 
   return (
     <div className="flex justify-center w-full min-h-screen bg-gray-100">
-      <div className="flex flex-col rounded-lg border text-card-foreground shadow-sm w-full max-w-[1400px] m-2 sm:m-4 md:m-10 bg-gray-50">
+      <div className="flex flex-col rounded-lg border text-card-foreground shadow-sm w-full max-w-[1400px] m-2 sm:m-4 md:m-10 bg-gray-50 overflow-hidden">
         {/* Top Navigation Bar */}
         <div className="border-b px-3 sm:px-6 py-3 flex items-center justify-between bg-gray-50 rounded-t-lg">
           {/* Logo and Site Name */}
@@ -191,7 +191,7 @@ function App() {
         </div>
 
         {/* Footer */}
-        <div className="border-t px-4 py-3 bg-gray-50 text-center text-sm text-gray-600">
+        <div className="border-t px-4 py-3 bg-gray-50 text-center text-sm text-gray-600 rounded-b-lg">
           <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
             <span>© 2024 Obsidian Fast Note Sync Service</span>
             <span className="hidden sm:inline">•</span>

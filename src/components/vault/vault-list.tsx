@@ -99,59 +99,61 @@ export function VaultList() {
         </Button>
       </div>
 
-      <div className="rounded-md border overflow-x-auto w-full">
-        <Table className="w-full">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[80px]">ID</TableHead>
-              <TableHead>{t("vaultName")}</TableHead>
-              <TableHead className="w-[100px]">{t("noteCount")}</TableHead>
-              <TableHead className="w-[100px]">{t("size")}</TableHead>
-              <TableHead className="w-[160px]">{t("updatedAt")}</TableHead>
-              <TableHead className="w-[160px]">{t("createdAt")}</TableHead>
-              <TableHead className="text-right w-[120px]">{t("actions")}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {vaults.map((vault) => (
-              <TableRow key={vault.id}>
-                <TableCell className="font-mono text-xs">{vault.id}</TableCell>
-                <TableCell className="font-medium">{vault.vault}</TableCell>
-                <TableCell>{vault.noteCount}</TableCell>
-                <TableCell>{formatBytes(vault.size)}</TableCell>
-                <TableCell className="text-sm">{vault.updatedAt}</TableCell>
-                <TableCell className="text-sm">{vault.createdAt}</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end space-x-1">
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleCopyVaultConfig(vault.vault)} title={t("copyConfig").includes("Copy") ? `Copy ${vault.vault} Config` : `复制仓库 ${vault.vault} 配置`}>
-                      <Clipboard className="h-3 w-3 sm:h-4 sm:w-4" />
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-8 w-8"
-                      onClick={() => {
-                        setEditingVault(vault)
-                        setIsDialogOpen(true)
-                      }}>
-                      <Pencil className="h-3 w-3 sm:h-4 sm:w-4" />
-                    </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDelete(vault.id)}>
-                      <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-            {vaults.length === 0 && (
+      <div className="rounded-md border border-gray-300 w-full overflow-hidden">
+        <div className="overflow-x-auto">
+          <Table className="w-full">
+            <TableHeader>
               <TableRow>
-                <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
-                  {t("noVaults")}
-                </TableCell>
+                <TableHead className="w-[80px]">ID</TableHead>
+                <TableHead>{t("vaultName")}</TableHead>
+                <TableHead className="w-[100px]">{t("noteCount")}</TableHead>
+                <TableHead className="w-[100px]">{t("size")}</TableHead>
+                <TableHead className="w-[160px]">{t("updatedAt")}</TableHead>
+                <TableHead className="w-[160px]">{t("createdAt")}</TableHead>
+                <TableHead className="text-right w-[120px]">{t("actions")}</TableHead>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {vaults.map((vault) => (
+                <TableRow key={vault.id}>
+                  <TableCell className="font-mono text-xs">{vault.id}</TableCell>
+                  <TableCell className="font-medium">{vault.vault}</TableCell>
+                  <TableCell>{vault.noteCount}</TableCell>
+                  <TableCell>{formatBytes(vault.size)}</TableCell>
+                  <TableCell className="text-sm">{vault.updatedAt}</TableCell>
+                  <TableCell className="text-sm">{vault.createdAt}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end space-x-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleCopyVaultConfig(vault.vault)} title={t("copyConfig").includes("Copy") ? `Copy ${vault.vault} Config` : `复制仓库 ${vault.vault} 配置`}>
+                        <Clipboard className="h-3 w-3 sm:h-4 sm:w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8"
+                        onClick={() => {
+                          setEditingVault(vault)
+                          setIsDialogOpen(true)
+                        }}>
+                        <Pencil className="h-3 w-3 sm:h-4 sm:w-4" />
+                      </Button>
+                      <Button variant="ghost" size="icon" className="h-8 w-8" onClick={() => handleDelete(vault.id)}>
+                        <Trash2 className="h-3 w-3 sm:h-4 sm:w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {vaults.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
+                    {t("noVaults")}
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </div>
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
