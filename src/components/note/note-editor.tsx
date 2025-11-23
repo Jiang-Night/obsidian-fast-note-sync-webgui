@@ -81,7 +81,17 @@ export function NoteEditor({ vault, note, mode, onBack, onSaveSuccess, onEdit }:
                     ) : (
                         <Input
                             value={path}
-                            onChange={(e) => setPath(e.target.value)}
+                            onChange={(e) => {
+                                // Filter out characters that are invalid in file systems
+                                // Windows: < > : " \ | ? *
+                                // Allow / for folder paths
+                                // Also filter control characters (0-31)
+                                // Trim leading and trailing spaces
+                                const sanitized = e.target.value
+                                    .replace(/[<>:"\\|?*\x00-\x1f]/g, '')
+                                    .trim();
+                                setPath(sanitized);
+                            }}
                             placeholder={t("noteTitlePlaceholder").replace(" (e.g., note.md)", "").replace(" (例如: note.md)", "")}
                             className="font-bold text-lg border-none shadow-none focus-visible:ring-0 px-0"
                         />
