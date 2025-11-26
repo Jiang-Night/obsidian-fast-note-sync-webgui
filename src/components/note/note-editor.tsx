@@ -56,7 +56,7 @@ export function NoteEditor({ vault, note, mode, onBack, onSaveSuccess, onEdit }:
                 // Renaming
                 options.srcPath = originalNote.path;
                 options.srcPathHash = originalNote.pathHash;
-                options.pathHash = originalNote.pathHash; // API doc says pathHash is needed when renaming? Let's try sending it.
+                options.pathHash = originalNote.pathHash;
             } else {
                 options.pathHash = originalNote.pathHash;
                 options.contentHash = originalNote.contentHash;
@@ -69,15 +69,35 @@ export function NoteEditor({ vault, note, mode, onBack, onSaveSuccess, onEdit }:
         });
     };
 
+    // Helper to split path for display
+    const getDisplayParts = (fullPath: string) => {
+        const lastSlash = fullPath.lastIndexOf('/');
+        if (lastSlash === -1) return { folder: '', filename: fullPath };
+        return {
+            folder: fullPath.substring(0, lastSlash),
+            filename: fullPath.substring(lastSlash + 1)
+        };
+    };
+
+    const { folder, filename } = getDisplayParts(path);
+
     return (
         <Card className="w-full h-full flex flex-col">
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 border-b gap-4">
-                <div className="flex items-center space-x-2 flex-1">
-                    <Button variant="ghost" size="icon" onClick={onBack}>
+                <div className="flex items-center space-x-2 flex-1 overflow-hidden">
+                    <Button variant="ghost" size="icon" onClick={onBack} className="shrink-0">
                         <ArrowLeft className="h-5 w-5" />
                     </Button>
                     {mode === "view" ? (
-                        <span className="font-bold text-lg px-0 break-words">{path}</span>
+                        <div className="flex items-center text-lg overflow-hidden whitespace-nowrap text-ellipsis">
+                            {folder && (
+                                <>
+                                    <span className="text-muted-foreground">{folder}</span>
+                                    <span className="text-muted-foreground mx-1">/</span>
+                                </>
+                            )}
+                            <span className="font-bold">{filename}</span>
+                        </div>
                     ) : (
                         <Input
                             value={path}
@@ -98,12 +118,12 @@ export function NoteEditor({ vault, note, mode, onBack, onSaveSuccess, onEdit }:
                     )}
                 </div>
                 {mode === "edit" ? (
-                    <Button onClick={handleSave} disabled={saving || loading || !path}>
+                    <Button onClick={handleSave} disabled={saving || loading || !path} className="shrink-0">
                         <Save className="mr-2 h-4 w-4" />
                         {saving ? t("saving") : t("save")}
                     </Button>
                 ) : (
-                    <Button onClick={onEdit} variant="outline">
+                    <Button onClick={onEdit} variant="outline" className="shrink-0">
                         <Pencil className="mr-2 h-4 w-4" />
                         {t("edit")}
                     </Button>
