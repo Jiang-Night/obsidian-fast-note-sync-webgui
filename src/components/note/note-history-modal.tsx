@@ -48,8 +48,15 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash }:
     const fetchHistoryList = (currentPage: number) => {
         setLoading(true);
         handleNoteHistoryList(vault, notePath, pathHash, currentPage, pageSize, (data) => {
-            setHistoryList(data.list);
-            setTotalRows(data.pager.totalRows);
+            if (data) {
+                setHistoryList(data.list || []);
+                if (data.pager) {
+                    setTotalRows(data.pager.totalRows || 0);
+                }
+            } else {
+                setHistoryList([]);
+                setTotalRows(0);
+            }
             setLoading(false);
         });
     };
@@ -91,7 +98,9 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash }:
         };
 
         diffs.forEach(d => {
-            const parts = d.Text.split("\n");
+            if (!d || d.Text === null || d.Text === undefined) return;
+            const textContent = String(d.Text);
+            const parts = textContent.split("\n");
             parts.forEach((part, i) => {
                 currentLineSegments.push({ Type: d.Type, Text: part });
                 if (i < parts.length - 1) {
@@ -105,13 +114,14 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash }:
 
         // 2. 过滤逻辑：如果开启了“只看差异”，仅保留包含修改内容 (Type != 0) 的行
         const displayLines = showDiffOnly
-            ? processedLines.filter(line => line.segments.some(segment => segment.Type !== 0))
+            ? processedLines.filter(line => line.segments && line.segments.some(segment => segment.Type !== 0))
             : processedLines;
 
         // 3. 构建 HTML
         const html = displayLines.map((line) => {
+            if (!line.segments) return "";
             const lineContent = line.segments.map(d => {
-                const text = d.Text
+                const text = String(d.Text || "")
                     .replace(/&/g, "&amp;")
                     .replace(/</g, "&lt;")
                     .replace(/>/g, "&gt;");
@@ -143,7 +153,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash }:
     };
 
     const renderClientIcon = (clientName: string = "") => {
-        const name = clientName.toLowerCase();
+        const name = String(clientName || "").toLowerCase();
 
         if (name.includes("web")) {
             return <Chrome className="h-4 w-4 text-[#4285F4] shrink-0" />;
@@ -160,7 +170,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash }:
         return <Laptop className="h-4 w-4 text-slate-400 shrink-0" />;
     };
 
-    const totalPages = Math.ceil(totalRows / pageSize);
+    const totalPages = Math.ceil((totalRows || 0) / pageSize);
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -169,11 +179,11 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash }:
                     <DialogTitle className="flex items-center gap-2 font-normal overflow-hidden">
                         <History className="h-4 w-4 shrink-0 text-muted-foreground opacity-70" />
                         <span className="shrink-0 text-muted-foreground">{t("noteHistory")}:</span>
-                        <span className="truncate text-foreground font-medium">{notePath.replace(/\.md$/, "")}</span>
+                        <span className="truncate text-foreground font-medium">{String(notePath || "").replace(/\.md$/, "")}</span>
                     </DialogTitle>
                 </DialogHeader>
 
-                <div className="flex-1 overflow-auto py-4">
+                <div className="flex-1 overflow-auto py-4 custom-scrollbar">
                     <div className="space-y-6">
                         {/* 列表部分 */}
                         <div className="border rounded-md">
@@ -182,8 +192,8 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash }:
                                     <TableRow>
                                         <TableHead className="w-[80px]">{t("historyVersion")}</TableHead>
                                         <TableHead>{t("clientSource")}</TableHead>
-                                        <TableHead>{t("createdAt")}</TableHead>
-                                        <TableHead className="text-right">{t("viewDetail")}</TableHead>
+                                        <TableHead>{t("updatedAt")}</TableHead>
+                                        <TableHead className="text-right pr-7">{t("viewDetail")}</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -191,20 +201,22 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash }:
                                         <TableRow>
                                             <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">{t("loadingHistory")}</TableCell>
                                         </TableRow>
-                                    ) : historyList.length === 0 ? (
+                                    ) : !Array.isArray(historyList) || Array.isArray(historyList) && historyList.length === 0 ? (
                                         <TableRow>
                                             <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">{t("noHistory")}</TableCell>
                                         </TableRow>
                                     ) : (
-                                        historyList.map((item) => (
+                                        historyList.filter(item => item !== null).map((item) => (
                                             <TableRow key={item.id} className={`hover:bg-muted/50 transition-colors ${selectedHistory?.id === item.id ? "bg-blue-50" : ""}`}>
                                                 <TableCell className="font-mono">v{item.version}</TableCell>
-                                                <TableCell className="flex items-center gap-2 text-muted-foreground">
-                                                    <span>{item.clientName || "Unknown"}</span>
-                                                    {renderClientIcon(item.clientName)}
+                                                <TableCell className="text-muted-foreground">
+                                                    <div className="flex items-center gap-2">
+                                                        <span>{item.clientName || "Unknown"}</span>
+                                                        {renderClientIcon(item.clientName)}
+                                                    </div>
                                                 </TableCell>
                                                 <TableCell className="text-muted-foreground">
-                                                    {format(new Date(item.createdAt), "yyyy-MM-dd HH:mm:ss")}
+                                                    {item.createdAt ? format(new Date(item.createdAt), "yyyy-MM-dd HH:mm:ss") : "-"}
                                                 </TableCell>
                                                 <TableCell className="text-right">
                                                     <Button variant="ghost" size="sm" onClick={() => handleViewDetail(item.id)}>
@@ -234,7 +246,9 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash }:
                                         <ChevronLeft className="h-4 w-4 mr-1" />
                                         {t("previous")}
                                     </Button>
-                                    <span className="text-sm font-medium">{t("page")} {page} / {totalPages} {t("next").includes("下一页") ? "页" : ""}</span>
+                                    <span className="text-sm font-medium">
+                                        {t("page")} {page} / {totalPages} {String(t("next") || "").includes("下一页") ? "页" : ""}
+                                    </span>
                                     <Button
                                         variant="outline"
                                         size="sm"

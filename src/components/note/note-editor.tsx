@@ -84,9 +84,9 @@ export function NoteEditor({ vault, note, mode, onBack, onSaveSuccess, onEdit, o
 
     return (
         <Card className="w-full h-full flex flex-col">
-            <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2 border-b gap-4">
-                <div className="flex items-start space-x-2 flex-1 min-w-0">
-                    <Button variant="ghost" size="icon" onClick={onBack} className="shrink-0 mt-0.5">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 py-3 border-b gap-4">
+                <div className="flex items-center space-x-2 flex-1 min-w-0">
+                    <Button variant="ghost" size="icon" onClick={onBack} className="shrink-0">
                         <ArrowLeft className="h-5 w-5" />
                     </Button>
                     {mode === "view" ? (

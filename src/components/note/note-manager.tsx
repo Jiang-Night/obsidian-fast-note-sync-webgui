@@ -64,13 +64,22 @@ export function NoteManager({ vault = "defaultVault", onVaultChange, onNavigateT
     };
 
     const handleBack = () => {
-        setView("list");
-        setSelectedNote(undefined);
+        if (mode === "edit" && selectedNote) {
+            setMode("view");
+        } else {
+            setView("list");
+            setSelectedNote(undefined);
+        }
     };
 
     const handleSaveSuccess = () => {
-        setView("list");
-        setSelectedNote(undefined);
+        setMode("view");
+        // 如果是新创建的笔记，由于 selectedNote 可能还是 undefined
+        // 这里需要 fetchNote 或者根据 fullPath 重新选中，
+        // 但为了简单，如果保存成功且没有 selectedNote，可以先回列表
+        if (!selectedNote) {
+            setView("list");
+        }
     };
 
     const handleEdit = () => {

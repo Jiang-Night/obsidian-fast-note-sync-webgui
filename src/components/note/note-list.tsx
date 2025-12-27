@@ -44,9 +44,13 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
     const fetchNotes = (currentPage: number = page, currentPageSize: number = pageSize, keyword: string = debouncedKeyword) => {
         setLoading(true);
         handleNoteList(vault, currentPage, currentPageSize, keyword, (data) => {
-            setNotes(data.list);
-            setTotalRows(data.pager.totalRows);
-            // setPage(data.pager.page); // Don't update page from response, trust the state
+            if (data) {
+                setNotes(data.list || []);
+                setTotalRows(data.pager?.totalRows || 0);
+            } else {
+                setNotes([]);
+                setTotalRows(0);
+            }
             setLoading(false);
         });
     };
@@ -136,7 +140,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
             </CardHeader>
             <CardContent className="p-0">
                 <div className="pb-6 pt-2">
-                    {!notes || notes.length === 0 ? (
+                    {!Array.isArray(notes) || notes.length === 0 ? (
                         <div className="text-center text-gray-500 py-8">{t("noNotes")}</div>
                     ) : (
                         <>

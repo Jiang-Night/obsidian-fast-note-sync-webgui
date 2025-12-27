@@ -36,12 +36,14 @@ export function useNoteHandle() {
             }
             const res: NoteResponse<{ list: Note[], pager: { page: number, pageSize: number, totalRows: number } }> = await response.json()
             if (res.code > 0 && res.code <= 200) {
-                callback(res.data || { list: [], pager: { page: 1, pageSize: pageSize, totalRows: 0 } })
+                const data = res.data || { list: [], pager: { page: 1, pageSize: pageSize, totalRows: 0 } };
+                if (!data.list) data.list = [];
+                callback(data)
             } else {
                 openConfirmDialog(res.message, "error")
             }
-        } catch (error: any) {
-            openConfirmDialog(error.message, "error")
+        } catch (error: unknown) {
+            openConfirmDialog(error instanceof Error ? error.message : String(error), "error")
         }
     }
 
@@ -55,13 +57,16 @@ export function useNoteHandle() {
                 throw new Error("Network response was not ok")
             }
             const res: NoteResponse<NoteDetail> = await response.json()
-            if (res.code > 0 && res.code <= 200) {
+            if (res.code > 0 && res.code <= 200 && res.data) {
                 callback(res.data)
+            } else if (res.code > 0 && res.code <= 200) {
+                // handle empty data
+                console.warn("GetNote returned 200 but data is null");
             } else {
                 openConfirmDialog(res.message, "error")
             }
-        } catch (error: any) {
-            openConfirmDialog(error.message, "error")
+        } catch (error: unknown) {
+            openConfirmDialog(error instanceof Error ? error.message : String(error), "error")
         }
     }
 
@@ -87,15 +92,15 @@ export function useNoteHandle() {
             if (!response.ok) {
                 throw new Error("Network response was not ok")
             }
-            const res: NoteResponse<any> = await response.json()
+            const res: NoteResponse<unknown> = await response.json()
             if (res.code > 0 && res.code <= 200) {
                 openConfirmDialog(res.message, "success")
                 callback()
             } else {
                 openConfirmDialog(res.message + (res.details ? ": " + res.details.join(", ") : ""), "error")
             }
-        } catch (error: any) {
-            openConfirmDialog(error.message, "error")
+        } catch (error: unknown) {
+            openConfirmDialog(error instanceof Error ? error.message : String(error), "error")
         }
     }
 
@@ -114,15 +119,15 @@ export function useNoteHandle() {
             if (!response.ok) {
                 throw new Error("Network response was not ok")
             }
-            const res: NoteResponse<any> = await response.json()
+            const res: NoteResponse<unknown> = await response.json()
             if (res.code > 0 && res.code <= 200) {
                 openConfirmDialog(res.message, "success")
                 callback()
             } else {
                 openConfirmDialog(res.message + (res.details ? ": " + res.details.join(", ") : ""), "error")
             }
-        } catch (error: any) {
-            openConfirmDialog(error.message, "error")
+        } catch (error: unknown) {
+            openConfirmDialog(error instanceof Error ? error.message : String(error), "error")
         }
     }
 
@@ -143,12 +148,14 @@ export function useNoteHandle() {
             }
             const res: NoteResponse<NoteHistoryListResponse> = await response.json()
             if (res.code > 0 && res.code <= 200) {
-                callback(res.data)
+                const data = res.data || { list: [], pager: { page: 1, pageSize: pageSize, totalRows: 0 } };
+                if (!data.list) data.list = [];
+                callback(data)
             } else {
                 openConfirmDialog(res.message, "error")
             }
-        } catch (error: any) {
-            openConfirmDialog(error.message, "error")
+        } catch (error: unknown) {
+            openConfirmDialog(error instanceof Error ? error.message : String(error), "error")
         }
     }
 
@@ -162,13 +169,13 @@ export function useNoteHandle() {
                 throw new Error("Network response was not ok")
             }
             const res: NoteResponse<NoteHistoryDetail> = await response.json()
-            if (res.code > 0 && res.code <= 200) {
+            if (res.code > 0 && res.code <= 200 && res.data) {
                 callback(res.data)
             } else {
                 openConfirmDialog(res.message, "error")
             }
-        } catch (error: any) {
-            openConfirmDialog(error.message, "error")
+        } catch (error: unknown) {
+            openConfirmDialog(error instanceof Error ? error.message : String(error), "error")
         }
     }
 

@@ -1,7 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
+@font-face {
+  font-family: "LXGW WenKai Lite";
+  src: url("/fonts/LXGWWenKai-Light.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -30,7 +38,7 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
   }
- 
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -58,12 +66,67 @@
     --chart-5: 340 75% 55%;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
   }
-  body {
+  body,
+  input,
+  textarea,
+  .w-md-editor,
+  .wmde-markdown {
     @apply bg-background text-foreground;
+    font-family: "LXGW WenKai Lite", "Segoe UI", Segoe, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
   }
+}
+
+/* 自定义滚动条：浮动显示，不挤压内容（解决布局抖动） */
+.custom-scrollbar {
+  overflow-y: auto;
+  overflow-y: overlay; /* Chrome/Edge/Safari: 允许滚动条浮动在内容之上 */
+  scrollbar-gutter: stable; /* 支持此属性的浏览器会预留空间，防止内容跳动 */
+}
+
+/* 针对非支持 overflow: overlay 的浏览器优化 */
+@supports not (overflow: overlay) {
+  .custom-scrollbar {
+    scrollbar-gutter: stable;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.dark .custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Firefox 稳定支持 */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.custom-scrollbar:hover {
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+.dark .custom-scrollbar:hover {
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
 }
