@@ -27,7 +27,7 @@ export default defineConfig({
         drop_console: true,  // 去除 console.log
       },
     },
-    chunkSizeWarningLimit: 1000, // 降低警告阈值到 1MB
+    chunkSizeWarningLimit: 1500, // 降低警告阈值到 1MB
     rollupOptions: {
       output: {
         // 代码分割策略
