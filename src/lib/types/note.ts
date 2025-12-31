@@ -14,6 +14,8 @@ export interface Note {
 export interface NoteDetail extends Note {
     content: string
     contentHash: string
+    fileLinks: Record<string, string>
+    convertContent?: string
 }
 
 export interface NoteResponse<T> {
