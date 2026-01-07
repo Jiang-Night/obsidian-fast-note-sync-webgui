@@ -39,6 +39,8 @@ export default {
     addVault: "新建仓库",
     vaultName: "仓库名称",
     noteCount: "笔记数量",
+    attachmentCount: "附件",
+    totalSize: "共计 {{size}}",
     size: "占用空间",
     updatedAt: "更新时间",
     createdAt: "创建时间",

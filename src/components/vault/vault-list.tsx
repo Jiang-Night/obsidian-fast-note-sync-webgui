@@ -1,4 +1,4 @@
-import { Pencil, Trash2, Plus, Clipboard, FileText, Database, Clock } from "lucide-react";
+import { Pencil, Trash2, Plus, Clipboard, FileText, Database, Clock, RefreshCw } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
@@ -95,15 +95,26 @@ export function VaultList({ onNavigateToNotes }: VaultListProps) {
           <CardTitle className="text-xl font-bold">
             {t("vaultManagement")} ({vaults.length})
           </CardTitle>
-          <Button
-            onClick={() => {
-              setEditingVault(undefined)
-              setIsDialogOpen(true)
-            }}
-            size="sm">
-            <Plus className="mr-2 h-4 w-4" />
-            {t("addVault")}
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={loadVaults}
+              title={t("refresh")}
+              className="h-8 w-8"
+            >
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+            <Button
+              onClick={() => {
+                setEditingVault(undefined)
+                setIsDialogOpen(true)
+              }}
+              size="sm">
+              <Plus className="mr-2 h-4 w-4" />
+              {t("addVault")}
+            </Button>
+          </div>
         </CardHeader>
         <CardContent className="p-0">
           <div className="pb-6 pt-2">
@@ -131,7 +142,9 @@ export function VaultList({ onNavigateToNotes }: VaultListProps) {
                           <span className="hidden sm:inline">•</span>
                           <span>{vault.noteCount} {t("note") || "Notes"}</span>
                           <span>•</span>
-                          <span>{formatBytes(vault.size)}</span>
+                          <span>{vault.fileCount || "0"} {t("attachmentCount") || "附件"}</span>
+                          <span>•</span>
+                          <span>{t("totalSize", { size: formatBytes(vault.size) })}</span>
                           <span className="hidden sm:inline-flex items-center ml-2">
                             <Clock className="mr-1 h-3 w-3" />
                             {vault.updatedAt}
