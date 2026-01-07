@@ -81,7 +81,7 @@ function App() {
         styleContent = `
           @font-face {
             font-family: "LXGW WenKai Lite";
-            src: url("/fonts/LXGWWenKai-Light.woff") format("woff");
+            src: url("/static/fonts/font.woff2") format("woff");
             font-weight: normal;
             font-style: normal;
             font-display: swap;
@@ -216,57 +216,57 @@ function App() {
         {/* Top Navigation Bar */}
         {!isMaximized && (
           <div className="border-b px-3 sm:px-6 py-3 flex items-center justify-between bg-gray-50 rounded-t-lg">
-          {/* Logo and Site Name */}
-          <div className="flex items-center space-x-2 sm:space-x-3">
-            {/* Mobile Menu Button */}
-            {isLoggedIn && (
-              <button onClick={() => setShowMobileSidebar(!showMobileSidebar)} className="md:hidden p-2 hover:bg-gray-100 rounded-md">
-                {showMobileSidebar ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-              </button>
-            )}
-            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xs sm:text-base">OS</span>
-            </div>
-            <span className="text-sm sm:text-xl font-semibold">Obsidian Fast Note Sync</span>
-          </div>
-
-          {/* User Actions */}
-          {isLoggedIn && (
-            <div className="flex items-center space-x-2">
-              <LanguageSwitcher className="text-gray-600 hover:text-gray-900" />
-              <div className="relative">
-                <button onClick={() => setShowUserMenu(!showUserMenu)} className="flex items-center space-x-2 hover:bg-gray-100 rounded-full p-2">
-                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                    <span className="text-gray-600 text-xs sm:text-base">U</span>
-                  </div>
+            {/* Logo and Site Name */}
+            <div className="flex items-center space-x-2 sm:space-x-3">
+              {/* Mobile Menu Button */}
+              {isLoggedIn && (
+                <button onClick={() => setShowMobileSidebar(!showMobileSidebar)} className="md:hidden p-2 hover:bg-gray-100 rounded-md">
+                  {showMobileSidebar ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
                 </button>
-
-                {/* Dropdown Menu */}
-                {showUserMenu && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border z-10">
-                    <button
-                      onClick={() => {
-                        setShowChangePassword(true)
-                        setShowUserMenu(false)
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      {t("changePassword")}
-                    </button>
-                    <button
-                      onClick={() => {
-                        logout()
-                        setShowUserMenu(false)
-                      }}
-                      className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                      {t("logout")}
-                      <LogOut className="h-4 w-4 inline-block ml-2" />
-                    </button>
-                  </div>
-                )}
+              )}
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-xs sm:text-base">OS</span>
               </div>
+              <span className="text-sm sm:text-xl font-semibold">Obsidian Fast Note Sync</span>
             </div>
-          )}
-        </div>
+
+            {/* User Actions */}
+            {isLoggedIn && (
+              <div className="flex items-center space-x-2">
+                <LanguageSwitcher className="text-gray-600 hover:text-gray-900" />
+                <div className="relative">
+                  <button onClick={() => setShowUserMenu(!showUserMenu)} className="flex items-center space-x-2 hover:bg-gray-100 rounded-full p-2">
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                      <span className="text-gray-600 text-xs sm:text-base">U</span>
+                    </div>
+                  </button>
+
+                  {/* Dropdown Menu */}
+                  {showUserMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border z-10">
+                      <button
+                        onClick={() => {
+                          setShowChangePassword(true)
+                          setShowUserMenu(false)
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        {t("changePassword")}
+                      </button>
+                      <button
+                        onClick={() => {
+                          logout()
+                          setShowUserMenu(false)
+                        }}
+                        className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        {t("logout")}
+                        <LogOut className="h-4 w-4 inline-block ml-2" />
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
         )}
 
         {/* Content Area with Sidebar and Main Content */}
@@ -369,23 +369,23 @@ function App() {
         {/* Footer */}
         {!isMaximized && (
           <div className="border-t px-4 py-3 bg-gray-50 text-center text-sm text-gray-600 rounded-b-lg">
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
-            <span>© 2024 Obsidian Fast Note Sync Service</span>
-            <span className="hidden sm:inline">•</span>
-            <a href="https://github.com/haierkeys/fast-note-sync-service" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline">
-              GitHub
-            </a>
-            {versionInfo && (
-              <>
-                <span className="hidden sm:inline">•</span>
-                <span className="text-gray-500">
-                  v{versionInfo.version}
-                  {versionInfo.gitTag && ` ( ${versionInfo.gitTag} / ${versionInfo.buildTime} )`}
-                </span>
-              </>
-            )}
+            <div className="flex flex-col sm:flex-row justify-center items-center gap-2">
+              <span>© 2024 Obsidian Fast Note Sync Service</span>
+              <span className="hidden sm:inline">•</span>
+              <a href="https://github.com/haierkeys/fast-note-sync-service" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 hover:underline">
+                GitHub
+              </a>
+              {versionInfo && (
+                <>
+                  <span className="hidden sm:inline">•</span>
+                  <span className="text-gray-500">
+                    v{versionInfo.version}
+                    {versionInfo.gitTag && ` ( ${versionInfo.gitTag} / ${versionInfo.buildTime} )`}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
-        </div>
         )}
       </div>
     </div>

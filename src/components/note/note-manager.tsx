@@ -43,6 +43,7 @@ export function NoteManager({
         const saved = localStorage.getItem("notePageSize");
         return saved ? parseInt(saved, 10) : 10;
     });
+    const [searchKeyword, setSearchKeyword] = useState("");
 
     useEffect(() => {
         localStorage.setItem("notePageSize", pageSize.toString());
@@ -164,6 +165,8 @@ export function NoteManager({
                 setPage={setPage}
                 pageSize={pageSize}
                 setPageSize={setPageSize}
+                searchKeyword={searchKeyword}
+                setSearchKeyword={setSearchKeyword}
                 onViewHistory={handleViewHistory}
                 isRecycle={isRecycle}
             />

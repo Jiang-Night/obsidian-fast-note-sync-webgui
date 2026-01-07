@@ -24,17 +24,18 @@ interface NoteListProps {
     setPageSize: (pageSize: number) => void;
     onViewHistory: (note: Note) => void;
     isRecycle?: boolean;
+    searchKeyword: string;
+    setSearchKeyword: (keyword: string) => void;
 }
 
-export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateNote, page, setPage, pageSize, setPageSize, onViewHistory, isRecycle = false }: NoteListProps) {
+export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateNote, page, setPage, pageSize, setPageSize, onViewHistory, isRecycle = false, searchKeyword, setSearchKeyword }: NoteListProps) {
     const { t } = useTranslation();
     const { handleNoteList, handleDeleteNote } = useNoteHandle();
     const { openConfirmDialog } = useConfirmDialog();
     const [notes, setNotes] = useState<Note[]>([]);
     const [loading, setLoading] = useState(false);
     const [totalRows, setTotalRows] = useState(0);
-    const [searchKeyword, setSearchKeyword] = useState("");
-    const [debouncedKeyword, setDebouncedKeyword] = useState("");
+    const [debouncedKeyword, setDebouncedKeyword] = useState(searchKeyword);
 
     // Debounce search keyword
     useEffect(() => {
