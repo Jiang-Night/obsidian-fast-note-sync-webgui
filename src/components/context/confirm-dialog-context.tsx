@@ -1,6 +1,7 @@
 // confirm-dialog-context.tsx
-import React, { createContext, useContext, useState, ReactNode } from "react"
-import { ConfirmDialog } from "@/components/dialog/confirm-dialog"
+import React, { createContext, useContext, useState, ReactNode } from "react";
+import { ConfirmDialog } from "@/components/dialog/confirm-dialog";
+
 
 // 定义上下文的类型
 interface ConfirmDialogContextType {
@@ -37,13 +38,13 @@ export const ConfirmDialogProvider: React.FC<{ children: ReactNode }> = ({ child
     handleCancel()
   }
 
-  const openConfirmDialog = (message: string, type?: string, onConfirm?: () => void, children?: ReactNode) => {
+  const openConfirmDialog = React.useCallback((message: string, type?: string, onConfirm?: () => void, children?: ReactNode) => {
     setMessage(message)
     setType(type || "error")
     setHandleConfirm(() => onConfirm)
     setCustomChildren(children)
     setIsDialogOpen(true)
-  }
+  }, [])
 
   return (
     <ConfirmDialogContext.Provider value={{ isDialogOpen, message, type, openConfirmDialog, closeDialog: handleCancel }}>

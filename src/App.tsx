@@ -1,13 +1,14 @@
 import { LogOut, Menu, X, Clipboard, Database, FileText, RefreshCw, GitBranch, Settings, Trash2 } from "lucide-react";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { SystemSettings } from "@/components/layout/system-settings";
 import { ChangePassword } from "@/components/user/change-password";
 import { RegisterForm } from "@/components/user/register-form";
 import { NoteManager } from "@/components/note/note-manager";
 import { VaultList } from "@/components/vault/vault-list";
 import { LoginForm } from "@/components/user/login-form";
+import { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { useState, useEffect } from "react";
 import env from "@/env.ts";
 
 import { useVaultHandle } from "./components/api-handle/vault-handle";
@@ -31,6 +32,11 @@ function App() {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false)
   const [isMaximized, setIsMaximized] = useState(false)
   const [registerIsEnable, setRegisterIsEnable] = useState(true)
+  const [adminUid, setAdminUid] = useState<number | null>(null)
+  const menuRef = useRef<HTMLDivElement>(null)
+
+  const currentUid = localStorage.getItem("uid") ? parseInt(localStorage.getItem("uid")!) : null
+  const isAdmin = adminUid !== null && currentUid !== null && (adminUid === 0 || adminUid === currentUid)
 
   // 验证用户登录状态
   useEffect(() => {
@@ -132,6 +138,9 @@ function App() {
             if (res.data.registerIsEnable !== undefined) {
               setRegisterIsEnable(res.data.registerIsEnable);
             }
+            if (res.data.adminUid !== undefined) {
+              setAdminUid(res.data.adminUid);
+            }
           } else {
             updateFonts("");
           }
@@ -153,6 +162,23 @@ function App() {
     };
   }, [])
 
+  // 点击外部关闭用户菜单
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false)
+      }
+    }
+
+    if (showUserMenu) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [showUserMenu])
+
   const handleLoginSuccess = () => {
     login()
   }
@@ -168,7 +194,7 @@ function App() {
     { id: "trash", label: t("menuTrash"), icon: Trash2 },
     { id: "sync", label: t("menuSync"), icon: RefreshCw, isPlanned: true },
     { id: "git", label: t("menuGit"), icon: GitBranch, isPlanned: true },
-    { id: "settings", label: t("menuSettings"), icon: Settings, isPlanned: true },
+    { id: "settings", label: t("menuSettings"), icon: Settings },
   ]
 
   const { openConfirmDialog } = useConfirmDialog()
@@ -234,7 +260,7 @@ function App() {
             {isLoggedIn && (
               <div className="flex items-center space-x-2">
                 <LanguageSwitcher className="text-gray-600 hover:text-gray-900" />
-                <div className="relative">
+                <div className="relative" ref={menuRef}>
                   <button onClick={() => setShowUserMenu(!showUserMenu)} className="flex items-center space-x-2 hover:bg-gray-100 rounded-full p-2">
                     <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gray-200 rounded-full flex items-center justify-center">
                       <span className="text-gray-600 text-xs sm:text-base">U</span>
@@ -244,6 +270,9 @@ function App() {
                   {/* Dropdown Menu */}
                   {showUserMenu && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border z-10">
+                      <div className="px-4 py-2 text-xs text-gray-400 border-b mb-1 uppercase font-semibold">
+                        {t("userUid", { uid: currentUid })}
+                      </div>
                       <button
                         onClick={() => {
                           setShowChangePassword(true)
@@ -289,12 +318,16 @@ function App() {
                 <div className="space-y-4">
                   <h2 className="text-lg font-semibold mb-4">{t("navigation")}</h2>
                   <nav className="space-y-2">
-                    {menuItems.map((item) => (
+                    {menuItems.filter(item => item.id !== "settings" || isAdmin).map((item) => (
                       <div key={item.id} className="relative group">
                         <button
                           onClick={() => {
                             if (item.isPlanned) {
                               openConfirmDialog(t("underConstruction"), "info")
+                              return
+                            }
+                            if (item.id === "settings" && !isAdmin) {
+                              openConfirmDialog(t("onlyAdminAccess"), "warning")
                               return
                             }
                             setActiveMenu(item.id)
@@ -352,6 +385,8 @@ function App() {
                   onToggleMaximize={() => setIsMaximized(!isMaximized)}
                   isRecycle={true}
                 />
+              ) : activeMenu === "settings" && isAdmin ? (
+                <SystemSettings onBack={() => setActiveMenu("vaults")} />
               ) : (
                 <VaultList onNavigateToNotes={(vaultName) => {
                   setActiveVault(vaultName);

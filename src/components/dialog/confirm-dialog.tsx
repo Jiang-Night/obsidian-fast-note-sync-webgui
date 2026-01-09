@@ -104,7 +104,12 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
   } else {
     buttons = (
       <div className="mt-4 flex justify-end">
-        <Button size="sm" onClick={onCancel}>
+        <Button size="sm" onClick={() => {
+          if (type !== "confirm" && onConfirm) {
+            onConfirm();
+          }
+          onCancel();
+        }}>
           {t("close")}
         </Button>
       </div>
