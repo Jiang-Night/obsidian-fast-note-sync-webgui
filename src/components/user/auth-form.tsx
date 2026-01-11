@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { motion, AnimatePresence } from "motion/react";
-import { User, Lock, Mail, KeyRound } from "lucide-react";
+import { User, Lock, Mail, KeyRound, Github } from "lucide-react";
 import { useState } from "react";
 
 interface AuthFormProps {
@@ -350,15 +350,16 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
           <div className="flex items-center gap-3">
             <LanguageSwitcher 
               showText={true} 
-              className="text-sm text-muted-foreground hover:text-foreground p-0 h-auto font-normal" 
+              className="text-sm text-muted-foreground hover:text-foreground font-normal h-8 px-2" 
             />
             <span className="text-border">|</span>
             <Button 
               variant="link" 
               onClick={onSoft} 
               type="button" 
-              className="text-muted-foreground/60 hover:text-muted-foreground p-0 h-auto text-sm font-normal transition-colors"
+              className="text-muted-foreground/60 hover:text-muted-foreground h-8 px-2 text-sm font-normal transition-colors inline-flex items-center gap-1"
             >
+              <Github className="w-4 h-4" />
               GitHub
             </Button>
           </div>

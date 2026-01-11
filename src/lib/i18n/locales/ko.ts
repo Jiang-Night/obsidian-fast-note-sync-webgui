@@ -159,6 +159,14 @@ export default {
     githubRepo: "GitHub 저장소",
     currentVersion: "현재 버전",
     unknown: "알 수 없음",
+    // 버전 업데이트 확인
+    checkUpdate: "업데이트 확인",
+    checkNow: "지금 확인",
+    checking: "확인 중...",
+    newVersionAvailable: "새 버전이 있습니다",
+    alreadyLatest: "최신 버전입니다",
+    viewRelease: "릴리스 보기",
+    updateCheckFailed: "업데이트 확인 실패",
     // 설정 페이지
     accountSettings: "계정 설정",
     appearance: "외관",

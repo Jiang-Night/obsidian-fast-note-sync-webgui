@@ -159,6 +159,14 @@ export default {
     githubRepo: "GitHub Repository",
     currentVersion: "Current Version",
     unknown: "Unknown",
+    // Version update check
+    checkUpdate: "Check for Updates",
+    checkNow: "Check Now",
+    checking: "Checking...",
+    newVersionAvailable: "New version available",
+    alreadyLatest: "Already up to date",
+    viewRelease: "View Release",
+    updateCheckFailed: "Failed to check for updates",
     // Search modes
     searchPath: "Path",
     searchContentMode: "Content",
@@ -208,4 +216,13 @@ export default {
     fillAllFields: "Please fill in all fields",
     invalidNumber: "Please enter a valid number",
     autoSaving: "Saving...",
+    // Color scheme
+    colorScheme: "Color Scheme",
+    colorSchemeSwitched: "Switched to {{scheme}} theme",
+    "colorScheme.green": "Green",
+    "colorScheme.skyBlue": "Sky Blue",
+    "colorScheme.purple": "Purple",
+    "colorScheme.orange": "Orange",
+    "colorScheme.rose": "Rose",
+    "colorScheme.teal": "Teal",
 };

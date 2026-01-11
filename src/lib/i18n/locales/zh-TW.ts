@@ -159,6 +159,14 @@ export default {
     githubRepo: "GitHub 倉庫",
     currentVersion: "當前版本",
     unknown: "未知",
+    // 版本更新檢測
+    checkUpdate: "檢查更新",
+    checkNow: "立即檢查",
+    checking: "檢查中...",
+    newVersionAvailable: "發現新版本",
+    alreadyLatest: "已是最新版本",
+    viewRelease: "查看發布頁",
+    updateCheckFailed: "檢查更新失敗",
     // 設置頁面
     accountSettings: "帳戶設置",
     appearance: "外觀",

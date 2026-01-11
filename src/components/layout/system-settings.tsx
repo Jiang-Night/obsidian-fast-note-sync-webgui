@@ -1,6 +1,7 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useSettingsStore, ToastPosition } from "@/lib/stores/settings-store";
+import { useSettingsStore, ToastPosition, COLOR_SCHEMES } from "@/lib/stores/settings-store";
 import { useVersion } from "@/components/api-handle/use-version";
+import { useUpdateCheck } from "@/components/api-handle/use-update-check";
 import { toast } from "@/components/common/Toast";
 import { addCacheBuster } from "@/lib/utils/cache-buster";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -24,9 +25,13 @@ import {
     Shield,
     Sun,
     User,
-    Pencil,
     Lock,
-    Loader2
+    Loader2,
+    Palette,
+    RefreshCw,
+    ExternalLink,
+    CheckCircle,
+    AlertCircle
 } from "lucide-react";
 import env from "@/env.ts";
 
@@ -54,14 +59,13 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
     const [loading, setLoading] = useState(true)
     const [autoSaving, setAutoSaving] = useState(false)
     const token = localStorage.getItem("token")
-    const { toastPosition, setToastPosition } = useSettingsStore()
+    const { toastPosition, setToastPosition, colorScheme, setColorScheme } = useSettingsStore()
     const { versionInfo, isLoading: versionLoading } = useVersion()
+    const { checkUpdate, isChecking, updateResult } = useUpdateCheck()
     const saveTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
     const pendingConfigRef = useRef<SystemConfig | null>(null)
 
     // 账户设置状态
-    const [newUsername, setNewUsername] = useState("")
-    const [savingUsername, setSavingUsername] = useState(false)
     const [oldPassword, setOldPassword] = useState("")
     const [newPassword, setNewPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
@@ -73,6 +77,20 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
     // adminUid 单独管理（手动保存）
     const [adminUidInput, setAdminUidInput] = useState("")
     const [savingAdminUid, setSavingAdminUid] = useState(false)
+
+    // 检查更新
+    const handleCheckUpdate = async () => {
+        if (versionInfo?.version) {
+            const result = await checkUpdate(versionInfo.version)
+            if (result) {
+                if (result.hasUpdate) {
+                    toast.success(t("newVersionAvailable") || "发现新版本")
+                } else {
+                    toast.success(t("alreadyLatest") || "已是最新版本")
+                }
+            }
+        }
+    }
 
     // 自动保存配置（防抖）
     const autoSaveConfig = useCallback(async (newConfig: SystemConfig) => {
@@ -156,36 +174,6 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
         }
         fetchConfig()
     }, [token, t, onBack])
-
-    // 修改用户名
-    const handleChangeUsername = async () => {
-        if (!newUsername.trim()) {
-            toast.error(t("usernameRequired") || "请输入用户名")
-            return
-        }
-        setSavingUsername(true)
-        try {
-            const formData = new FormData()
-            formData.append("username", newUsername.trim())
-            const response = await fetch(addCacheBuster(env.API_URL + "/api/user/change_username"), {
-                method: "POST",
-                headers: { Token: token || "" },
-                body: formData,
-            })
-            const res = await response.json()
-            if (res.status === true || res.code === 0) {
-                toast.success(t("usernameChangedSuccess") || "用户名修改成功")
-                localStorage.setItem("username", newUsername.trim())
-                setNewUsername("")
-            } else {
-                toast.error(res.message || t("usernameChangeFailed") || "用户名修改失败")
-            }
-        } catch {
-            toast.error(t("usernameChangeFailed") || "用户名修改失败")
-        } finally {
-            setSavingUsername(false)
-        }
-    }
 
     // 修改密码
     const handleChangePassword = async () => {
@@ -288,12 +276,12 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                             <span className="text-sm font-medium">{t("githubRepo")}</span>
                         </div>
                         <a 
-                            href="https://github.com/haierkeys/obsidian-fast-note-sync" 
+                            href="https://github.com/haierkeys/fast-note-sync-service" 
                             target="_blank" 
                             rel="noopener noreferrer"
                             className="text-sm text-primary hover:underline"
                         >
-                            haierkeys/fast-note-sync
+                            haierkeys/fast-note-sync-service
                         </a>
                     </div>
                     <div className="flex items-center justify-between gap-4">
@@ -305,6 +293,62 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                             {versionLoading ? t("loading") : (versionInfo?.version || t("unknown"))}
                         </code>
                     </div>
+                    <div className="border-t border-border" />
+                    {/* 检查更新 */}
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-3">
+                                <RefreshCw className={`h-5 w-5 text-muted-foreground ${isChecking ? 'animate-spin' : ''}`} />
+                                <span className="text-sm font-medium">{t("checkUpdate")}</span>
+                            </div>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleCheckUpdate}
+                                disabled={isChecking || versionLoading || !versionInfo?.version}
+                                className="rounded-xl"
+                            >
+                                {isChecking ? t("checking") : t("checkNow")}
+                            </Button>
+                        </div>
+                        {/* 更新结果显示 */}
+                        {updateResult && (
+                            <div className={`rounded-xl p-4 ${updateResult.hasUpdate ? 'bg-primary/10 border border-primary/20' : 'bg-muted/50'}`}>
+                                <div className="flex items-start gap-3">
+                                    {updateResult.hasUpdate ? (
+                                        <AlertCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                                    ) : (
+                                        <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />
+                                    )}
+                                    <div className="flex-1 space-y-2">
+                                        <div className="flex items-center justify-between">
+                                            <span className="text-sm font-medium">
+                                                {updateResult.hasUpdate 
+                                                    ? t("newVersionAvailable") 
+                                                    : t("alreadyLatest")}
+                                            </span>
+                                            {updateResult.latestVersion && (
+                                                <code className="text-xs font-mono bg-background px-2 py-0.5 rounded">
+                                                    {updateResult.latestVersion}
+                                                </code>
+                                            )}
+                                        </div>
+                                        {updateResult.hasUpdate && updateResult.releaseUrl && (
+                                            <a
+                                                href={updateResult.releaseUrl}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-1 text-sm text-primary hover:underline"
+                                            >
+                                                {t("viewRelease")}
+                                                <ExternalLink className="h-3 w-3" />
+                                            </a>
+                                        )}
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -315,6 +359,36 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                         <Sun className="h-5 w-5" />
                         {t("appearance") || "外观"}
                     </h2>
+                    {/* 配色方案选择 */}
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                            <Palette className="h-5 w-5 text-muted-foreground" />
+                            <span className="text-sm font-medium">{t("colorScheme") || "配色方案"}</span>
+                        </div>
+                        <div className="grid grid-cols-3 gap-2">
+                            {COLOR_SCHEMES.map((scheme) => (
+                                <button
+                                    key={scheme.value}
+                                    onClick={() => {
+                                        setColorScheme(scheme.value)
+                                        toast.success(t("colorSchemeSwitched", { scheme: t(scheme.label) || scheme.label.split('.')[1] }) || `已切换到${t(scheme.label)}配色`)
+                                    }}
+                                    className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${
+                                        colorScheme === scheme.value
+                                            ? 'border-primary bg-primary/10'
+                                            : 'border-border hover:border-primary/50'
+                                    }`}
+                                >
+                                    <span
+                                        className="w-4 h-4 rounded-full shrink-0"
+                                        style={{ backgroundColor: scheme.color }}
+                                    />
+                                    <span className="text-xs truncate">{t(scheme.label) || scheme.label.split('.')[1]}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="border-t border-border" />
                     <div className="flex items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
                             <Bell className="h-5 w-5 text-muted-foreground" />
@@ -458,31 +532,6 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                         {t("accountSettings") || "账户设置"}
                     </h2>
                     
-                    {/* 修改用户名 */}
-                    <div className="space-y-3">
-                        <div className="flex items-center gap-3">
-                            <Pencil className="h-5 w-5 text-muted-foreground" />
-                            <span className="text-sm font-medium">{t("changeUsername") || "修改用户名"}</span>
-                        </div>
-                        <div className="flex gap-2">
-                            <Input
-                                value={newUsername}
-                                onChange={(e) => setNewUsername(e.target.value)}
-                                placeholder={t("enterNewUsername") || "请输入新用户名"}
-                                className="rounded-xl flex-1"
-                            />
-                            <Button 
-                                onClick={handleChangeUsername} 
-                                disabled={savingUsername || !newUsername.trim()}
-                                className="rounded-xl"
-                            >
-                                {savingUsername ? t("submitting") : t("save")}
-                            </Button>
-                        </div>
-                    </div>
-
-                    <div className="border-t border-border" />
-
                     {/* 修改密码 */}
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">

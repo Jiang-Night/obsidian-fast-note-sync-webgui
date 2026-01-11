@@ -159,6 +159,14 @@ export default {
     githubRepo: "GitHub リポジトリ",
     currentVersion: "現在のバージョン",
     unknown: "不明",
+    // バージョン更新チェック
+    checkUpdate: "更新を確認",
+    checkNow: "今すぐ確認",
+    checking: "確認中...",
+    newVersionAvailable: "新しいバージョンがあります",
+    alreadyLatest: "最新バージョンです",
+    viewRelease: "リリースを見る",
+    updateCheckFailed: "更新の確認に失敗しました",
     // 設定ページ
     accountSettings: "アカウント設定",
     appearance: "外観",

@@ -34,7 +34,8 @@ export function useAuth() {
         localStorage.setItem("email", res.data.email)
         return { success: true, message: res.data.message }
       } else {
-        return { success: false, error: res.message + ": " + res.details }
+        const errorMsg = res.details ? `${res.message}: ${res.details}` : res.message
+        return { success: false, error: errorMsg }
       }
     } catch (_error) {
       return { success: false, error: "接口请求失败,请检查网络状态" }
@@ -70,7 +71,8 @@ export function useAuth() {
         localStorage.setItem("email", res.data.email)
         return { success: true }
       } else {
-        return { success: false, error: res.message + ": " + res.details }
+        const errorMsg = res.details ? `${res.message}: ${res.details}` : res.message
+        return { success: false, error: errorMsg }
       }
     } catch (_error) {
       return { success: false, error: "注册失败，请重试" }

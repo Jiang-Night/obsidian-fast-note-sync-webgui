@@ -159,6 +159,14 @@ export default {
     githubRepo: "GitHub 仓库",
     currentVersion: "当前版本",
     unknown: "未知",
+    // 版本更新检测
+    checkUpdate: "检查更新",
+    checkNow: "立即检查",
+    checking: "检查中...",
+    newVersionAvailable: "发现新版本",
+    alreadyLatest: "已是最新版本",
+    viewRelease: "查看发布页",
+    updateCheckFailed: "检查更新失败",
     // 搜索模式
     searchPath: "路径",
     searchContentMode: "内容",
@@ -208,4 +216,13 @@ export default {
     fillAllFields: "请填写所有字段",
     invalidNumber: "请输入有效数字",
     autoSaving: "保存中...",
+    // 配色方案
+    colorScheme: "配色方案",
+    colorSchemeSwitched: "已切换到 {{scheme}} 配色",
+    "colorScheme.green": "绿色",
+    "colorScheme.skyBlue": "天蓝",
+    "colorScheme.purple": "紫色",
+    "colorScheme.orange": "橙色",
+    "colorScheme.rose": "玫瑰",
+    "colorScheme.teal": "青色",
 };
