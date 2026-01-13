@@ -1,31 +1,28 @@
-import { useState, useEffect } from "react"
-import { useTranslation } from "react-i18next"
+import { useVaultHandle } from "@/components/api-handle/vault-handle";
+import { SystemSettings } from "@/components/layout/system-settings";
+import { useUserHandle } from "@/components/api-handle/user-handle";
+import { NoteManager } from "@/components/note/note-manager";
+import { useAuth } from "@/components/context/auth-context";
+import { ComingSoon } from "@/components/common/ComingSoon";
+import { VaultList } from "@/components/vault/vault-list";
+import { AppLayout } from "@/components/layout/AppLayout";
+import { AuthForm } from "@/components/user/auth-form";
+import { toast } from "@/components/common/Toast";
+import { useAppStore } from "@/stores/app-store";
+import { useTranslation } from "react-i18next";
+import { useState, useEffect } from "react";
+import env from "@/env.ts";
 
-import { useVaultHandle } from "@/components/api-handle/vault-handle"
-import { useUserHandle } from "@/components/api-handle/user-handle"
-import { useAuth } from "@/components/context/auth-context"
-import { useAppStore } from "@/stores/app-store"
-
-import { AppLayout } from "@/components/layout/AppLayout"
-import { SystemSettings } from "@/components/layout/system-settings"
-import { NoteManager } from "@/components/note/note-manager"
-import { VaultList } from "@/components/vault/vault-list"
-import { AuthForm } from "@/components/user/auth-form"
-import { ComingSoon } from "@/components/common/ComingSoon"
-import { toast } from "@/components/common/Toast"
-import { ContextMenuProvider } from "@/components/ui/context-menu"
-
-import env from "@/env.ts"
 
 /**
  * App - 应用主组件
- * 
+ *
  * 使用新的 AppLayout 布局组件，保持原有功能：
  * - 认证逻辑
  * - 模块渲染
  * - 管理员权限检查
  * - Zen 模式支持
- * 
+ *
  * Requirements: 1.5, 10.1, 10.2, 10.3, 10.4, 10.5, 10.7
  */
 function App() {
@@ -33,7 +30,7 @@ function App() {
   const { isLoggedIn, login, logout } = useAuth()
   const { handleVaultList } = useVaultHandle()
   const { handleUserInfo } = useUserHandle()
-  
+
   // 使用 Zustand store 管理应用状态
   const { currentModule, setModule, zenMode, setZenMode, resetState } = useAppStore()
 
@@ -149,11 +146,9 @@ function App() {
   // 未登录时显示登录/注册页面
   if (!isLoggedIn) {
     return (
-      <ContextMenuProvider>
-        <div className="w-full min-h-screen">
-          <AuthForm onSuccess={handleAuthSuccess} registerIsEnable={registerIsEnable} />
-        </div>
-      </ContextMenuProvider>
+      <div className="w-full min-h-screen">
+        <AuthForm onSuccess={handleAuthSuccess} registerIsEnable={registerIsEnable} />
+      </div>
     )
   }
 
@@ -179,7 +174,7 @@ function App() {
             onToggleMaximize={handleToggleZenMode}
           />
         )
-      
+
       case "trash":
         // 等待 vault 加载完成
         if (!vaultsLoaded || !activeVault) {
@@ -200,7 +195,7 @@ function App() {
             isRecycle={true}
           />
         )
-      
+
       case "settings":
         // 非管理员访问设置页面时显示提示并跳转
         if (!isAdmin) {
@@ -211,23 +206,23 @@ function App() {
         return (
           <SystemSettings onBack={() => setModule("vaults")} />
         )
-      
+
       case "sync":
         return (
-          <ComingSoon 
-            title={t("menuSync") || "远端备份"} 
+          <ComingSoon
+            title={t("menuSync") || "远端备份"}
             description={t("syncComingSoon") || "远端备份功能正在开发中，将支持 S3、OSS、WebDAV 等多种存储后端。"}
           />
         )
-      
+
       case "git":
         return (
-          <ComingSoon 
-            title={t("menuGit") || "Git 自动化"} 
+          <ComingSoon
+            title={t("menuGit") || "Git 自动化"}
             description={t("gitComingSoon") || "Git 自动化功能正在开发中，将支持自动提交、推送和版本管理。"}
           />
         )
-      
+
       case "vaults":
       default:
         return (
@@ -242,11 +237,9 @@ function App() {
   }
 
   return (
-    <ContextMenuProvider>
-      <AppLayout isAdmin={isAdmin} onLogout={handleLogout}>
-        {renderModuleContent()}
-      </AppLayout>
-    </ContextMenuProvider>
+    <AppLayout isAdmin={isAdmin} onLogout={handleLogout}>
+      {renderModuleContent()}
+    </AppLayout>
   )
 }
 

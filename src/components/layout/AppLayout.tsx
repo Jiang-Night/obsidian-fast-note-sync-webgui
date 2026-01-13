@@ -1,9 +1,11 @@
-import { cn } from "@/lib/utils"
-import { useAppStore } from "@/stores/app-store"
-import { useMobile } from "@/hooks/use-mobile"
-import { FloatingNav } from "./FloatingNav"
-import { TopBar } from "./TopBar"
-import { MainContent } from "./MainContent"
+import { useAppStore } from "@/stores/app-store";
+import { useMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
+
+import { MainContent } from "./MainContent";
+import { FloatingNav } from "./FloatingNav";
+import { TopBar } from "./TopBar";
+
 
 interface AppLayoutProps {
   /** 子组件（模块内容） */
@@ -18,7 +20,7 @@ interface AppLayoutProps {
 
 /**
  * AppLayout - 主布局组件
- * 
+ *
  * 整合所有布局组件，处理：
  * - 桌面端：左侧悬浮导航 + 右侧内容区
  * - 移动端：顶部 TopBar + 内容区 + 底部悬浮导航
@@ -37,16 +39,16 @@ export function AppLayout({
   return (
     <div
       className={cn(
-        "min-h-screen bg-background",
+        "h-screen overflow-hidden bg-background",
         className
       )}
     >
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col h-full">
         {/* Top Bar - 顶部栏（非 Zen 模式显示） */}
         {!zenMode && <TopBar onLogout={onLogout} />}
 
         {/* Content Area with Floating Nav */}
-        <div className="flex-1 flex min-h-0">
+        <div className="flex-1 flex min-h-0 overflow-hidden">
           {/* Floating Nav - 桌面端在左侧，移动端 fixed 在底部 */}
           {!zenMode && (
             <FloatingNav isAdmin={isAdmin} />

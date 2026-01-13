@@ -1,9 +1,10 @@
-import { motion } from "motion/react"
-import { useTranslation } from "react-i18next"
-import { Database, FileText, Trash2, Settings, RefreshCw, GitBranch } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { useAppStore, type ModuleId } from "@/stores/app-store"
-import { NavItem } from "@/components/navigation/NavItem"
+import { Database, FileText, Trash2, Settings, RefreshCw, GitBranch } from "lucide-react";
+import { useAppStore, type ModuleId } from "@/stores/app-store";
+import { NavItem } from "@/components/navigation/NavItem";
+import { useTranslation } from "react-i18next";
+import { motion } from "motion/react";
+import { cn } from "@/lib/utils";
+
 
 interface FloatingNavProps {
   isAdmin: boolean
@@ -12,7 +13,7 @@ interface FloatingNavProps {
 
 /**
  * FloatingNav - 悬浮导航栏
- * 
+ *
  * - 移动端：固定在底部中央
  * - 桌面端：sticky 定位，与内容卡片顶部对齐
  * - 圆角胶囊形状 (rounded-2xl)
@@ -29,11 +30,11 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
     labelKey: string
     adminOnly?: boolean
   }> = [
-    { id: "vaults", icon: Database, labelKey: "menuVaults" },
-    { id: "notes", icon: FileText, labelKey: "menuNotes" },
-    { id: "trash", icon: Trash2, labelKey: "menuTrash" },
-    { id: "settings", icon: Settings, labelKey: "menuSettings", adminOnly: true },
-  ]
+      { id: "vaults", icon: Database, labelKey: "menuVaults" },
+      { id: "notes", icon: FileText, labelKey: "menuNotes" },
+      { id: "trash", icon: Trash2, labelKey: "menuTrash" },
+      { id: "settings", icon: Settings, labelKey: "menuSettings", adminOnly: true },
+    ]
 
   // 计划中的功能
   const plannedItems: Array<{
@@ -41,9 +42,9 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
     icon: typeof Database
     labelKey: string
   }> = [
-    { id: "sync", icon: RefreshCw, labelKey: "menuSync" },
-    { id: "git", icon: GitBranch, labelKey: "menuGit" },
-  ]
+      { id: "sync", icon: RefreshCw, labelKey: "menuSync" },
+      { id: "git", icon: GitBranch, labelKey: "menuGit" },
+    ]
 
   const visibleItems = navItems.filter(item => !item.adminOnly || isAdmin)
 
@@ -51,7 +52,7 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
     <div className={cn(
       // 移动端：fixed 定位，不占用文档流空间
       "fixed bottom-1 left-1/2 -translate-x-1/2 z-50",
-      // 桌面端：相对定位，占用空间
+      // 桌面端：相对定位，由于父容器 overflow:hidden 且 MainContent 独立滚动，这里自然会保持固定
       "md:relative md:bottom-auto md:left-auto md:translate-x-0 md:pt-6 md:pl-4",
       className
     )}>
@@ -63,7 +64,7 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
           // 桌面端：垂直排列
           "md:flex-col md:gap-1 md:p-2",
           // 样式
-          "bg-sidebar text-sidebar-foreground border border-sidebar-border rounded-2xl",
+          "bg-sidebar text-sidebar-foreground border border-sidebar-border rounded-lg",
           "custom-shadow backdrop-blur-sm"
         )}
         initial={{ opacity: 0, scale: 0.9 }}
@@ -83,7 +84,7 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
 
         {/* 计划中的功能 - 桌面端显示 */}
         <div className="hidden md:block w-8 h-px bg-border/50 my-1" />
-        
+
         {plannedItems.map((item) => (
           <NavItem
             key={item.id}

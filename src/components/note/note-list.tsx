@@ -1,15 +1,16 @@
-import { FileText, Trash2, RefreshCw, Plus, Calendar, Clock, ChevronLeft, ChevronRight, History, Search, X, Regex, FileSearch, ArrowUpDown, RotateCcw, Eye } from "lucide-react";
+import { FileText, Trash2, RefreshCw, Plus, Calendar, Clock, ChevronLeft, ChevronRight, History, Search, X, Regex, FileSearch, ArrowUpDown, RotateCcw, Eye, Pencil } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { useNoteHandle } from "@/components/api-handle/note-handle";
 import React, { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
 import { Tooltip } from "@/components/ui/tooltip";
+import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { VaultType } from "@/lib/types/vault";
 import { Input } from "@/components/ui/input";
 import { Note } from "@/lib/types/note";
 import { format } from "date-fns";
+
 
 type SearchMode = "path" | "content" | "regex";
 type SortBy = "mtime" | "ctime" | "path";
@@ -69,11 +70,11 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
     const fetchNotes = (currentPage: number = page, currentPageSize: number = pageSize, keyword: string = debouncedKeyword) => {
         // 如果是正则模式且有错误，不发起请求
         if (searchMode === "regex" && regexError) return;
-        
+
         setLoading(true);
         handleNoteList(vault, currentPage, currentPageSize, keyword, isRecycle, searchMode, false, sortBy, sortOrder, (data) => {
             let filteredList = data?.list || [];
-            
+
             // 前端正则过滤（因为后端使用 LIKE 作为后备）
             if (searchMode === "regex" && keyword && filteredList.length > 0) {
                 try {
@@ -83,7 +84,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                     // 正则无效时不过滤
                 }
             }
-            
+
             setNotes(filteredList);
             setTotalRows(data?.pager?.totalRows || 0);
             setLoading(false);
@@ -174,10 +175,10 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                 </button>
                             )}
                         </div>
-                        <Button 
-                            variant="outline" 
-                            size="icon" 
-                            onClick={() => fetchNotes()} 
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            onClick={() => fetchNotes()}
                             disabled={loading}
                             className="rounded-xl shrink-0"
                         >
@@ -257,23 +258,23 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
 
             {/* 笔记列表 */}
             {loading ? (
-                <div className="rounded-3xl border border-border bg-card p-12 text-center text-muted-foreground">
+                <div className="rounded-xl border border-border bg-card p-12 text-center text-muted-foreground">
                     <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2" />
                     {t("loading") || "加载中..."}
                 </div>
             ) : !Array.isArray(notes) || notes.length === 0 ? (
-                <div className="rounded-3xl border border-border bg-card p-12 text-center text-muted-foreground">
+                <div className="rounded-xl border border-border bg-card p-12 text-center text-muted-foreground">
                     {t("noNotes")}
                 </div>
             ) : (
                 <div className="flex-1 min-h-0 overflow-y-auto -mx-2 px-2">
                     <div className="grid grid-cols-1 gap-3 py-1">
-                    {notes.map((note) => (
-                        <article
-                            key={note.id}
-                            className="rounded-3xl border border-border bg-card p-4 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30"
-                            onClick={() => onSelectNote(note)}
-                        >
+                        {notes.map((note) => (
+                            <article
+                                key={note.id}
+                                className="rounded-xl border border-border bg-card p-4 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30"
+                                onClick={() => onSelectNote(note, true)}
+                            >
                                 <div className="flex items-center justify-between gap-4">
                                     {/* 左侧：图标和内容 */}
                                     <div className="flex items-start gap-3 min-w-0 flex-1">
@@ -322,6 +323,19 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                                 }}
                                             >
                                                 <Eye className="h-4 w-4" />
+                                            </Button>
+                                        </Tooltip>
+                                        <Tooltip content={t("editNote")} side="top" delay={200}>
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                className="h-8 w-8 rounded-xl text-muted-foreground hover:text-blue-600"
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    onSelectNote(note, false);
+                                                }}
+                                            >
+                                                <Pencil className="h-4 w-4" />
                                             </Button>
                                         </Tooltip>
                                         <Tooltip content={t("history") || "历史记录"} side="top" delay={200}>

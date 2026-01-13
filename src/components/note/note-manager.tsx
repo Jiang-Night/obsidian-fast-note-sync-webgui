@@ -1,8 +1,8 @@
 import { useVaultHandle } from "@/components/api-handle/vault-handle";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { VaultType } from "@/lib/types/vault";
-import { useState, useEffect, useRef } from "react";
 import { Note } from "@/lib/types/note";
 import { Database } from "lucide-react";
 
@@ -114,7 +114,7 @@ export function NoteManager({
     // 检查是否有仓库（只在加载完成后显示空状态）
     if (vaultsLoaded.current && vaults.length === 0) {
         return (
-            <div className="rounded-3xl border border-border bg-card p-12 flex flex-col items-center justify-center">
+            <div className="rounded-xl border border-border bg-card p-12 flex flex-col items-center justify-center">
                 <Database className="h-16 w-16 text-muted-foreground/30 mb-4" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">
                     {t("noVaultsForNotes")}

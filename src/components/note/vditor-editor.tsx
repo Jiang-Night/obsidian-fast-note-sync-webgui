@@ -1,10 +1,12 @@
-import { forwardRef, useImperativeHandle, useRef, useEffect, useCallback, useState } from "react";
-import Vditor from "vditor";
 import "vditor/dist/index.css";
 import "./vditor-editor.css";
+
+import { forwardRef, useImperativeHandle, useRef, useEffect, useCallback, useState } from "react";
 import { useTheme } from "@/components/context/theme-context";
 import { useTranslation } from "react-i18next";
+import Vditor from "vditor";
 import env from "@/env.ts";
+
 
 interface VditorEditorProps {
     value: string;
@@ -69,7 +71,7 @@ export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
         const vditorRef = useRef<Vditor | null>(null);
         const contentRef = useRef(value);
         const [isReady, setIsReady] = useState(false);
-        
+
         // 保存最新的 props 用于预览转换
         const propsRef = useRef({ vault, fileLinks, token: localStorage.getItem("token") || "" });
         propsRef.current = { vault, fileLinks, token: localStorage.getItem("token") || "" };
@@ -141,8 +143,8 @@ export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
                     "inline-code",
                     "table",
                     "line",
-                    "|",
-                    "upload",
+                    //"|",
+                    // "upload",
                     "|",
                     "undo",
                     "redo",
@@ -167,7 +169,7 @@ export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
                     accept: "image/*",
                     handler: (files: File[]) => {
                         if (!vditorRef.current) return null;
-                        
+
                         files.forEach((file) => {
                             // 使用 Obsidian 的 ![[]] 语法
                             const markdown = `![[${file.name}]]`;
@@ -178,6 +180,7 @@ export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
                     },
                 },
                 preview: {
+                    actions: [], // 隐藏 Desktop/Tablet/Mobile/Wechat 切换按钮
                     transform: (html: string) => {
                         // 在预览时转换 Obsidian 语法
                         const { vault, fileLinks, token } = propsRef.current;
@@ -186,7 +189,7 @@ export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
                     hljs: {
                         enable: true,
                         lineNumber: true,
-                        style: resolvedTheme === "dark" ? "native" : "github",
+                        style: resolvedTheme === "dark" ? "native" : "native",
                     },
                     markdown: {
                         // 禁用 sanitize 以支持 base64 图片（data: 协议）

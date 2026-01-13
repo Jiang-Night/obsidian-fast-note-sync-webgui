@@ -1,18 +1,19 @@
-import { Pencil, Trash2, Plus, Clipboard, Settings, Database, Clock, RefreshCw, Check, X, Search, GripVertical } from "lucide-react";
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, TouchSensor, useSensor, useSensors, DragEndEvent } from "@dnd-kit/core";
+import { Pencil, Trash2, Plus, Clipboard, Settings, Database, Clock, RefreshCw, Check, X, Search, GripVertical } from "lucide-react";
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, useSortable, rectSortingStrategy } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { useVaultHandle } from "@/components/api-handle/vault-handle";
-import { toast } from "@/components/common/Toast";
 import { useState, useEffect, useCallback, useMemo } from "react";
-import { Button } from "@/components/ui/button";
 import { Tooltip } from "@/components/ui/tooltip";
-import { Input } from "@/components/ui/input";
+import { toast } from "@/components/common/Toast";
+import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { VaultType } from "@/lib/types/vault";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { CSS } from "@dnd-kit/utilities";
 import env from "@/env.ts";
+
 
 interface VaultListProps {
   onNavigateToNotes?: (vaultName: string) => void;
@@ -69,7 +70,7 @@ function SortableVaultCard({
     <article
       ref={setNodeRef}
       style={style}
-      className="relative flex flex-col gap-4 rounded-3xl border border-border bg-card p-5 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
+      className="relative flex flex-col gap-4 rounded-xl border border-border bg-card p-5 transition-all duration-300 hover:scale-[1.02] cursor-pointer"
       onClick={() => editingId !== vault.id && onNavigateToNotes && onNavigateToNotes(vault.vault)}
     >
       {/* 头部：仓库名称 */}
@@ -108,11 +109,11 @@ function SortableVaultCard({
 
       {/* 统计信息 */}
       <dl className="grid grid-cols-2 gap-3">
-        <div className="flex flex-col rounded-2xl border border-border/70 bg-background/80 p-3">
+        <div className="flex flex-col rounded-lg border border-border/70 bg-background/80 p-3">
           <dt className="text-xs text-muted-foreground">{t("note") || "笔记"}</dt>
           <dd className="text-xl font-semibold">{vault.noteCount}</dd>
         </div>
-        <div className="flex flex-col rounded-2xl border border-border/70 bg-background/80 p-3">
+        <div className="flex flex-col rounded-lg border border-border/70 bg-background/80 p-3">
           <dt className="text-xs text-muted-foreground">{t("attachmentCount") || "附件"}</dt>
           <dd className="text-xl font-semibold">{vault.fileCount || "0"}</dd>
         </div>
@@ -175,20 +176,20 @@ function SortableVaultCard({
         ) : (
           <>
             <Tooltip content={t("viewConfig") || "查看配置"} side="top" delay={200}>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 rounded-xl text-muted-foreground hover:text-purple-600" 
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 rounded-xl text-muted-foreground hover:text-purple-600"
                 onClick={(e) => onViewConfig(vault.vault, e)}
               >
                 <Settings className="h-4 w-4" />
               </Button>
             </Tooltip>
             <Tooltip content={t("copyConfig") || "快速复制"} side="top" delay={200}>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 rounded-xl text-muted-foreground hover:text-blue-600" 
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 rounded-xl text-muted-foreground hover:text-blue-600"
                 onClick={(e) => onQuickCopy(vault.vault, e)}
               >
                 <Clipboard className="h-4 w-4" />
@@ -205,10 +206,10 @@ function SortableVaultCard({
               </Button>
             </Tooltip>
             <Tooltip content={t("deleteVault")} side="top" delay={200}>
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                className="h-8 w-8 rounded-xl text-muted-foreground hover:text-destructive" 
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 rounded-xl text-muted-foreground hover:text-destructive"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleDelete(vault.id)
@@ -483,7 +484,7 @@ export function VaultList({ onNavigateToNotes }: VaultListProps) {
 
       {/* 新增仓库输入框 */}
       {isAdding && (
-        <div className="rounded-3xl border border-primary bg-card p-5">
+        <div className="rounded-xl border border-primary bg-card p-5">
           <div className="flex items-center gap-3">
             <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
               <Database className="h-5 w-5" />
@@ -527,7 +528,7 @@ export function VaultList({ onNavigateToNotes }: VaultListProps) {
 
       {/* 仓库列表 */}
       {filteredVaults.length === 0 && !isAdding ? (
-        <div className="rounded-3xl border border-border bg-card p-12 text-center text-muted-foreground">
+        <div className="rounded-xl border border-border bg-card p-12 text-center text-muted-foreground">
           {searchKeyword ? t("noSearchResults") || "没有找到匹配的仓库" : t("noVaults")}
         </div>
       ) : (
@@ -566,7 +567,7 @@ export function VaultList({ onNavigateToNotes }: VaultListProps) {
 
       {/* 配置模态窗口 */}
       <Dialog open={configModalOpen} onOpenChange={setConfigModalOpen}>
-        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg mx-auto rounded-2xl sm:rounded-3xl">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg mx-auto rounded-lg sm:rounded-xl">
           <DialogHeader>
             <DialogTitle className="text-base sm:text-lg truncate pr-8">
               {t("vaultConfig") || "仓库配置"} - {configVaultName}

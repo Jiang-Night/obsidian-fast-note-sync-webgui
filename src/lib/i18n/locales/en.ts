@@ -94,6 +94,7 @@ export default {
     view: "View",
     viewNote: "View Note",
     edit: "Edit",
+    editNote: "Edit Note",
     viewNotes: "View Notes",
     showing: "Showing",
     to: "to",

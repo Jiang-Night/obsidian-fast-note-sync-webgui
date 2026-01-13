@@ -1,15 +1,10 @@
-import * as React from "react"
-import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
-import { useTranslation } from "react-i18next"
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import {
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-  Info,
-  HelpCircle,
-} from "lucide-react"
+import { CheckCircle, XCircle, AlertTriangle, Info, HelpCircle, } from "lucide-react";
+import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog";
+import { buttonVariants } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
+import * as React from "react";
+
 
 type DialogType = "success" | "error" | "warning" | "info" | "confirm"
 
@@ -107,7 +102,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
         <AlertDialogPrimitive.Content
           className={cn(
             "fixed left-[50%] top-[50%] z-50 grid w-[calc(100vw-2rem)] max-w-md translate-x-[-50%] translate-y-[-50%]",
-            "gap-4 border bg-background p-4 sm:p-6 shadow-2xl duration-200 rounded-2xl sm:rounded-3xl",
+            "gap-4 border bg-background p-4 sm:p-6 shadow-2xl duration-200 rounded-lg sm:rounded-xl",
             "data-[state=open]:animate-in data-[state=closed]:animate-out",
             "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
             "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",

@@ -1,22 +1,20 @@
+import { Info, GitBranch, Tag, Bell, Type, UserPlus, HardDrive, Trash2, Clock, Shield, Sun, User, Lock, Loader2, Palette, RefreshCw, ExternalLink, CheckCircle, AlertCircle } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useSettingsStore, ToastPosition, COLOR_SCHEMES } from "@/lib/stores/settings-store";
-import { useVersion } from "@/components/api-handle/use-version";
 import { useUpdateCheck } from "@/components/api-handle/use-update-check";
-import { toast } from "@/components/common/Toast";
+import { useVersion } from "@/components/api-handle/use-version";
+import { Eye, EyeOff, Save, Settings } from "lucide-react";
 import { addCacheBuster } from "@/lib/utils/cache-buster";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "@/components/common/Toast";
 import { getBrowserLang } from "@/lib/i18n/utils";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
-import { Eye, EyeOff, Save, Settings } from "lucide-react";
-import { 
-    Info, GitBranch, Tag, Bell, Type, UserPlus, HardDrive, Trash2, Clock, Shield,
-    Sun, User, Lock, Loader2, Palette, RefreshCw, ExternalLink, CheckCircle, AlertCircle
-} from "lucide-react";
 import env from "@/env.ts";
+
 
 const TOAST_POSITIONS: ToastPosition[] = [
     'top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right',
@@ -190,7 +188,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
             {/* 左列 */}
             <div className="flex flex-col gap-4">
                 {/* 版本信息 */}
-                <div className="rounded-3xl border border-border bg-card p-6 space-y-5">
+                <div className="rounded-xl border border-border bg-card p-6 space-y-5">
                     <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
                         <Info className="h-5 w-5" />
                         {t("versionInfo")}
@@ -246,7 +244,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                 </div>
 
                 {/* 外观设置 */}
-                <div className="rounded-3xl border border-border bg-card p-6 space-y-5">
+                <div className="rounded-xl border border-border bg-card p-6 space-y-5">
                     <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
                         <Sun className="h-5 w-5" />
                         {t("appearance")}
@@ -282,7 +280,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                 </div>
 
                 {/* 账户设置 */}
-                <div className="rounded-3xl border border-border bg-card p-6 space-y-5">
+                <div className="rounded-xl border border-border bg-card p-6 space-y-5">
                     <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
                         <User className="h-5 w-5" />
                         {t("accountSettings")}
@@ -322,12 +320,12 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
 
             {/* 右列 - 系统配置 */}
             <div className="flex flex-col gap-4">
-                <div className="rounded-3xl border border-border bg-card p-6 space-y-5">
+                <div className="rounded-xl border border-border bg-card p-6 space-y-5">
                     <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
                         <Settings className="h-5 w-5" />
                         {t("systemConfig")}
                     </h2>
-                    
+
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">
                             <Type className="h-5 w-5 text-muted-foreground" />
@@ -336,9 +334,9 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                         <Input value={config.fontSet} onChange={(e) => updateConfig({ fontSet: e.target.value })} placeholder="e.g. /static/fonts/font.css" className="rounded-xl" />
                         <p className="text-xs text-muted-foreground">{t("fontSetDesc")}</p>
                     </div>
-                    
+
                     <div className="border-t border-border" />
-                    
+
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">
                             <UserPlus className="h-5 w-5 text-muted-foreground" />
@@ -350,9 +348,9 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                         </div>
                         <p className="text-xs text-muted-foreground">{t("registerIsEnableDesc")}</p>
                     </div>
-                    
+
                     <div className="border-t border-border" />
-                    
+
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">
                             <Shield className="h-5 w-5 text-muted-foreground" />
@@ -361,9 +359,9 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                         <Input type="number" value={config.adminUid} onChange={(e) => updateConfig({ adminUid: parseInt(e.target.value) || 0 })} placeholder="e.g. 1" className="rounded-xl" />
                         <p className="text-xs text-muted-foreground">{t("adminUidDesc")}</p>
                     </div>
-                    
+
                     <div className="border-t border-border" />
-                    
+
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">
                             <HardDrive className="h-5 w-5 text-muted-foreground" />
@@ -372,9 +370,9 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                         <Input value={config.fileChunkSize} onChange={(e) => updateConfig({ fileChunkSize: e.target.value })} placeholder="e.g. 1MB, 512KB" className="rounded-xl" />
                         <p className="text-xs text-muted-foreground">{t("fileChunkSizeDesc")}</p>
                     </div>
-                    
+
                     <div className="border-t border-border" />
-                    
+
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">
                             <Trash2 className="h-5 w-5 text-muted-foreground" />
@@ -383,9 +381,9 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                         <Input value={config.softDeleteRetentionTime} onChange={(e) => updateConfig({ softDeleteRetentionTime: e.target.value })} placeholder="e.g. 30d, 24h" className="rounded-xl" />
                         <p className="text-xs text-muted-foreground">{t("softDeleteRetentionTimeDesc")}</p>
                     </div>
-                    
+
                     <div className="border-t border-border" />
-                    
+
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">
                             <Clock className="h-5 w-5 text-muted-foreground" />
@@ -394,9 +392,9 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                         <Input value={config.uploadSessionTimeout} onChange={(e) => updateConfig({ uploadSessionTimeout: e.target.value })} placeholder="e.g. 1h, 30m" className="rounded-xl" />
                         <p className="text-xs text-muted-foreground">{t("uploadSessionTimeoutDesc")}</p>
                     </div>
-                    
+
                     <div className="border-t border-border" />
-                    
+
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">
                             <GitBranch className="h-5 w-5 text-muted-foreground" />
@@ -405,9 +403,9 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                         <Input type="number" min="100" value={config.historyKeepVersions} onChange={(e) => updateConfig({ historyKeepVersions: parseInt(e.target.value) || 100 })} placeholder="e.g. 100" className="rounded-xl" />
                         <p className="text-xs text-muted-foreground">{t("historyKeepVersionsDesc")}</p>
                     </div>
-                    
+
                     <div className="border-t border-border" />
-                    
+
                     <div className="space-y-3">
                         <div className="flex items-center gap-3">
                             <Clock className="h-5 w-5 text-muted-foreground" />
@@ -416,9 +414,9 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                         <Input value={config.historySaveDelay} onChange={(e) => updateConfig({ historySaveDelay: e.target.value })} placeholder="e.g. 10s, 1m" className="rounded-xl" />
                         <p className="text-xs text-muted-foreground">{t("historySaveDelayDesc")}</p>
                     </div>
-                    
+
                     <div className="border-t border-border" />
-                    
+
                     <Button onClick={handleSaveConfig} disabled={saving} className="w-full rounded-xl">
                         {saving ? (
                             <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t("submitting")}</>

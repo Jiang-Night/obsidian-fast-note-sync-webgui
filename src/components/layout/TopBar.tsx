@@ -1,9 +1,11 @@
-import { useTranslation } from "react-i18next"
-import { motion, AnimatePresence } from "motion/react"
-import { cn } from "@/lib/utils"
-import { useAppStore, type ModuleId } from "@/stores/app-store"
-import { ActionGroup } from "./ActionGroup"
-import { ProfileButton } from "@/components/navigation/ProfileButton"
+import { ProfileButton } from "@/components/navigation/ProfileButton";
+import { useAppStore, type ModuleId } from "@/stores/app-store";
+import { motion, AnimatePresence } from "motion/react";
+import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
+
+import { ActionGroup } from "./ActionGroup";
+
 
 interface TopBarProps {
   /** 登出回调 */
@@ -14,7 +16,7 @@ interface TopBarProps {
 
 /**
  * TopBar - 顶部栏组件
- * 
+ *
  * 简洁的顶部导航栏：
  * - 左侧显示 Logo + 当前模块名称
  * - 右侧显示操作按钮组
@@ -39,14 +41,17 @@ export function TopBar({ onLogout, className }: TopBarProps) {
     <header
       className={cn(
         "h-14 flex items-center justify-between px-4 md:px-6",
+        "sticky top-0 z-50",
+        "bg-background/80 backdrop-blur-md",
+        "border-b border-border/50",
         className
       )}
     >
       {/* Logo + Module Title */}
       <div className="flex items-center gap-3">
-        <img 
-          src="/static/images/icon.svg" 
-          alt="Logo" 
+        <img
+          src="/static/images/icon.svg"
+          alt="Logo"
           className="size-8 shrink-0"
         />
         <AnimatePresence mode="wait">

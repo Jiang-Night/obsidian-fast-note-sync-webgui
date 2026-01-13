@@ -94,6 +94,7 @@ export default {
     view: "查看",
     viewNote: "查看笔记",
     edit: "编辑",
+    editNote: "编辑笔记",
     viewNotes: "查看笔记",
     showing: "显示",
     to: "到",

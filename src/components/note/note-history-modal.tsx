@@ -1,7 +1,7 @@
-import { ChevronLeft, ChevronRight, History, FileText, Apple, Laptop, Chrome, Smartphone, Copy, Check, RotateCcw } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
+import { ChevronLeft, ChevronRight, History, FileText, Apple, Laptop, Chrome, Smartphone, Copy, Check, RotateCcw } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useNoteHandle } from "@/components/api-handle/note-handle";
 import { NoteHistory, NoteHistoryDetail } from "@/lib/types/note";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -245,7 +245,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent className="max-w-4xl w-[95vw] sm:w-auto max-h-[85vh] sm:max-h-[90vh] flex flex-col p-4 sm:p-6 rounded-2xl sm:rounded-3xl">
+            <DialogContent className="max-w-4xl w-[95vw] sm:w-auto max-h-[85vh] sm:max-h-[90vh] flex flex-col p-4 sm:p-6 rounded-lg sm:rounded-xl">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 font-normal overflow-hidden text-sm sm:text-base">
                         <History className="h-4 w-4 shrink-0 text-muted-foreground opacity-70" />
@@ -305,7 +305,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                     </TableBody>
                                 </Table>
                             </div>
-                            
+
                             {/* 移动端卡片列表 */}
                             <div className="sm:hidden divide-y">
                                 {loading ? (
@@ -314,8 +314,8 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                     <div className="text-center py-8 text-muted-foreground">{t("noHistory")}</div>
                                 ) : (
                                     historyList.filter(item => item !== null).map((item) => (
-                                        <div 
-                                            key={item.id} 
+                                        <div
+                                            key={item.id}
                                             className={`p-3 ${selectedHistory?.id === item.id ? "bg-blue-50" : ""}`}
                                             onClick={() => handleViewDetail(item.id)}
                                         >
