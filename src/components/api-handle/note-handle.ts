@@ -11,8 +11,8 @@ export function useNoteHandle() {
 
     const getHeaders = useCallback(() => ({
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
         Domain: window.location.origin,
-        Token: token,
         Lang: getBrowserLang(),
     }), [token])
 

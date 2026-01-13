@@ -31,6 +31,7 @@ export function NoteManager({
     const { t } = useTranslation();
     const [view, setView] = useState<"list" | "editor">("list");
     const [selectedNote, setSelectedNote] = useState<Note | undefined>(undefined);
+    const [initialPreviewMode, setInitialPreviewMode] = useState(false);
     const [vaults, setVaults] = useState<VaultType[]>([]);
     const [historyModalOpen, setHistoryModalOpen] = useState(false);
     const [selectedNoteForHistory, setSelectedNoteForHistory] = useState<Note | null>(null);
@@ -62,13 +63,15 @@ export function NoteManager({
         setPage(1);
     }, [vault]);
 
-    const handleSelectNote = (note: Note) => {
+    const handleSelectNote = (note: Note, previewMode: boolean = false) => {
         setSelectedNote(note);
+        setInitialPreviewMode(previewMode);
         setView("editor");
     };
 
     const handleCreateNote = () => {
         setSelectedNote(undefined);
+        setInitialPreviewMode(false);
         setView("editor");
     };
 
@@ -136,6 +139,7 @@ export function NoteManager({
                 isMaximized={isMaximized}
                 onToggleMaximize={onToggleMaximize}
                 isRecycle={isRecycle}
+                initialPreviewMode={initialPreviewMode}
             />
         );
     } else {

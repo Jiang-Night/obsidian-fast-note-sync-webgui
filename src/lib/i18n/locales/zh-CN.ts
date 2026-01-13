@@ -92,6 +92,7 @@ export default {
     noteContentPlaceholder: "请输入笔记内容...",
     saving: "保存中...",
     view: "查看",
+    viewNote: "查看笔记",
     edit: "编辑",
     viewNotes: "查看笔记",
     showing: "显示",

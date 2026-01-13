@@ -92,6 +92,7 @@ export default {
     noteContentPlaceholder: "Please enter note content...",
     saving: "Saving...",
     view: "View",
+    viewNote: "View Note",
     edit: "Edit",
     viewNotes: "View Notes",
     showing: "Showing",

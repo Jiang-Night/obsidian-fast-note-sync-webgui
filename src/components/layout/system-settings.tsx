@@ -105,7 +105,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Token: token || "",
+                    "Authorization": `Bearer ${token}`,
                     Lang: getBrowserLang(),
                 },
                 body: JSON.stringify(newConfig),
@@ -158,7 +158,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
             try {
                 const response = await fetch(addCacheBuster(env.API_URL + "/api/admin/config"), {
                     headers: {
-                        Token: token || "",
+                        "Authorization": `Bearer ${token}`,
                         Lang: getBrowserLang(),
                     },
                 })
@@ -199,7 +199,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
             formData.append("confirmPassword", confirmPassword)
             const response = await fetch(addCacheBuster(env.API_URL + "/api/user/change_password"), {
                 method: "POST",
-                headers: { Token: token || "" },
+                headers: { "Authorization": `Bearer ${token}` },
                 body: formData,
             })
             const res = await response.json()
@@ -233,7 +233,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Token: token || "",
+                    "Authorization": `Bearer ${token}`,
                     Lang: getBrowserLang(),
                 },
                 body: JSON.stringify(newConfig),
@@ -267,7 +267,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Token: token || "",
+                    "Authorization": `Bearer ${token}`,
                     Lang: getBrowserLang(),
                 },
                 body: JSON.stringify(newConfig),
