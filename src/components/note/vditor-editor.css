@@ -156,6 +156,27 @@ body:has(.vditor--fullscreen) header {
   z-index: 40 !important;
 }
 
+/* 纯预览模式 (阅读模式) 优化 */
+.vditor-container--preview-only .vditor-sv.vditor-reset {
+  display: none !important; /* 隐藏编辑器源码部分 */
+}
+
+.vditor-container--preview-only .vditor-toolbar {
+  display: none !important; /* 隐藏空工具栏及其边框 */
+}
+
+.vditor-container--preview-only .vditor-preview {
+  display: block !important;
+  width: 100% !important;
+  border-left: none !important;
+}
+
+.vditor-container--preview-only .vditor-preview > .vditor-reset {
+  max-width: 900px !important; /* 保持适中的阅读宽度 */
+  margin: 0 auto !important; /* 居中显示 */
+  padding: 40px 20px !important;
+}
+
 /* Webkit 浏览器 (Chrome/Safari/Edge) */
 .vditor-ir .vditor-reset::-webkit-scrollbar,
 .vditor-wysiwyg .vditor-reset::-webkit-scrollbar,

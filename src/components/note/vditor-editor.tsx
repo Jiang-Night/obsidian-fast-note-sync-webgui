@@ -157,7 +157,7 @@ export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
                     "export",
                 ],
                 counter: {
-                    enable: true,
+                    enable: false,
                     type: "text",
                 },
                 outline: {
@@ -253,7 +253,7 @@ export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
             }
         }, [readOnly, isReady]);
 
-        return <div ref={containerRef} className="vditor-container h-full" />;
+        return <div ref={containerRef} className={`vditor-container h-full ${initialMode === "preview" ? "vditor-container--preview-only" : ""}`} />;
     }
 );
 

@@ -1,15 +1,17 @@
-import { ArrowLeft, Folder, History, RefreshCcw, Check, X, Cloud, Fullscreen, Shrink } from "lucide-react";
+import { ArrowLeft, Folder, History, RefreshCcw, Check, X, Cloud, Fullscreen, Shrink, Eye, Pencil } from "lucide-react";
 import { useState, useEffect, useCallback, useRef, lazy, Suspense } from "react";
 import { useNoteHandle } from "@/components/api-handle/note-handle";
-import { toast } from "@/components/common/Toast";
 import { Note, NoteDetail } from "@/lib/types/note";
-import { Button } from "@/components/ui/button";
 import { Tooltip } from "@/components/ui/tooltip";
+import { toast } from "@/components/common/Toast";
+import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { hashCode } from "@/lib/utils/hash";
 import { format } from "date-fns";
+
 import type { VditorEditorRef } from "./vditor-editor";
+
 
 // 懒加载编辑器组件
 const VditorEditor = lazy(() => import("./vditor-editor").then(m => ({ default: m.VditorEditor })));
@@ -68,11 +70,17 @@ export function NoteEditor({
     const [editingTitleValue, setEditingTitleValue] = useState("");
     const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
     const [isFullscreen, setIsFullscreen] = useState(false);
+    const [isPreviewMode, setIsPreviewMode] = useState(initialPreviewMode);
     const titleInputRef = useRef<HTMLInputElement>(null);
-    
+
+    // 当 initialPreviewMode 变化时（例如从外部切换笔记），同步状态
+    useEffect(() => {
+        setIsPreviewMode(initialPreviewMode);
+    }, [initialPreviewMode, note?.id]);
+
     // 是否为新建笔记模式
     const isNewNote = !note;
-    
+
     // 记录初始 note id，用于判断是否需要重新加载
     const initialNoteIdRef = useRef(note?.id);
 
@@ -107,8 +115,7 @@ export function NoteEditor({
     // 首次挂载时加载
     useEffect(() => {
         loadNote();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [loadNote]);
 
     // 清理定时器
     useEffect(() => {
@@ -122,7 +129,7 @@ export function NoteEditor({
     // 全屏切换
     const toggleFullscreen = useCallback(() => {
         if (!containerRef.current) return;
-        
+
         if (!document.fullscreenElement) {
             containerRef.current.requestFullscreen().catch(() => {
                 // 全屏请求失败时静默处理
@@ -148,9 +155,9 @@ export function NoteEditor({
     // 执行保存操作
     const doSave = useCallback((currentPath: string, currentContent: string, silent: boolean = false) => {
         if (!currentPath || isRecycle) return;
-        
+
         const fullPath = currentPath.endsWith(".md") ? currentPath : currentPath + ".md";
-        
+
         const options: { pathHash?: string; srcPath?: string; srcPathHash?: string; contentHash?: string } = {
             pathHash: hashCode(fullPath),
             contentHash: hashCode(currentContent)
@@ -178,17 +185,17 @@ export function NoteEditor({
     // 内容变化时的防抖自动保存
     const handleContentChange = useCallback((newContent: string) => {
         setContent(newContent);
-        
+
         // 新建笔记且没有标题时不自动保存
         if (isNewNote && !path) return;
         // 回收站模式不保存
         if (isRecycle) return;
-        
+
         // 清除之前的定时器
         if (saveTimerRef.current) {
             clearTimeout(saveTimerRef.current);
         }
-        
+
         // 设置新的防抖定时器
         saveTimerRef.current = setTimeout(() => {
             doSave(path, newContent, true);
@@ -215,7 +222,7 @@ export function NoteEditor({
             .split('')
             .filter(c => c.charCodeAt(0) >= 32)
             .join('');
-        
+
         if (!sanitized) {
             cancelEditingTitle();
             return;
@@ -224,7 +231,7 @@ export function NoteEditor({
         const oldPath = path;
         setPath(sanitized);
         setIsEditingTitle(false);
-        
+
         // 如果路径变化了，保存笔记
         if (sanitized !== oldPath) {
             const currentContent = editorRef.current?.getValue() || content;
@@ -287,8 +294,8 @@ export function NoteEditor({
                         className="font-bold text-sm sm:text-lg border-none shadow-none focus-visible:ring-0 px-1 sm:px-2 flex-1 h-7 sm:h-auto"
                         autoFocus
                     />
-                    <Button 
-                        variant="ghost" 
+                    <Button
+                        variant="ghost"
                         size="icon-sm"
                         className="self-center h-6 w-6 sm:h-7 sm:w-7 shrink-0"
                         onClick={handleFirstSave}
@@ -332,7 +339,7 @@ export function NoteEditor({
         // 显示标题（可点击编辑）
         return (
             <div className="flex items-center gap-1 min-w-0 flex-1">
-                <div 
+                <div
                     className={`flex items-center gap-1 min-w-0 text-sm sm:text-lg ${!isRecycle ? "cursor-pointer hover:bg-muted/50 rounded px-1 py-0.5 -mx-1 -my-0.5 transition-colors" : ""}`}
                     onClick={startEditingTitle}
                 >
@@ -385,24 +392,24 @@ export function NoteEditor({
             {/* 顶部工具栏 */}
             <div className="flex items-center justify-between gap-1 sm:gap-4 mb-1 sm:mb-4">
                 <div className="flex items-center gap-1 sm:gap-3 min-w-0 flex-1">
-                    <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        onClick={onBack} 
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={onBack}
                         className="shrink-0 rounded-lg sm:rounded-xl h-7 w-7 sm:h-10 sm:w-10"
                     >
                         <ArrowLeft className="h-4 w-4 sm:h-5 sm:w-5" />
                     </Button>
-                    
+
                     {renderTitle()}
                 </div>
 
                 <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
                     {note && (
                         <Tooltip content={t("refresh")} side="bottom" delay={200}>
-                            <Button 
-                                onClick={loadNote} 
-                                variant="outline" 
+                            <Button
+                                onClick={loadNote}
+                                variant="outline"
                                 size="icon"
                                 className="rounded-lg sm:rounded-xl h-7 w-7 sm:h-10 sm:w-10"
                             >
@@ -410,10 +417,22 @@ export function NoteEditor({
                             </Button>
                         </Tooltip>
                     )}
+                    {note && (
+                        <Tooltip content={isPreviewMode ? t("editNote") : t("viewNote")} side="bottom" delay={200}>
+                            <Button
+                                onClick={() => setIsPreviewMode(!isPreviewMode)}
+                                variant="outline"
+                                size="icon"
+                                className="rounded-lg sm:rounded-xl h-7 w-7 sm:h-10 sm:w-10"
+                            >
+                                {isPreviewMode ? <Pencil className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : <Eye className="h-3.5 w-3.5 sm:h-4 sm:w-4" />}
+                            </Button>
+                        </Tooltip>
+                    )}
                     {note && onViewHistory && (
                         <Tooltip content={t("history") || "历史"} side="bottom" delay={200}>
-                            <Button 
-                                onClick={onViewHistory} 
+                            <Button
+                                onClick={onViewHistory}
                                 variant="outline"
                                 size="icon"
                                 className="rounded-lg sm:rounded-xl h-7 w-7 sm:h-10 sm:w-10"
@@ -423,9 +442,9 @@ export function NoteEditor({
                         </Tooltip>
                     )}
                     <Tooltip content={isFullscreen ? (t("exitFullscreen") || "退出全屏") : (t("fullscreen") || "全屏")} side="bottom" delay={200}>
-                        <Button 
-                            onClick={toggleFullscreen} 
-                            variant="outline" 
+                        <Button
+                            onClick={toggleFullscreen}
+                            variant="outline"
                             size="icon"
                             className="rounded-lg sm:rounded-xl h-7 w-7 sm:h-10 sm:w-10"
                         >
@@ -446,13 +465,14 @@ export function NoteEditor({
                         <Suspense fallback={<EditorLoading />}>
                             <VditorEditor
                                 ref={editorRef}
+                                key={`${note?.id}-${isPreviewMode}`}
                                 value={content}
                                 onChange={handleContentChange}
-                                readOnly={isRecycle}
+                                readOnly={isRecycle || isPreviewMode}
                                 placeholder={t("noteContentPlaceholder")}
                                 vault={vault}
                                 fileLinks={originalNote?.fileLinks}
-                                initialMode={initialPreviewMode ? "preview" : "sv"}
+                                initialMode={isPreviewMode ? "preview" : "sv"}
                             />
                         </Suspense>
                     </div>
