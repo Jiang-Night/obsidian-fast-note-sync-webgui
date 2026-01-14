@@ -79,19 +79,62 @@ function App() {
       if (currentFontUrl === fontUrl) return
       currentFontUrl = fontUrl
 
-      // 移除旧的字体样式
+      // 移除旧的动态样式
       const oldLink = document.getElementById("dynamic-font-link")
       if (oldLink) oldLink.remove()
+      const oldStyle = document.getElementById("dynamic-font-style")
+      if (oldStyle) oldStyle.remove()
+      document.body.style.fontFamily = ""
 
-      // 支持远程 CSS 或服务端字体文件路径
-      if (fontUrl && fontUrl.endsWith(".css")) {
+      if (!fontUrl) return
+
+      // 1. 处理简写: "local" -> "/static/fonts/local.css"
+      let finalUrl = fontUrl
+      if (!fontUrl.includes("/") && !fontUrl.includes("://")) {
+        finalUrl = `/static/fonts/${fontUrl}.css`
+      }
+
+      // 2. 格式化完整路径 (不再强制拼接 API 地址，由浏览器基于当前域名解析)
+      const fullUrl = finalUrl
+
+      // 提取路径部分用于判断扩展名 (忽略查询参数)
+      const pathOnly = finalUrl.split('?')[0].split('#')[0]
+      const isCss = pathOnly.toLowerCase().endsWith(".css") || finalUrl.includes("fonts.googleapis.com")
+      const isDirectFont = /\.(woff2|woff|ttf|otf)$/i.test(pathOnly)
+
+      if (isCss) {
+        // 加载 CSS 链接
         const link = document.createElement("link")
         link.id = "dynamic-font-link"
         link.rel = "stylesheet"
-        // 服务端路径需要拼接 API_URL
-        link.href = fontUrl.startsWith("/") ? `${env.API_URL.replace(/\/$/, "")}${fontUrl}` : fontUrl
+        link.href = fullUrl
         link.crossOrigin = "anonymous"
         document.head.appendChild(link)
+
+        // 针对 Google Fonts 自动尝试应用
+        if (fullUrl.includes("fonts.googleapis.com")) {
+          const familyMatch = fullUrl.match(/family=([^&:]+)/)
+          if (familyMatch) {
+            const familyName = decodeURIComponent(familyMatch[1]).replace(/\+/g, ' ')
+            document.body.style.fontFamily = `'${familyName}', sans-serif`
+          }
+        }
+      } else if (isDirectFont) {
+        // 直接定义字体并应用
+        const style = document.createElement("style")
+        style.id = "dynamic-font-style"
+        const familyName = "DynamicCustomFont"
+        style.textContent = `
+          @font-face {
+            font-family: '${familyName}';
+            src: url('${fullUrl}');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+          }
+          body { font-family: '${familyName}', sans-serif !important; }
+        `
+        document.head.appendChild(style)
       }
     }
 

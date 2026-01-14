@@ -22,6 +22,7 @@ const TOAST_POSITIONS: ToastPosition[] = [
 
 interface SystemConfig {
     fontSet: string
+    authTokenKey: string
     registerIsEnable: boolean
     fileChunkSize: string
     softDeleteRetentionTime: string
@@ -332,7 +333,18 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                             <span className="text-sm font-medium">{t("fontSet")}</span>
                         </div>
                         <Input value={config.fontSet} onChange={(e) => updateConfig({ fontSet: e.target.value })} placeholder="e.g. /static/fonts/font.css" className="rounded-xl" />
-                        <p className="text-xs text-muted-foreground">{t("fontSetDesc")}</p>
+                        <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("fontSetDesc") }} />
+                    </div>
+
+                    <div className="border-t border-border" />
+
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                            <Lock className="h-5 w-5 text-muted-foreground" />
+                            <span className="text-sm font-medium">{t("authTokenKey")}</span>
+                        </div>
+                        <Input value={config.authTokenKey} onChange={(e) => updateConfig({ authTokenKey: e.target.value })} placeholder="e.g. token" className="rounded-xl" />
+                        <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("authTokenKeyDesc") }} />
                     </div>
 
                     <div className="border-t border-border" />
@@ -346,7 +358,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                             <Checkbox id="registerIsEnable" checked={config.registerIsEnable} onCheckedChange={(checked) => updateConfig({ registerIsEnable: !!checked })} />
                             <Label htmlFor="registerIsEnable" className="text-sm">{config.registerIsEnable ? t("isEnabled") : t("close")}</Label>
                         </div>
-                        <p className="text-xs text-muted-foreground">{t("registerIsEnableDesc")}</p>
+                        <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("registerIsEnableDesc") }} />
                     </div>
 
                     <div className="border-t border-border" />
@@ -357,7 +369,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                             <span className="text-sm font-medium">{t("adminUid")}</span>
                         </div>
                         <Input type="number" value={config.adminUid} onChange={(e) => updateConfig({ adminUid: parseInt(e.target.value) || 0 })} placeholder="e.g. 1" className="rounded-xl" />
-                        <p className="text-xs text-muted-foreground">{t("adminUidDesc")}</p>
+                        <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("adminUidDesc") }} />
                     </div>
 
                     <div className="border-t border-border" />
@@ -368,7 +380,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                             <span className="text-sm font-medium">{t("fileChunkSize")}</span>
                         </div>
                         <Input value={config.fileChunkSize} onChange={(e) => updateConfig({ fileChunkSize: e.target.value })} placeholder="e.g. 1MB, 512KB" className="rounded-xl" />
-                        <p className="text-xs text-muted-foreground">{t("fileChunkSizeDesc")}</p>
+                        <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("fileChunkSizeDesc") }} />
                     </div>
 
                     <div className="border-t border-border" />
@@ -379,7 +391,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                             <span className="text-sm font-medium">{t("softDeleteRetentionTime")}</span>
                         </div>
                         <Input value={config.softDeleteRetentionTime} onChange={(e) => updateConfig({ softDeleteRetentionTime: e.target.value })} placeholder="e.g. 30d, 24h" className="rounded-xl" />
-                        <p className="text-xs text-muted-foreground">{t("softDeleteRetentionTimeDesc")}</p>
+                        <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("softDeleteRetentionTimeDesc") }} />
                     </div>
 
                     <div className="border-t border-border" />
@@ -390,7 +402,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                             <span className="text-sm font-medium">{t("uploadSessionTimeout")}</span>
                         </div>
                         <Input value={config.uploadSessionTimeout} onChange={(e) => updateConfig({ uploadSessionTimeout: e.target.value })} placeholder="e.g. 1h, 30m" className="rounded-xl" />
-                        <p className="text-xs text-muted-foreground">{t("uploadSessionTimeoutDesc")}</p>
+                        <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("uploadSessionTimeoutDesc") }} />
                     </div>
 
                     <div className="border-t border-border" />
@@ -401,7 +413,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                             <span className="text-sm font-medium">{t("historyKeepVersions")}</span>
                         </div>
                         <Input type="number" min="100" value={config.historyKeepVersions} onChange={(e) => updateConfig({ historyKeepVersions: parseInt(e.target.value) || 100 })} placeholder="e.g. 100" className="rounded-xl" />
-                        <p className="text-xs text-muted-foreground">{t("historyKeepVersionsDesc")}</p>
+                        <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("historyKeepVersionsDesc") }} />
                     </div>
 
                     <div className="border-t border-border" />
@@ -412,7 +424,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                             <span className="text-sm font-medium">{t("historySaveDelay")}</span>
                         </div>
                         <Input value={config.historySaveDelay} onChange={(e) => updateConfig({ historySaveDelay: e.target.value })} placeholder="e.g. 10s, 1m" className="rounded-xl" />
-                        <p className="text-xs text-muted-foreground">{t("historySaveDelayDesc")}</p>
+                        <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("historySaveDelayDesc") }} />
                     </div>
 
                     <div className="border-t border-border" />
