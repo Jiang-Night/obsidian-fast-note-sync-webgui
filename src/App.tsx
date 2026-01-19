@@ -2,6 +2,7 @@ import { useVaultHandle } from "@/components/api-handle/vault-handle";
 import { SystemSettings } from "@/components/layout/system-settings";
 import { useUserHandle } from "@/components/api-handle/user-handle";
 import { NoteManager } from "@/components/note/note-manager";
+import { FileManager } from "@/components/file/file-manager";
 import { useAuth } from "@/components/context/auth-context";
 import { ComingSoon } from "@/components/common/ComingSoon";
 import { VaultList } from "@/components/vault/vault-list";
@@ -51,9 +52,9 @@ function App() {
     }
   }, [isLoggedIn, handleUserInfo, logout])
 
-  // 当切换到笔记页面时，从 API 获取仓库列表并验证当前仓库是否有效
+  // 当切换到笔记、附件或回收站页面时，从 API 获取仓库列表并验证当前仓库是否有效
   useEffect(() => {
-    if ((currentModule === "notes" || currentModule === "trash") && isLoggedIn) {
+    if ((currentModule === "notes" || currentModule === "files" || currentModule === "trash") && isLoggedIn) {
       setVaultsLoaded(false)
       handleVaultList((vaults) => {
         if (vaults.length > 0) {
@@ -166,7 +167,7 @@ function App() {
     return () => {
       isMounted = false
     }
-  }, [])
+  }, [t])
 
   // 处理认证成功
   const handleAuthSuccess = () => {
@@ -215,6 +216,23 @@ function App() {
             onNavigateToVaults={() => setModule("vaults")}
             isMaximized={zenMode}
             onToggleMaximize={handleToggleZenMode}
+          />
+        )
+
+      case "files":
+        // 等待 vault 加载完成
+        if (!vaultsLoaded || !activeVault) {
+          return (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+          )
+        }
+        return (
+          <FileManager
+            vault={activeVault}
+            onVaultChange={setActiveVault}
+            onNavigateToVaults={() => setModule("vaults")}
           />
         )
 

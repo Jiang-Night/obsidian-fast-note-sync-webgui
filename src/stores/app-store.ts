@@ -1,16 +1,18 @@
-import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { create } from 'zustand';
+
 
 /**
  * 模块 ID 类型
  * - vaults: 仓库管理
  * - notes: 笔记管理
+ * - files: 附件管理
  * - trash: 回收站
  * - settings: 设置（仅管理员）
  * - sync: 远端备份（计划中）
  * - git: Git 自动化（计划中）
  */
-export type ModuleId = 'vaults' | 'notes' | 'trash' | 'settings' | 'sync' | 'git';
+export type ModuleId = 'vaults' | 'notes' | 'files' | 'trash' | 'settings' | 'sync' | 'git';
 
 /**
  * 应用状态接口
@@ -47,7 +49,7 @@ const defaultState = {
 
 /**
  * 应用状态 Store
- * 
+ *
  * 使用 Zustand + persist 中间件管理应用状态
  * - currentModule 持久化到 localStorage
  * - zenMode 和 userMenuOpen 不持久化（每次刷新重置）

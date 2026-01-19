@@ -1,4 +1,4 @@
-import { Database, FileText, Trash2, Settings, RefreshCw, GitBranch } from "lucide-react";
+import { Database, FileText, Trash2, Settings, RefreshCw, GitBranch, Paperclip } from "lucide-react";
 import { useAppStore, type ModuleId } from "@/stores/app-store";
 import { NavItem } from "@/components/navigation/NavItem";
 import { useTranslation } from "react-i18next";
@@ -32,6 +32,7 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
   }> = [
       { id: "vaults", icon: Database, labelKey: "menuVaults" },
       { id: "notes", icon: FileText, labelKey: "menuNotes" },
+      { id: "files", icon: Paperclip, labelKey: "menuFiles" },
       { id: "trash", icon: Trash2, labelKey: "menuTrash" },
       { id: "settings", icon: Settings, labelKey: "menuSettings", adminOnly: true },
     ]

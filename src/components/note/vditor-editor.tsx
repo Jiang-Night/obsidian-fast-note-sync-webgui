@@ -40,7 +40,7 @@ function transformObsidianSyntax(
         const resolvedPath = fileLinks[rawPath] || rawPath;
         const options = parts.slice(1);
 
-        const apiUrl = `${env.API_URL}/api/note/file?vault=${encodeURIComponent(vault)}&path=${encodeURIComponent(resolvedPath)}&token=${encodeURIComponent(token)}`;
+        const apiUrl = `${env.API_URL}/api/file?vault=${encodeURIComponent(vault)}&path=${encodeURIComponent(resolvedPath)}&token=${encodeURIComponent(token)}`;
         const lowerPath = resolvedPath.toLowerCase();
         const isImage = /\.(png|jpg|jpeg|gif|svg|webp|bmp)$/i.test(lowerPath);
         const isVideo = /\.(mp4|webm|ogg|mov)$/i.test(lowerPath);
