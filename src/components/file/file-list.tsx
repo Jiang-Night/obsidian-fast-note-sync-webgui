@@ -1,4 +1,4 @@
-import { FileText, Trash2, RefreshCw, Search, X, Calendar, Clock, ArrowUpDown, Paperclip } from "lucide-react";
+import { FileText, Trash2, RefreshCw, Search, X, Calendar, Clock, ArrowUpDown, Paperclip, Image, Music, Video, FileCode } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { useFileHandle } from "@/components/api-handle/file-handle";
@@ -72,6 +72,37 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false }: Fi
                 fetchFiles();
             });
         });
+    };
+
+    /**
+     * 根据文件后缀获取对应的图标
+     */
+    const getFileIcon = (path: string) => {
+        const ext = path.split('.').pop()?.toLowerCase() || '';
+
+        // 图片类型
+        if (['jpg', 'jpeg', 'png', 'gif', 'svg', 'webp', 'bmp'].includes(ext)) {
+            return <Image className="h-5 w-5" />;
+        }
+        // PDF 类型
+        if (ext === 'pdf') {
+            return <FileText className="h-5 w-5" />;
+        }
+        // 音频类型
+        if (['mp3', 'wav', 'flac', 'ogg', 'm4a'].includes(ext)) {
+            return <Music className="h-5 w-5" />;
+        }
+        // 视频类型
+        if (['mp4', 'webm', 'mkv', 'avi', 'mov'].includes(ext)) {
+            return <Video className="h-5 w-5" />;
+        }
+        // 脚本/代码类型
+        if (['js', 'ts', 'jsx', 'tsx', 'py', 'sh', 'bat', 'go', 'css', 'html', 'json', 'c', 'cpp', 'rs', 'php'].includes(ext)) {
+            return <FileCode className="h-5 w-5" />;
+        }
+
+        // 默认类型
+        return <Paperclip className="h-5 w-5" />;
     };
 
     return (
@@ -189,7 +220,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false }: Fi
                                     {/* 左侧：图标和内容 */}
                                     <div className="flex items-start gap-3 min-w-0 flex-1">
                                         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
-                                            <Paperclip className="h-5 w-5" />
+                                            {getFileIcon(file.path)}
                                         </span>
                                         <div className="min-w-0 flex-1">
                                             <h3 className="font-semibold text-card-foreground truncate">
@@ -197,7 +228,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false }: Fi
                                             </h3>
                                             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-xs text-muted-foreground">
                                                 <span className="flex items-center gap-1">
-                                                    <Paperclip className="h-3.5 w-3.5" />
+
                                                     {formatFileSize(file.size)}
                                                 </span>
                                                 <Tooltip content={t("createdAt")} side="top" delay={300}>
