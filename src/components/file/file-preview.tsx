@@ -1,6 +1,7 @@
 import { X, ExternalLink, Download, FileText, FileCode, Paperclip } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
+import { useRef, useEffect } from "react";
 import { File } from "@/lib/types/file";
 
 
@@ -19,6 +20,20 @@ export function FilePreview({ file, url, onClose }: FilePreviewProps) {
     const isCode = ['js', 'ts', 'jsx', 'tsx', 'py', 'sh', 'bat', 'go', 'css', 'html', 'json', 'c', 'cpp', 'rs', 'php'].includes(ext);
 
     const fileName = file.path.split('/').pop() || file.path;
+    const mediaRef = useRef<HTMLMediaElement>(null);
+
+    // 加载记忆的音量
+    useEffect(() => {
+        const savedVolume = localStorage.getItem('preview-volume');
+        if (savedVolume && mediaRef.current) {
+            mediaRef.current.volume = parseFloat(savedVolume);
+        }
+    }, [url]);
+
+    // 处理音量变化并保存
+    const handleVolumeChange = (e: React.SyntheticEvent<HTMLMediaElement>) => {
+        localStorage.setItem('preview-volume', e.currentTarget.volume.toString());
+    };
 
     return (
         <AnimatePresence>
@@ -76,15 +91,24 @@ export function FilePreview({ file, url, onClose }: FilePreviewProps) {
                                     </svg>
                                 </div>
                             </div>
-                            <audio src={url} controls autoPlay className="w-full" />
+                            <audio
+                                ref={mediaRef as React.RefObject<HTMLAudioElement>}
+                                src={url}
+                                controls
+                                autoPlay
+                                className="w-full"
+                                onVolumeChange={handleVolumeChange}
+                            />
                         </div>
                     )}
                     {isVideo && (
                         <video
+                            ref={mediaRef as React.RefObject<HTMLVideoElement>}
                             src={url}
                             controls
                             autoPlay
                             className="max-w-full max-h-100 rounded-lg shadow-sm"
+                            onVolumeChange={handleVolumeChange}
                         />
                     )}
                     {!isImage && !isAudio && !isVideo && (
