@@ -1,9 +1,9 @@
 import { FileText, Trash2, RefreshCw, Search, X, Calendar, Clock, ArrowUpDown, Paperclip, Image, Music, Video, FileCode, RotateCcw, ChevronLeft, ChevronRight } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
-import { FileListResponse, File as FileDTO } from "@/lib/types/file";
 import { useFileHandle } from "@/components/api-handle/file-handle";
 import React, { useState, useEffect } from "react";
+import { File as FileDTO } from "@/lib/types/file";
 import { Tooltip } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
