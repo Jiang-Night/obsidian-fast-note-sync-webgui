@@ -279,4 +279,13 @@ export default {
     searchFilePlaceholder: "搜索附件...",
     deleteFileConfirm: "確定要刪除附件 \"{{title}}\" 嗎？",
     restoreFileConfirm: "確定要恢復附件 \"{{title}}\" 嗎？",
+    imagePreview: "圖片預覽",
+    audioPreview: "音頻播放",
+    videoPreview: "視頻播放",
+    pdfPreview: "PDF 文檔",
+    codePreview: "腳本代碼",
+    fileDetail: "附件詳情",
+    unsupportedPreview: "該文件類型暫不支持直接預覽",
+    openInNewWindow: "在新窗口中打開",
+    browserDownload: "瀏覽器下載",
 };

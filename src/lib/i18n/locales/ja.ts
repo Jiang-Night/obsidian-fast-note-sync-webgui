@@ -267,4 +267,13 @@ export default {
     searchFilePlaceholder: "添付ファイルを検索...",
     deleteFileConfirm: "添付ファイル \"{{title}}\" を削除してもよろしいですか？",
     restoreFileConfirm: "添付ファイル \"{{title}}\" を復元してもよろしいですか？",
+    imagePreview: "画像プレビュー",
+    audioPreview: "オーディオ再生",
+    videoPreview: "ビデオ再生",
+    pdfPreview: "PDFドキュメント",
+    codePreview: "コードプレビュー",
+    fileDetail: "添付ファイルの詳細",
+    unsupportedPreview: "このファイル形式はまだ直接プレビューをサポートしていません",
+    openInNewWindow: "新しいウィンドウで開く",
+    browserDownload: "ブラウザでダウンロード",
 };

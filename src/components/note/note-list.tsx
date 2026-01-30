@@ -2,6 +2,7 @@ import { FileText, Trash2, RefreshCw, Plus, Calendar, Clock, ChevronLeft, Chevro
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { useNoteHandle } from "@/components/api-handle/note-handle";
+import { Checkbox } from "@/components/ui/checkbox";
 import React, { useState, useEffect } from "react";
 import { Tooltip } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
     const [regexError, setRegexError] = useState<string | null>(null);
     const [sortBy, setSortBy] = useState<SortBy>("mtime");
     const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+    const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
 
     // Debounce search keyword
     useEffect(() => {
@@ -93,6 +95,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
 
     useEffect(() => {
         fetchNotes(page, pageSize, debouncedKeyword);
+        setSelectedPaths(new Set()); // 清空选中
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [vault, page, pageSize, debouncedKeyword, isRecycle, searchMode, sortBy, sortOrder]);
 
@@ -127,6 +130,46 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
         });
     };
 
+    const toggleSelectAll = () => {
+        if (selectedPaths.size === notes.length && notes.length > 0) {
+            setSelectedPaths(new Set());
+        } else {
+            setSelectedPaths(new Set(notes.map(n => n.pathHash)));
+        }
+    };
+
+    const toggleSelect = (e: React.MouseEvent, pathHash: string) => {
+        e.stopPropagation();
+        const newSelected = new Set(selectedPaths);
+        if (newSelected.has(pathHash)) {
+            newSelected.delete(pathHash);
+        } else {
+            newSelected.add(pathHash);
+        }
+        setSelectedPaths(newSelected);
+    };
+
+    const onBatchRestore = () => {
+        if (selectedPaths.size === 0) return;
+
+        openConfirmDialog(t("batchRestoreConfirm", { count: selectedPaths.size }), "confirm", async () => {
+            setLoading(true);
+            const selectedNotes = notes.filter(n => selectedPaths.has(n.pathHash));
+
+            // 循环处理恢复
+            for (const note of selectedNotes) {
+                await new Promise<void>((resolve) => {
+                    handleRestoreNote(vault, note.path, note.pathHash, () => {
+                        resolve();
+                    });
+                });
+            }
+
+            setSelectedPaths(new Set());
+            fetchNotes();
+        });
+    };
+
     const totalPages = Math.ceil(totalRows / pageSize);
 
     return (
@@ -152,6 +195,35 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                     <span className="text-sm text-muted-foreground">
                         {totalRows} {isRecycle ? t("menuTrash") : ""}{t("note")}
                     </span>
+                    {isRecycle && notes.length > 0 && (
+                        <div className="flex items-center gap-2 ml-2 pl-4 border-l border-border">
+                            <Checkbox
+                                id="select-all"
+                                checked={selectedPaths.size === notes.length && notes.length > 0}
+                                onCheckedChange={toggleSelectAll}
+                                className="rounded-md"
+                            />
+                            <label htmlFor="select-all" className="text-xs font-medium cursor-pointer">
+                                {t("selectAll") || "全选"}
+                            </label>
+                            {selectedPaths.size > 0 && (
+                                <>
+                                    <span className="text-xs text-primary font-medium ml-2">
+                                        {t("selectedCount", { count: selectedPaths.size })}
+                                    </span>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={onBatchRestore}
+                                        className="h-8 rounded-xl ml-2 text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700 hover:border-green-300"
+                                    >
+                                        <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
+                                        {t("batchRestore")}
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* 右侧：搜索和操作 */}
@@ -278,6 +350,17 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                 <div className="flex items-center justify-between gap-4">
                                     {/* 左侧：图标和内容 */}
                                     <div className="flex items-start gap-3 min-w-0 flex-1">
+                                        {isRecycle && (
+                                            <div
+                                                className="flex items-center self-center"
+                                                onClick={(e) => toggleSelect(e, note.pathHash)}
+                                            >
+                                                <Checkbox
+                                                    checked={selectedPaths.has(note.pathHash)}
+                                                    className="rounded-md"
+                                                />
+                                            </div>
+                                        )}
                                         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
                                             <FileText className="h-5 w-5" />
                                         </span>
@@ -393,7 +476,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             setPageSize(newSize);
                             setPage(1);
                         }}>
-                            <SelectTrigger className="h-8 w-[100px] rounded-xl">
+                            <SelectTrigger className="h-8 w-25 rounded-xl">
                                 <SelectValue placeholder={pageSize.toString()} />
                             </SelectTrigger>
                             <SelectContent className="rounded-xl">

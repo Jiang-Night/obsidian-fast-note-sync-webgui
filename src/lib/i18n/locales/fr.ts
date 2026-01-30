@@ -267,4 +267,13 @@ export default {
     searchFilePlaceholder: "Rechercher des pièces jointes...",
     deleteFileConfirm: "Êtes-vous sûr de vouloir supprimer la pièce jointe \"{{title}}\" ?",
     restoreFileConfirm: "Êtes-vous sûr de vouloir restaurer la pièce jointe \"{{title}}\" ?",
+    imagePreview: "Aperçu de l'image",
+    audioPreview: "Aperçu audio",
+    videoPreview: "Aperçu vidéo",
+    pdfPreview: "Document PDF",
+    codePreview: "Aperçu du code",
+    fileDetail: "Détails de la pièce jointe",
+    unsupportedPreview: "Ce type de fichier ne prend pas encore en charge l'aperçu direct",
+    openInNewWindow: "Ouvrir dans une nouvelle fenêtre",
+    browserDownload: "Téléchargement par le navigateur",
 };

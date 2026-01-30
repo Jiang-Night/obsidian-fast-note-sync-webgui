@@ -599,7 +599,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
 
       {/* 配置模态窗口 */}
       <Dialog open={configModalOpen} onOpenChange={setConfigModalOpen}>
-        <DialogContent className="w-[calc(100vw-2rem)] max-w-lg mx-auto rounded-lg sm:rounded-xl">
+        <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl mx-auto rounded-lg sm:rounded-xl">
           <DialogHeader>
             <DialogTitle className="text-base sm:text-lg truncate pr-8">
               {configModalIsError ? t("copyConfigError") : (t("authTokenConfig") || "授权配置")}
@@ -610,7 +610,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
             <pre className="p-3 sm:p-4 rounded-xl bg-muted text-xs sm:text-sm overflow-x-auto max-h-48 sm:max-h-64 font-mono whitespace-pre-wrap break-all">
               {getConfigJson(configVaultName)}
             </pre>
-            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2">
+            <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 text-nowrap">
               <Button variant="outline" onClick={() => setConfigModalOpen(false)} className="w-full sm:w-auto rounded-xl">
                 {t("close") || "关闭"}
               </Button>

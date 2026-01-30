@@ -2,6 +2,7 @@ import { FileText, Trash2, RefreshCw, Search, X, Calendar, Clock, ArrowUpDown, P
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { useFileHandle } from "@/components/api-handle/file-handle";
+import { Checkbox } from "@/components/ui/checkbox";
 import React, { useState, useEffect } from "react";
 import { File as FileDTO } from "@/lib/types/file";
 import { Tooltip } from "@/components/ui/tooltip";
@@ -51,6 +52,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
     const [debouncedKeyword, setDebouncedKeyword] = useState(searchKeyword);
     const [sortBy, setSortBy] = useState<SortBy>("mtime");
     const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+    const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
 
     // 预览相关状态
     const [previewFile, setPreviewFile] = useState<FileDTO | null>(null);
@@ -75,6 +77,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
 
     useEffect(() => {
         fetchFiles(page, pageSize, debouncedKeyword);
+        setSelectedPaths(new Set());
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [vault, page, pageSize, debouncedKeyword, isRecycle, sortBy, sortOrder]);
 
@@ -104,6 +107,45 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
             handleRestoreFile(vault, file.path, file.pathHash, () => {
                 fetchFiles();
             });
+        });
+    };
+
+    const toggleSelectAll = () => {
+        if (selectedPaths.size === files.length && files.length > 0) {
+            setSelectedPaths(new Set());
+        } else {
+            setSelectedPaths(new Set(files.map(f => f.pathHash)));
+        }
+    };
+
+    const toggleSelect = (e: React.MouseEvent, pathHash: string) => {
+        e.stopPropagation();
+        const newSelected = new Set(selectedPaths);
+        if (newSelected.has(pathHash)) {
+            newSelected.delete(pathHash);
+        } else {
+            newSelected.add(pathHash);
+        }
+        setSelectedPaths(newSelected);
+    };
+
+    const onBatchRestore = () => {
+        if (selectedPaths.size === 0) return;
+
+        openConfirmDialog(t("batchRestoreConfirm", { count: selectedPaths.size }), "confirm", async () => {
+            setLoading(true);
+            const selectedFiles = files.filter(f => selectedPaths.has(f.pathHash));
+
+            for (const file of selectedFiles) {
+                await new Promise<void>((resolve) => {
+                    handleRestoreFile(vault, file.path, file.pathHash, () => {
+                        resolve();
+                    });
+                });
+            }
+
+            setSelectedPaths(new Set());
+            fetchFiles();
         });
     };
 
@@ -172,6 +214,35 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                     <span className="text-sm text-muted-foreground">
                         {totalRows} {t("file") || "附件"}
                     </span>
+                    {isRecycle && files.length > 0 && (
+                        <div className="flex items-center gap-2 ml-2 pl-4 border-l border-border">
+                            <Checkbox
+                                id="select-all"
+                                checked={selectedPaths.size === files.length && files.length > 0}
+                                onCheckedChange={toggleSelectAll}
+                                className="rounded-md"
+                            />
+                            <label htmlFor="select-all" className="text-xs font-medium cursor-pointer">
+                                {t("selectAll") || "全选"}
+                            </label>
+                            {selectedPaths.size > 0 && (
+                                <>
+                                    <span className="text-xs text-primary font-medium ml-2">
+                                        {t("selectedCount", { count: selectedPaths.size })}
+                                    </span>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={onBatchRestore}
+                                        className="h-8 rounded-xl ml-2 text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700 hover:border-green-300"
+                                    >
+                                        <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
+                                        {t("batchRestore")}
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* 右侧：搜索和操作 */}
@@ -264,6 +335,17 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                                 <div className="flex items-center justify-between gap-4">
                                     {/* 左侧：图标和内容 */}
                                     <div className="flex items-start gap-3 min-w-0 flex-1">
+                                        {isRecycle && (
+                                            <div
+                                                className="flex items-center self-center"
+                                                onClick={(e) => toggleSelect(e, file.pathHash)}
+                                            >
+                                                <Checkbox
+                                                    checked={selectedPaths.has(file.pathHash)}
+                                                    className="rounded-md"
+                                                />
+                                            </div>
+                                        )}
                                         <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary shrink-0">
                                             {getFileIcon(file.path)}
                                         </span>
