@@ -24,10 +24,12 @@ interface AppState {
   zenMode: boolean;
   /** 用户菜单是否打开 */
   userMenuOpen: boolean;
+  /** 回收站显示的类型：笔记或附件 */
+  trashType: 'notes' | 'files';
 
   // Actions
   /** 设置当前模块 */
-  setModule: (module: ModuleId) => void;
+  setModule: (module: ModuleId, trashType?: 'notes' | 'files') => void;
   /** 切换 Zen 模式 */
   toggleZenMode: () => void;
   /** 设置 Zen 模式 */
@@ -45,6 +47,7 @@ const defaultState = {
   currentModule: 'vaults' as ModuleId,
   zenMode: false,
   userMenuOpen: false,
+  trashType: 'notes' as 'notes' | 'files',
 };
 
 /**
@@ -59,7 +62,10 @@ export const useAppStore = create<AppState>()(
     (set) => ({
       ...defaultState,
 
-      setModule: (module) => set({ currentModule: module }),
+      setModule: (module, trashType) => set((state) => ({
+        currentModule: module,
+        trashType: trashType ?? state.trashType
+      })),
 
       toggleZenMode: () => set((state) => ({ zenMode: !state.zenMode })),
 
@@ -78,8 +84,11 @@ export const useAppStore = create<AppState>()(
     }),
     {
       name: 'app-storage',
-      // 只持久化 currentModule，其他状态每次刷新重置
-      partialize: (state) => ({ currentModule: state.currentModule }),
+      // 持久化 currentModule 和 trashType
+      partialize: (state) => ({
+        currentModule: state.currentModule,
+        trashType: state.trashType
+      }),
     }
   )
 );

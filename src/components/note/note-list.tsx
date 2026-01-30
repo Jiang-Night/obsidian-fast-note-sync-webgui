@@ -5,6 +5,7 @@ import { useNoteHandle } from "@/components/api-handle/note-handle";
 import { Checkbox } from "@/components/ui/checkbox";
 import React, { useState, useEffect } from "react";
 import { Tooltip } from "@/components/ui/tooltip";
+import { useAppStore } from "@/stores/app-store";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { VaultType } from "@/lib/types/vault";
@@ -46,6 +47,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
     const [sortBy, setSortBy] = useState<SortBy>("mtime");
     const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
     const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
+    const { trashType, setModule } = useAppStore();
 
     // Debounce search keyword
     useEffect(() => {
@@ -195,6 +197,22 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                     <span className="text-sm text-muted-foreground">
                         {totalRows} {isRecycle ? t("menuTrash") : ""}{t("note")}
                     </span>
+                    {isRecycle && (
+                        <div className="flex items-center h-9 rounded-xl border border-border overflow-hidden ml-2 bg-background/50">
+                            <button
+                                className={`px-4 h-full text-xs font-medium transition-colors ${trashType === 'notes' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                                onClick={() => setModule("trash", "notes")}
+                            >
+                                {t("note") || "笔记"}
+                            </button>
+                            <button
+                                className={`px-4 h-full text-xs font-medium transition-colors border-l border-border ${trashType === 'files' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                                onClick={() => setModule("trash", "files")}
+                            >
+                                {t("file") || "附件"}
+                            </button>
+                        </div>
+                    )}
                     {isRecycle && notes.length > 0 && (
                         <div className="flex items-center gap-2 ml-2 pl-4 border-l border-border">
                             <Checkbox

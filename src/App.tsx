@@ -33,7 +33,7 @@ function App() {
   const { handleUserInfo } = useUserHandle()
 
   // 使用 Zustand store 管理应用状态
-  const { currentModule, setModule, zenMode, setZenMode, resetState } = useAppStore()
+  const { currentModule, setModule, zenMode, setZenMode, resetState, trashType } = useAppStore()
 
   // 本地状态
   const [activeVault, setActiveVault] = useState<string | null>(null)
@@ -248,6 +248,17 @@ function App() {
             <div className="flex items-center justify-center h-64">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
             </div>
+          )
+        }
+        // 根据 trashType 决定显示笔记回收站还是附件回收站
+        if (trashType === "files") {
+          return (
+            <FileManager
+              vault={activeVault}
+              onVaultChange={setActiveVault}
+              onNavigateToVaults={() => setModule("vaults")}
+              isRecycle={true}
+            />
           )
         }
         return (
