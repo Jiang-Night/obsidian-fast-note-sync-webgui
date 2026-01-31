@@ -105,6 +105,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
 
     const onRestore = (e: React.MouseEvent, file: FileDTO) => {
         e.stopPropagation();
+        if (!file.contentHash) return;
         openConfirmDialog(t("restoreFileConfirm", { title: file.path }), "confirm", () => {
             handleRestoreFile(vault, file.path, file.pathHash, () => {
                 fetchFiles();
@@ -113,20 +114,22 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
     };
 
     const toggleSelectAll = () => {
-        if (selectedPaths.size === files.length && files.length > 0) {
+        const restorableFiles = files.filter(f => f.contentHash);
+        if (selectedPaths.size === restorableFiles.length && restorableFiles.length > 0) {
             setSelectedPaths(new Set());
         } else {
-            setSelectedPaths(new Set(files.map(f => f.pathHash)));
+            setSelectedPaths(new Set(restorableFiles.map(f => f.pathHash)));
         }
     };
 
-    const toggleSelect = (e: React.MouseEvent, pathHash: string) => {
+    const toggleSelect = (e: React.MouseEvent, file: FileDTO) => {
         e.stopPropagation();
+        if (!file.contentHash) return;
         const newSelected = new Set(selectedPaths);
-        if (newSelected.has(pathHash)) {
-            newSelected.delete(pathHash);
+        if (newSelected.has(file.pathHash)) {
+            newSelected.delete(file.pathHash);
         } else {
-            newSelected.add(pathHash);
+            newSelected.add(file.pathHash);
         }
         setSelectedPaths(newSelected);
     };
@@ -134,9 +137,11 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
     const onBatchRestore = () => {
         if (selectedPaths.size === 0) return;
 
-        openConfirmDialog(t("batchRestoreConfirm", { count: selectedPaths.size }), "confirm", async () => {
+        const selectedFiles = files.filter(f => selectedPaths.has(f.pathHash) && f.contentHash);
+        if (selectedFiles.length === 0) return;
+
+        openConfirmDialog(t("batchRestoreConfirm", { count: selectedFiles.length }), "confirm", async () => {
             setLoading(true);
-            const selectedFiles = files.filter(f => selectedPaths.has(f.pathHash));
 
             for (const file of selectedFiles) {
                 await new Promise<void>((resolve) => {
@@ -155,7 +160,10 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
      * 处理文件点击 (预览或下载)
      */
     const handleItemClick = (file: FileDTO) => {
-        const url = getRawFileUrl(vault, file.path, file.pathHash?.toString());
+        let url = getRawFileUrl(vault, file.path, file.pathHash?.toString());
+        if (isRecycle) {
+            url += (url.includes("?") ? "&" : "?") + "isRecycle=1";
+        }
         setPreviewFile(file);
         setPreviewUrl(url);
     };
@@ -236,7 +244,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                         <div className="flex items-center gap-2 ml-2 pl-4 border-l border-border">
                             <Checkbox
                                 id="select-all"
-                                checked={selectedPaths.size === files.length && files.length > 0}
+                                checked={files.filter(f => f.contentHash).length > 0 && selectedPaths.size === files.filter(f => f.contentHash).length}
                                 onCheckedChange={toggleSelectAll}
                                 className="rounded-md"
                             />
@@ -252,6 +260,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                                         variant="outline"
                                         size="sm"
                                         onClick={onBatchRestore}
+                                        disabled={!files.some(f => selectedPaths.has(f.pathHash) && f.contentHash)}
                                         className="h-8 rounded-xl ml-2 text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700 hover:border-green-300"
                                     >
                                         <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
@@ -355,11 +364,13 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                                     <div className="flex items-start gap-3 min-w-0 flex-1">
                                         {isRecycle && (
                                             <div
-                                                className="flex items-center self-center"
-                                                onClick={(e) => toggleSelect(e, file.pathHash)}
+                                                className={`flex items-center self-center ${!file.contentHash ? "opacity-30" : ""}`}
+                                                onClick={(e) => toggleSelect(e, file)}
                                             >
                                                 <Checkbox
                                                     checked={selectedPaths.has(file.pathHash)}
+                                                    onCheckedChange={() => !loading && file.contentHash && toggleSelect({ stopPropagation: () => { } } as any, file)}
+                                                    disabled={!file.contentHash}
                                                     className="rounded-md"
                                                 />
                                             </div>
@@ -411,6 +422,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
+                                                    disabled={!file.contentHash}
                                                     className="h-8 w-8 rounded-xl text-muted-foreground hover:text-green-600"
                                                     onClick={(e) => onRestore(e, file)}
                                                 >
