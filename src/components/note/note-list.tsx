@@ -194,54 +194,9 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             </SelectContent>
                         </Select>
                     )}
-                    <span className="text-sm text-muted-foreground">
-                        {totalRows} {isRecycle ? t("menuTrash") : ""}{t("note")}
+                    <span className="text-sm text-muted-foreground mr-2">
+                        {!isRecycle && `${totalRows} ${t("note")}`}
                     </span>
-                    {isRecycle && (
-                        <div className="flex items-center h-9 rounded-xl border border-border overflow-hidden ml-2 bg-background/50">
-                            <button
-                                className={`px-4 h-full text-xs font-medium transition-colors ${trashType === 'notes' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setModule("trash", "notes")}
-                            >
-                                {t("note") || "笔记"}
-                            </button>
-                            <button
-                                className={`px-4 h-full text-xs font-medium transition-colors border-l border-border ${trashType === 'files' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setModule("trash", "files")}
-                            >
-                                {t("file") || "附件"}
-                            </button>
-                        </div>
-                    )}
-                    {isRecycle && notes.length > 0 && (
-                        <div className="flex items-center gap-2 ml-2 pl-4 border-l border-border">
-                            <Checkbox
-                                id="select-all"
-                                checked={selectedPaths.size === notes.length && notes.length > 0}
-                                onCheckedChange={toggleSelectAll}
-                                className="rounded-md"
-                            />
-                            <label htmlFor="select-all" className="text-xs font-medium cursor-pointer">
-                                {t("selectAll") || "全选"}
-                            </label>
-                            {selectedPaths.size > 0 && (
-                                <>
-                                    <span className="text-xs text-primary font-medium ml-2">
-                                        {t("selectedCount", { count: selectedPaths.size })}
-                                    </span>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={onBatchRestore}
-                                        className="h-8 rounded-xl ml-2 text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700 hover:border-green-300"
-                                    >
-                                        <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
-                                        {t("batchRestore")}
-                                    </Button>
-                                </>
-                            )}
-                        </div>
-                    )}
                 </div>
 
                 {/* 右侧：搜索和操作 */}
@@ -345,6 +300,68 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                     </div>
                 </div>
             </div>
+
+            {/* 第二行工具栏：仅在回收站模式下显示 */}
+            {isRecycle && (
+                <div className="flex flex-wrap items-center gap-4 py-2 px-1 bg-muted/30 rounded-xl border border-border/50">
+                    <div className="flex items-center gap-3">
+                        {/* 页面切换开关 */}
+                        <div className="flex items-center h-8 rounded-lg border border-border overflow-hidden bg-background shadow-sm">
+                            <button
+                                className={`px-4 h-full text-xs font-medium transition-colors ${trashType === 'notes' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                                onClick={() => setModule("trash", "notes")}
+                            >
+                                {t("note") || "笔记"}
+                            </button>
+                            <button
+                                className={`px-4 h-full text-xs font-medium transition-colors border-l border-border ${trashType === 'files' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                                onClick={() => setModule("trash", "files")}
+                            >
+                                {t("file") || "附件"}
+                            </button>
+                        </div>
+
+                        {/* 数量统计 */}
+                        <span className="text-sm font-medium text-muted-foreground mr-2">
+                            {totalRows} {t("menuTrash")}{t("note")}
+                        </span>
+                    </div>
+
+                    {/* 批量操作控制 */}
+                    {notes.length > 0 && (
+                        <div className="flex items-center gap-3 pl-4 border-l border-border/60">
+                            <div className="flex items-center gap-2">
+                                <Checkbox
+                                    id="select-all"
+                                    checked={selectedPaths.size === notes.length && notes.length > 0}
+                                    onCheckedChange={toggleSelectAll}
+                                    className="rounded-md"
+                                />
+                                <label htmlFor="select-all" className="text-xs font-medium cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+                                    {t("selectAll") || "全选"}
+                                </label>
+                            </div>
+
+                            {selectedPaths.size > 0 && (
+                                <div className="flex items-center gap-3 animate-in fade-in slide-in-from-left-2 duration-200">
+                                    <span className="text-xs text-primary font-semibold bg-primary/10 px-2 py-0.5 rounded-full">
+                                        {t("selectedCount", { count: selectedPaths.size })}
+                                    </span>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={onBatchRestore}
+                                        className="h-8 rounded-lg text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700 hover:border-green-300 shadow-sm"
+                                    >
+                                        <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
+                                        {t("batchRestore")}
+                                    </Button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+            )}
 
             {/* 笔记列表 */}
             {loading ? (

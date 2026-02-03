@@ -70,7 +70,7 @@ export default {
     copyConfigError: "非 HTTPS 页面，无法使用剪贴板功能，请手动复制授权配置",
     authTokenConfig: "授权配置",
     authTokenConfigTo: "授权配置到 Obsidian 自动创建",
-    oneClickImport: "一键导入到 Obsidian 桌面端",
+    oneClickImport: "一键授权到 Obsidian",
     credentialsRequired: "用户名（或邮箱）不能为空",
     passwordMinLength: "密码至少需要6个字符",
     usernameMinLength: "用户名至少3个字符",
