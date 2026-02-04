@@ -1,4 +1,4 @@
-import { FileText, Trash2, RefreshCw, Search, X, Calendar, Clock, ArrowUpDown, Paperclip, Image, Music, Video, FileCode, RotateCcw, ChevronLeft, ChevronRight } from "lucide-react";
+import { FileText, Trash2, RefreshCw, Search, X, Calendar, Clock, ArrowUpDown, Paperclip, Image, Music, Video, FileCode, RotateCcw, ChevronLeft, ChevronRight, Folder as FolderIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { useFileHandle } from "@/components/api-handle/file-handle";
@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { VaultType } from "@/lib/types/vault";
 import { Input } from "@/components/ui/input";
+import { Folder } from "@/lib/types/folder";
 import { format } from "date-fns";
 
 import { FilePreview } from "./file-preview";
@@ -18,6 +19,7 @@ import { FilePreview } from "./file-preview";
 
 type SortBy = "mtime" | "ctime" | "path";
 type SortOrder = "desc" | "asc";
+type ViewMode = "flat" | "folder";
 
 interface FileListProps {
     vault: string;
@@ -45,7 +47,7 @@ function formatFileSize(bytes: number): string {
 
 export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page, setPage, pageSize, setPageSize, searchKeyword, setSearchKeyword }: FileListProps) {
     const { t } = useTranslation();
-    const { handleFileList, handleDeleteFile, handleRestoreFile, getRawFileUrl } = useFileHandle();
+    const { handleFileList, handleDeleteFile, handleRestoreFile, getRawFileUrl, handleFolderFiles, handleFolderList } = useFileHandle();
     const { openConfirmDialog } = useConfirmDialog();
     const [files, setFiles] = useState<FileDTO[]>([]);
     const [loading, setLoading] = useState(false);
@@ -54,6 +56,9 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
     const [sortBy, setSortBy] = useState<SortBy>("mtime");
     const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
     const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
+    const [viewMode, setViewMode] = useState<ViewMode>("folder");
+    const [currentPath, setCurrentPath] = useState<string>("");
+    const [folders, setFolders] = useState<Folder[]>([]);
     const { trashType, setModule } = useAppStore();
 
     // 预览相关状态
@@ -70,23 +75,38 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
 
     const fetchFiles = (currentPage: number = page, currentPageSize: number = pageSize, keyword: string = debouncedKeyword) => {
         setLoading(true);
-        handleFileList(vault, currentPage, currentPageSize, isRecycle, keyword, sortBy, sortOrder, (data) => {
-            setFiles(data.list || []);
-            setTotalRows(data.pager?.totalRows || 0);
-            setLoading(false);
-        });
+
+        if (viewMode === "folder" && !isRecycle) {
+            handleFolderList(vault, currentPath, (folderData) => {
+                setFolders(folderData || []);
+                handleFolderFiles(vault, currentPath, currentPage, currentPageSize, sortBy, sortOrder, (fileData) => {
+                    setFiles(fileData.list || []);
+                    setTotalRows(fileData.pager?.totalRows || 0);
+                    setLoading(false);
+                });
+            });
+        } else {
+            handleFileList(vault, currentPage, currentPageSize, isRecycle, keyword, sortBy, sortOrder, (data) => {
+                setFiles(data.list || []);
+                setTotalRows(data.pager?.totalRows || 0);
+                setLoading(false);
+            });
+        }
     };
 
     useEffect(() => {
         fetchFiles(page, pageSize, debouncedKeyword);
         setSelectedPaths(new Set());
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [vault, page, pageSize, debouncedKeyword, isRecycle, sortBy, sortOrder]);
+    }, [vault, page, pageSize, debouncedKeyword, isRecycle, sortBy, sortOrder, viewMode, currentPath]);
 
-    // Reset page to 1 when search keyword changes
+    // 当搜索内容、目录路径或浏览模式变化时，重置页码到第1页
     useEffect(() => {
+        if (debouncedKeyword) {
+            setViewMode("flat");
+        }
         setPage(1);
-    }, [debouncedKeyword, setPage]);
+    }, [debouncedKeyword, currentPath, viewMode, setPage]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= Math.ceil(totalRows / pageSize)) {
@@ -294,6 +314,61 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                 </div>
             </div>
 
+            {/* 面包屑导航 - 仅在目录模式下显示 */}
+            {viewMode === "folder" && !isRecycle && currentPath && (
+                <div className="flex items-center gap-2 px-1 text-sm text-muted-foreground overflow-x-auto whitespace-nowrap scrollbar-hide">
+                    <button
+                        className="hover:text-primary transition-colors flex items-center"
+                        onClick={() => setCurrentPath("")}
+                    >
+                        {vault}
+                    </button>
+                    {currentPath.split("/").filter(Boolean).map((part, index, arr) => (
+                        <React.Fragment key={`breadcrumb-${index}`}>
+                            <ChevronRight className="h-4 w-4 shrink-0" />
+                            <button
+                                className={`transition-colors ${index === arr.length - 1 ? "text-foreground font-medium pointer-events-none" : "hover:text-primary"}`}
+                                onClick={() => {
+                                    const path = arr.slice(0, index + 1).join("/");
+                                    setCurrentPath(path);
+                                }}
+                            >
+                                {part}
+                            </button>
+                        </React.Fragment>
+                    ))}
+                </div>
+            )}
+
+            {/* 第二行工具栏：平铺/目录切换 (非回收站模式) */}
+            {!isRecycle && (
+                <div className="flex flex-wrap items-center gap-4 py-2 px-2 bg-muted/30 rounded-xl border border-border/50">
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center h-8 rounded-lg border border-border overflow-hidden bg-background shadow-sm">
+                            <button
+                                className={`px-4 h-full text-xs font-medium transition-colors ${viewMode === 'folder' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                                onClick={() => {
+                                    setSearchKeyword("");
+                                    setDebouncedKeyword("");
+                                    setViewMode("folder");
+                                }}
+                            >
+                                {t("viewFolder") || "目录浏览"}
+                            </button>
+                            <button
+                                className={`px-4 h-full text-xs font-medium transition-colors border-l border-border ${viewMode === 'flat' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                                onClick={() => setViewMode("flat")}
+                            >
+                                {t("viewFlat") || "平铺浏览"}
+                            </button>
+                        </div>
+                        <span className="text-sm font-medium text-muted-foreground mr-2">
+                            {totalRows} {t("file") || "附件"}
+                        </span>
+                    </div>
+                </div>
+            )}
+
             {/* 第二行工具栏：仅在回收站模式下显示 */}
             {isRecycle && (
                 <div className="flex flex-wrap items-center gap-4 py-2 px-2 bg-muted/30 rounded-xl border border-border/50">
@@ -363,16 +438,56 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                     <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2" />
                     {t("loading") || "加载中..."}
                 </div>
-            ) : !Array.isArray(files) || files.length === 0 ? (
+            ) : (!Array.isArray(files) || files.length === 0) && (!Array.isArray(folders) || folders.length === 0 || viewMode === "flat") ? (
                 <div className="rounded-xl border border-border bg-card p-12 text-center text-muted-foreground">
                     {t("noFiles") || "暂无附件"}
                 </div>
             ) : (
                 <div className="-mx-2 px-2">
                     <div className="grid grid-cols-1 gap-3 py-1">
-                        {files.map((file, index) => (
+                        {/* 目录列表 */}
+                        {viewMode === "folder" && !isRecycle && Array.isArray(folders) && folders.map((folder) => (
                             <article
-                                key={`${file.pathHash}-${index}`}
+                                key={`folder-${folder.pathHash}`}
+                                className="rounded-xl border border-border bg-card p-4 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30"
+                                onClick={() => setCurrentPath(folder.path)}
+                            >
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="flex items-start gap-3 min-w-0 flex-1">
+                                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 shrink-0">
+                                            <FolderIcon className="h-5 w-5 fill-current opacity-70" />
+                                        </span>
+                                        <div className="min-w-0 flex-1">
+                                            <h3 className="font-semibold text-card-foreground truncate">
+                                                {folder.path.split("/").pop()}
+                                            </h3>
+                                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-xs text-muted-foreground">
+                                                <Tooltip content={t("createdAt")} side="top" delay={300}>
+                                                    <span className="hidden sm:flex items-center gap-1">
+                                                        <Calendar className="h-3.5 w-3.5" />
+                                                        {format(new Date(folder.ctime), "yyyy-MM-dd HH:mm")}
+                                                    </span>
+                                                </Tooltip>
+                                                <Tooltip content={t("updatedAt")} side="top" delay={300}>
+                                                    <span className="flex items-center gap-1">
+                                                        <Clock className="h-3.5 w-3.5" />
+                                                        {format(new Date(folder.mtime), "yyyy-MM-dd HH:mm")}
+                                                    </span>
+                                                </Tooltip>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="shrink-0">
+                                        <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                                    </div>
+                                </div>
+                            </article>
+                        ))}
+
+                        {/* 附件列表 */}
+                        {Array.isArray(files) && files.map((file) => (
+                            <article
+                                key={`file-${file.pathHash}`}
                                 className="rounded-xl border border-border bg-card p-4 transition-all duration-200 hover:shadow-md hover:border-primary/30 cursor-pointer"
                                 onClick={() => handleItemClick(file)}
                             >
@@ -397,11 +512,10 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                                         </span>
                                         <div className="min-w-0 flex-1">
                                             <h3 className="font-semibold text-card-foreground truncate">
-                                                {file.path}
+                                                {(viewMode === "folder" && !isRecycle ? file.path.split("/").pop() : file.path)}
                                             </h3>
                                             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-xs text-muted-foreground">
                                                 <span className="flex items-center gap-1">
-
                                                     {formatFileSize(file.size)}
                                                 </span>
                                                 <Tooltip content={t("createdAt")} side="top" delay={300}>

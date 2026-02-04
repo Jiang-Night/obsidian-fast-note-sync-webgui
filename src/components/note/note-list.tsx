@@ -424,7 +424,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                         {vault}
                     </button>
                     {currentPath.split("/").filter(Boolean).map((part, index, arr) => (
-                        <React.Fragment key={index}>
+                        <React.Fragment key={`breadcrumb-${index}`}>
                             <ChevronRight className="h-4 w-4 shrink-0" />
                             <button
                                 className={`transition-colors ${index === arr.length - 1 ? "text-foreground font-medium pointer-events-none" : "hover:text-primary"}`}
@@ -456,7 +456,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                         {/* 目录列表 */}
                         {viewMode === "folder" && !isRecycle && folders.map((folder) => (
                             <article
-                                key={folder.pathHash}
+                                key={`folder-${folder.pathHash}`}
                                 className="rounded-xl border border-border bg-card p-4 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30"
                                 onClick={() => setCurrentPath(folder.path)}
                             >
@@ -495,7 +495,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                         {/* 笔记列表 */}
                         {Array.isArray(notes) && notes.map((note) => (
                             <article
-                                key={note.id}
+                                key={`note-${note.pathHash}`}
                                 className="rounded-xl border border-border bg-card p-4 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30"
                                 onClick={() => onSelectNote(note, true)}
                             >
