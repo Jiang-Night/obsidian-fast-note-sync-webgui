@@ -3,6 +3,7 @@ import { FileListResponse } from "@/lib/types/file";
 import { toast } from "@/components/common/Toast";
 import { getBrowserLang } from "@/lib/i18n/utils";
 import { useCallback, useMemo } from "react";
+import { Folder } from "@/lib/types/folder";
 import env from "@/env.ts";
 
 
@@ -183,15 +184,90 @@ export function useFileHandle() {
         return url;
     }, []);
 
+    /**
+     * 获取仓库下的文件夹列表
+     */
+    const handleFolderList = useCallback(async (vault: string, path: string = "", callback: (data: Folder[]) => void) => {
+        try {
+            const apiUrl = env.API_URL.endsWith("/") ? env.API_URL.slice(0, -1) : env.API_URL;
+            let url = `${apiUrl}/api/folders?vault=${encodeURIComponent(vault)}`;
+            if (path) {
+                url += `&path=${encodeURIComponent(path)}`;
+            }
+            const response = await fetch(addCacheBuster(url), {
+                method: "GET",
+                headers: getHeaders(),
+            })
+            if (!response.ok) {
+                throw new Error("Network response was not ok")
+            }
+            const res: { code: number; message: string; data?: Folder[] } = await response.json()
+            if (res.code > 0 && res.code <= 200) {
+                callback(res.data || [])
+            } else {
+                toast.error(res.message)
+            }
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : String(error))
+        }
+    }, [getHeaders])
+
+    /**
+     * 获取目录下附件列表
+     */
+    const handleFolderFiles = useCallback(async (
+        vault: string,
+        path: string = "",
+        page: number,
+        pageSize: number,
+        sortBy: string = "mtime",
+        sortOrder: string = "desc",
+        callback: (data: FileListResponse) => void
+    ) => {
+        try {
+            const apiUrl = env.API_URL.endsWith("/") ? env.API_URL.slice(0, -1) : env.API_URL;
+            const pageStr = Math.floor(page).toString();
+            const pageSizeStr = Math.floor(pageSize).toString();
+            let url = `${apiUrl}/api/folder/files?vault=${encodeURIComponent(vault)}&page=${pageStr}&pageSize=${pageSizeStr}`;
+            if (path) {
+                url += `&path=${encodeURIComponent(path)}`;
+            }
+            if (sortBy) url += `&sortBy=${sortBy}`;
+            if (sortOrder) url += `&sortOrder=${sortOrder}`;
+
+            const response = await fetch(addCacheBuster(url), {
+                method: "GET",
+                headers: getHeaders(),
+            })
+            if (!response.ok) {
+                throw new Error("Network response was not ok")
+            }
+            const res: { code: number; message: string; data?: FileListResponse } = await response.json()
+            if (res.code > 0 && res.code <= 200) {
+                const data = res.data || { list: [], pager: { page, pageSize, totalRows: 0, totalPages: 0 } };
+                if (!data.list) data.list = [];
+                callback(data)
+            } else {
+                toast.error(res.message)
+            }
+        } catch (error: unknown) {
+            toast.error(error instanceof Error ? error.message : String(error))
+        }
+    }, [getHeaders])
+
     return useMemo(() => ({
         handleFileList,
         handleDeleteFile,
         handleRestoreFile,
         getRawFileUrl,
+        handleFolderList,
+        handleFolderFiles,
     }), [
         handleFileList,
         handleDeleteFile,
         handleRestoreFile,
         getRawFileUrl,
+        handleFolderList,
+        handleFolderFiles,
     ]);
 }

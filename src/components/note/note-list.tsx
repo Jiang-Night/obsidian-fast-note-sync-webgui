@@ -1,4 +1,4 @@
-import { FileText, Trash2, RefreshCw, Plus, Calendar, Clock, ChevronLeft, ChevronRight, History, Search, X, Regex, FileSearch, ArrowUpDown, RotateCcw, Eye, Pencil } from "lucide-react";
+import { FileText, Trash2, RefreshCw, Plus, Calendar, Clock, ChevronLeft, ChevronRight, History, Search, X, Regex, FileSearch, ArrowUpDown, RotateCcw, Eye, Pencil, Folder as FolderIcon } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { useNoteHandle } from "@/components/api-handle/note-handle";
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { VaultType } from "@/lib/types/vault";
 import { Input } from "@/components/ui/input";
+import { Folder } from "@/lib/types/folder";
 import { Note } from "@/lib/types/note";
 import { format } from "date-fns";
 
@@ -17,6 +18,7 @@ import { format } from "date-fns";
 type SearchMode = "path" | "content" | "regex";
 type SortBy = "mtime" | "ctime" | "path";
 type SortOrder = "desc" | "asc";
+type ViewMode = "flat" | "folder";
 
 interface NoteListProps {
     vault: string;
@@ -36,7 +38,7 @@ interface NoteListProps {
 
 export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateNote, page, setPage, pageSize, setPageSize, onViewHistory, isRecycle = false, searchKeyword, setSearchKeyword }: NoteListProps) {
     const { t } = useTranslation();
-    const { handleNoteList, handleDeleteNote, handleRestoreNote } = useNoteHandle();
+    const { handleNoteList, handleDeleteNote, handleRestoreNote, handleFolderList, handleFolderNotes } = useNoteHandle();
     const { openConfirmDialog } = useConfirmDialog();
     const [notes, setNotes] = useState<Note[]>([]);
     const [loading, setLoading] = useState(false);
@@ -47,6 +49,9 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
     const [sortBy, setSortBy] = useState<SortBy>("mtime");
     const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
     const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
+    const [viewMode, setViewMode] = useState<ViewMode>("folder");
+    const [currentPath, setCurrentPath] = useState<string>("");
+    const [folders, setFolders] = useState<Folder[]>([]);
     const { trashType, setModule } = useAppStore();
 
     // Debounce search keyword
@@ -76,35 +81,52 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
         if (searchMode === "regex" && regexError) return;
 
         setLoading(true);
-        handleNoteList(vault, currentPage, currentPageSize, keyword, isRecycle, searchMode, false, sortBy, sortOrder, (data) => {
-            let filteredList = data?.list || [];
 
-            // 前端正则过滤（因为后端使用 LIKE 作为后备）
-            if (searchMode === "regex" && keyword && filteredList.length > 0) {
-                try {
-                    const regex = new RegExp(keyword, "i");
-                    filteredList = filteredList.filter(note => regex.test(note.path));
-                } catch {
-                    // 正则无效时不过滤
+        if (viewMode === "folder" && !isRecycle) {
+            // 目录模式工作流：1. 加载子目录 2. 加载当前目录下的笔记
+            handleFolderList(vault, currentPath, (folderData) => {
+                setFolders(folderData || []);
+                handleFolderNotes(vault, currentPath, currentPage, currentPageSize, sortBy, sortOrder, (noteData) => {
+                    setNotes(noteData?.list || []);
+                    setTotalRows(noteData?.pager?.totalRows || 0);
+                    setLoading(false);
+                });
+            });
+        } else {
+            // 平铺模式或回收站
+            handleNoteList(vault, currentPage, currentPageSize, keyword, isRecycle, searchMode, false, sortBy, sortOrder, (data) => {
+                let filteredList = data?.list || [];
+
+                // 前端正则过滤（因为后端使用 LIKE 作为后备）
+                if (searchMode === "regex" && keyword && filteredList.length > 0) {
+                    try {
+                        const regex = new RegExp(keyword, "i");
+                        filteredList = filteredList.filter(note => regex.test(note.path));
+                    } catch {
+                        // 正则无效时不过滤
+                    }
                 }
-            }
 
-            setNotes(filteredList);
-            setTotalRows(data?.pager?.totalRows || 0);
-            setLoading(false);
-        });
+                setNotes(filteredList);
+                setTotalRows(data?.pager?.totalRows || 0);
+                setLoading(false);
+            });
+        }
     };
 
     useEffect(() => {
         fetchNotes(page, pageSize, debouncedKeyword);
         setSelectedPaths(new Set()); // 清空选中
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [vault, page, pageSize, debouncedKeyword, isRecycle, searchMode, sortBy, sortOrder]);
+    }, [vault, page, pageSize, debouncedKeyword, isRecycle, searchMode, sortBy, sortOrder, viewMode, currentPath]);
 
-    // Reset page to 1 when search keyword changes
+    // 当搜索内容、目录路径或浏览模式变化时，重置页码到第1页
     useEffect(() => {
+        if (debouncedKeyword) {
+            setViewMode("flat");
+        }
         setPage(1);
-    }, [debouncedKeyword, setPage]);
+    }, [debouncedKeyword, currentPath, viewMode, setPage]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 1 && newPage <= Math.ceil(totalRows / pageSize)) {
@@ -182,7 +204,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                 <div className="flex items-center gap-3">
                     {vaults && onVaultChange && (
                         <Select value={vault} onValueChange={onVaultChange}>
-                            <SelectTrigger className="w-auto min-w-[180px] rounded-xl">
+                            <SelectTrigger className="w-auto min-w-45 rounded-xl">
                                 <SelectValue placeholder="Select Vault" />
                             </SelectTrigger>
                             <SelectContent className="rounded-xl">
@@ -301,9 +323,38 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                 </div>
             </div>
 
+            {/* 第二行工具栏：平铺/目录切换 (非回收站模式) */}
+            {!isRecycle && (
+                <div className="flex flex-wrap items-center gap-4 py-2 px-2 bg-muted/30 rounded-xl border border-border/50">
+                    <div className="flex items-center gap-3">
+                        <div className="flex items-center h-8 rounded-lg border border-border overflow-hidden bg-background shadow-sm">
+                            <button
+                                className={`px-4 h-full text-xs font-medium transition-colors ${viewMode === 'folder' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                                onClick={() => {
+                                    setSearchKeyword("");
+                                    setDebouncedKeyword("");
+                                    setViewMode("folder");
+                                }}
+                            >
+                                {t("viewFolder") || "目录浏览"}
+                            </button>
+                            <button
+                                className={`px-4 h-full text-xs font-medium transition-colors border-l border-border ${viewMode === 'flat' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
+                                onClick={() => setViewMode("flat")}
+                            >
+                                {t("viewFlat") || "平铺浏览"}
+                            </button>
+                        </div>
+                        <span className="text-sm font-medium text-muted-foreground mr-2">
+                            {totalRows} {t("note")}
+                        </span>
+                    </div>
+                </div>
+            )}
+
             {/* 第二行工具栏：仅在回收站模式下显示 */}
             {isRecycle && (
-                <div className="flex flex-wrap items-center gap-4 py-2 px-1 bg-muted/30 rounded-xl border border-border/50">
+                <div className="flex flex-wrap items-center gap-4 py-2 px-2 bg-muted/30 rounded-xl border border-border/50">
                     <div className="flex items-center gap-3">
                         {/* 页面切换开关 */}
                         <div className="flex items-center h-8 rounded-lg border border-border overflow-hidden bg-background shadow-sm">
@@ -363,20 +414,86 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                 </div>
             )}
 
-            {/* 笔记列表 */}
+            {/* 面包屑导航 - 仅在目录模式下显示 */}
+            {viewMode === "folder" && !isRecycle && currentPath && (
+                <div className="flex items-center gap-2 px-1 text-sm text-muted-foreground overflow-x-auto whitespace-nowrap scrollbar-hide">
+                    <button
+                        className="hover:text-primary transition-colors flex items-center"
+                        onClick={() => setCurrentPath("")}
+                    >
+                        {vault}
+                    </button>
+                    {currentPath.split("/").filter(Boolean).map((part, index, arr) => (
+                        <React.Fragment key={index}>
+                            <ChevronRight className="h-4 w-4 shrink-0" />
+                            <button
+                                className={`transition-colors ${index === arr.length - 1 ? "text-foreground font-medium pointer-events-none" : "hover:text-primary"}`}
+                                onClick={() => {
+                                    const path = arr.slice(0, index + 1).join("/");
+                                    setCurrentPath(path);
+                                }}
+                            >
+                                {part}
+                            </button>
+                        </React.Fragment>
+                    ))}
+                </div>
+            )}
+
+            {/* 笔记及目录列表 */}
             {loading ? (
                 <div className="rounded-xl border border-border bg-card p-12 text-center text-muted-foreground">
                     <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2" />
                     {t("loading") || "加载中..."}
                 </div>
-            ) : !Array.isArray(notes) || notes.length === 0 ? (
+            ) : (!Array.isArray(notes) || notes.length === 0) && (!Array.isArray(folders) || folders.length === 0 || viewMode === "flat") ? (
                 <div className="rounded-xl border border-border bg-card p-12 text-center text-muted-foreground">
                     {t("noNotes")}
                 </div>
             ) : (
                 <div className="-mx-2 px-2">
                     <div className="grid grid-cols-1 gap-3 py-1">
-                        {notes.map((note) => (
+                        {/* 目录列表 */}
+                        {viewMode === "folder" && !isRecycle && folders.map((folder) => (
+                            <article
+                                key={folder.pathHash}
+                                className="rounded-xl border border-border bg-card p-4 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30"
+                                onClick={() => setCurrentPath(folder.path)}
+                            >
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="flex items-start gap-3 min-w-0 flex-1">
+                                        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/10 text-blue-500 shrink-0">
+                                            <FolderIcon className="h-5 w-5 fill-current opacity-70" />
+                                        </span>
+                                        <div className="min-w-0 flex-1">
+                                            <h3 className="font-semibold text-card-foreground truncate">
+                                                {folder.path.split("/").pop()}
+                                            </h3>
+                                            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-xs text-muted-foreground">
+                                                <Tooltip content={t("createdAt")} side="top" delay={300}>
+                                                    <span className="hidden sm:flex items-center gap-1">
+                                                        <Calendar className="h-3.5 w-3.5" />
+                                                        {format(new Date(folder.ctime), "yyyy-MM-dd HH:mm")}
+                                                    </span>
+                                                </Tooltip>
+                                                <Tooltip content={t("updatedAt")} side="top" delay={300}>
+                                                    <span className="flex items-center gap-1">
+                                                        <Clock className="h-3.5 w-3.5" />
+                                                        {format(new Date(folder.mtime), "yyyy-MM-dd HH:mm")}
+                                                    </span>
+                                                </Tooltip>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="shrink-0">
+                                        <ChevronRight className="h-5 w-5 text-muted-foreground" />
+                                    </div>
+                                </div>
+                            </article>
+                        ))}
+
+                        {/* 笔记列表 */}
+                        {Array.isArray(notes) && notes.map((note) => (
                             <article
                                 key={note.id}
                                 className="rounded-xl border border-border bg-card p-4 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30"
@@ -401,7 +518,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                         </span>
                                         <div className="min-w-0 flex-1">
                                             <h3 className="font-semibold text-card-foreground truncate">
-                                                {note.path.replace(/\.md$/, "")}
+                                                {(viewMode === "folder" && !isRecycle ? note.path.split("/").pop() : note.path)?.replace(/\.md$/, "")}
                                             </h3>
                                             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-xs text-muted-foreground">
                                                 <Tooltip content={t("createdAt")} side="top" delay={300}>

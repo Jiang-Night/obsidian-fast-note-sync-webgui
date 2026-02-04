@@ -203,6 +203,9 @@ export default {
     sortByPath: "Path",
     sortAsc: "Ascending",
     sortDesc: "Descending",
+    // View Modes
+    viewFlat: "Flat View",
+    viewFolder: "Directory View",
     editorSourceMode: "Source Mode",
     editorLivePreview: "Live Preview",
     editorReadingView: "Reading View",

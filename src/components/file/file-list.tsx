@@ -296,7 +296,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
 
             {/* 第二行工具栏：仅在回收站模式下显示 */}
             {isRecycle && (
-                <div className="flex flex-wrap items-center gap-4 py-2 px-1 bg-muted/30 rounded-xl border border-border/50">
+                <div className="flex flex-wrap items-center gap-4 py-2 px-2 bg-muted/30 rounded-xl border border-border/50">
                     <div className="flex items-center gap-3">
                         {/* 页面切换开关 */}
                         <div className="flex items-center h-8 rounded-lg border border-border overflow-hidden bg-background shadow-sm">

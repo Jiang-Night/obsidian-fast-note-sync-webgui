@@ -208,6 +208,9 @@ export default {
     sortByPath: "路径",
     sortAsc: "升序",
     sortDesc: "降序",
+    // 浏览模式
+    viewFlat: "平铺浏览",
+    viewFolder: "目录浏览",
     // 编辑器模式 (Obsidian 风格)
     editorSourceMode: "源码模式",
     editorLivePreview: "实时预览",
