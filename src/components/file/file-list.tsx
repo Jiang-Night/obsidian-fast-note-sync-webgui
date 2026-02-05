@@ -241,9 +241,6 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                             </SelectContent>
                         </Select>
                     )}
-                    <span className="text-sm text-muted-foreground mr-2">
-                        {!isRecycle && `${totalRows} ${t("file") || "附件"}`}
-                    </span>
                 </div>
 
                 {/* 右侧：搜索和操作 */}
@@ -276,40 +273,6 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                         >
                             <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
                         </Button>
-                    </div>
-                    {/* 排序选择 */}
-                    <div className="flex items-center gap-3 flex-wrap">
-                        <div className="flex items-center h-8 rounded-xl border border-border overflow-hidden">
-                            <button
-                                className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors ${sortBy === "mtime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setSortBy("mtime")}
-                            >
-                                <Clock className="h-3.5 w-3.5" />
-                                {t("sortByMtime") || "修改时间"}
-                            </button>
-                            <button
-                                className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "ctime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setSortBy("ctime")}
-                            >
-                                <Calendar className="h-3.5 w-3.5" />
-                                {t("sortByCtime") || "创建时间"}
-                            </button>
-                            <button
-                                className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "path" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setSortBy("path")}
-                            >
-                                <FileText className="h-3.5 w-3.5" />
-                                {t("sortByPath") || "路径"}
-                            </button>
-                            <Tooltip content={sortOrder === "desc" ? t("sortDesc") : t("sortAsc")} side="top" delay={200}>
-                                <button
-                                    className="px-2.5 h-full text-xs flex items-center transition-colors border-l border-border hover:bg-muted"
-                                    onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
-                                >
-                                    <ArrowUpDown className={`h-3.5 w-3.5 transition-transform ${sortOrder === "asc" ? "rotate-180" : ""}`} />
-                                </button>
-                            </Tooltip>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -366,6 +329,39 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                             {totalRows} {t("file") || "附件"}
                         </span>
                     </div>
+
+                    {/* 排序选择 */}
+                    <div className="flex items-center h-8 rounded-xl border border-border overflow-hidden bg-background shadow-sm ml-auto">
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors ${sortBy === "mtime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("mtime")}
+                        >
+                            <Clock className="h-3.5 w-3.5" />
+                            {t("sortByMtime") || "修改时间"}
+                        </button>
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "ctime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("ctime")}
+                        >
+                            <Calendar className="h-3.5 w-3.5" />
+                            {t("sortByCtime") || "创建时间"}
+                        </button>
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "path" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("path")}
+                        >
+                            <FileText className="h-3.5 w-3.5" />
+                            {t("sortByPath") || "路径"}
+                        </button>
+                        <Tooltip content={sortOrder === "desc" ? t("sortDesc") : t("sortAsc")} side="top" delay={200}>
+                            <button
+                                className="px-2.5 h-full text-xs flex items-center transition-colors border-l border-border hover:bg-muted"
+                                onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
+                            >
+                                <ArrowUpDown className={`h-3.5 w-3.5 transition-transform ${sortOrder === "asc" ? "rotate-180" : ""}`} />
+                            </button>
+                        </Tooltip>
+                    </div>
                 </div>
             )}
 
@@ -394,6 +390,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                             {totalRows} {t("menuTrash") || "回收站"}{t("file") || "附件"}
                         </span>
                     </div>
+
 
                     {/* 批量操作控制 */}
                     {files.length > 0 && (
@@ -429,6 +426,39 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                             )}
                         </div>
                     )}
+
+                    {/* 排序选择 */}
+                    <div className="flex items-center h-8 rounded-xl border border-border overflow-hidden bg-background shadow-sm ml-auto">
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors ${sortBy === "mtime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("mtime")}
+                        >
+                            <Clock className="h-3.5 w-3.5" />
+                            {t("sortByMtime") || "修改时间"}
+                        </button>
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "ctime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("ctime")}
+                        >
+                            <Calendar className="h-3.5 w-3.5" />
+                            {t("sortByCtime") || "创建时间"}
+                        </button>
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "path" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("path")}
+                        >
+                            <FileText className="h-3.5 w-3.5" />
+                            {t("sortByPath") || "路径"}
+                        </button>
+                        <Tooltip content={sortOrder === "desc" ? t("sortDesc") : t("sortAsc")} side="top" delay={200}>
+                            <button
+                                className="px-2.5 h-full text-xs flex items-center transition-colors border-l border-border hover:bg-muted"
+                                onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
+                            >
+                                <ArrowUpDown className={`h-3.5 w-3.5 transition-transform ${sortOrder === "asc" ? "rotate-180" : ""}`} />
+                            </button>
+                        </Tooltip>
+                    </div>
                 </div>
             )}
 
@@ -501,7 +531,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                                             >
                                                 <Checkbox
                                                     checked={selectedPaths.has(file.pathHash)}
-                                                    onCheckedChange={() => !loading && file.contentHash && toggleSelect({ stopPropagation: () => { } } as any, file)}
+                                                    onCheckedChange={() => !loading && file.contentHash && toggleSelect({ stopPropagation: () => { } } as unknown as React.MouseEvent, file)}
                                                     disabled={!file.contentHash}
                                                     className="rounded-md"
                                                 />

@@ -1,4 +1,5 @@
-import { FileText, Trash2, RefreshCw, Plus, Calendar, Clock, ChevronLeft, ChevronRight, History, Search, X, Regex, FileSearch, ArrowUpDown, RotateCcw, Eye, Pencil, Folder as FolderIcon } from "lucide-react";
+import { FileText, Trash2, RefreshCw, Plus, Calendar, Clock, ChevronLeft, ChevronRight, History, Search, X, ArrowUpDown, RotateCcw, Eye, Pencil, Folder as FolderIcon, ChevronDown, Regex, FolderSearch } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { useNoteHandle } from "@/components/api-handle/note-handle";
@@ -216,31 +217,69 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             </SelectContent>
                         </Select>
                     )}
-                    <span className="text-sm text-muted-foreground mr-2">
-                        {!isRecycle && `${totalRows} ${t("note")}`}
-                    </span>
                 </div>
 
                 {/* 右侧：搜索和操作 */}
                 <div className="flex flex-col gap-2 w-full sm:w-auto">
                     <div className="flex items-center gap-2">
-                        <div className="relative flex-1 sm:w-64">
+                        <div className="relative flex-1 sm:w-64 group">
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                             <Input
                                 type="text"
                                 placeholder={t("searchPlaceholder")}
-                                className={`pl-9 pr-8 rounded-xl ${regexError ? "border-destructive" : ""}`}
+                                className={`pl-9 pr-14 rounded-xl ${regexError ? "border-destructive" : ""}`}
                                 value={searchKeyword}
                                 onChange={(e) => setSearchKeyword(e.target.value)}
                             />
-                            {searchKeyword && (
-                                <button
-                                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                                    onClick={() => setSearchKeyword("")}
-                                >
-                                    <X className="h-4 w-4" />
-                                </button>
-                            )}
+                            <div className="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-0.5">
+                                {searchKeyword && (
+                                    <button
+                                        className="p-1.5 text-muted-foreground hover:text-foreground transition-colors"
+                                        onClick={() => setSearchKeyword("")}
+                                    >
+                                        <X className="h-4 w-4" />
+                                    </button>
+                                )}
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger asChild>
+                                        <button className="flex items-center gap-1 px-1.5 py-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted/80 rounded-lg transition-colors">
+                                            {searchMode === "path" && <FolderSearch className="h-3.5 w-3.5" />}
+                                            {searchMode === "content" && <FileText className="h-3.5 w-3.5" />}
+                                            {searchMode === "regex" && <Regex className="h-3.5 w-3.5" />}
+                                            <ChevronDown className="h-3 w-3" />
+                                        </button>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent align="end" className="rounded-xl min-w-32">
+                                        <DropdownMenuItem
+                                            onClick={() => setSearchMode("path")}
+                                            className={`rounded-lg flex items-center justify-between ${searchMode === "path" ? "bg-accent" : ""}`}
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <FolderSearch className="h-4 w-4" />
+                                                <span>{t("searchPath")}</span>
+                                            </div>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => setSearchMode("content")}
+                                            className={`rounded-lg flex items-center justify-between ${searchMode === "content" ? "bg-accent" : ""}`}
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <FileText className="h-4 w-4" />
+                                                <span>{t("searchContentMode")}</span>
+                                            </div>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem
+                                            onClick={() => setSearchMode("regex")}
+                                            className={`rounded-lg flex items-center justify-between ${searchMode === "regex" ? "bg-accent" : ""}`}
+                                        >
+                                            <div className="flex items-center gap-2">
+                                                <Regex className="h-4 w-4" />
+                                                <span>{t("searchRegex")}</span>
+                                            </div>
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            </div>
                         </div>
                         <Button
                             variant="outline"
@@ -258,68 +297,11 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             </Button>
                         )}
                     </div>
-                    {/* 搜索模式 + 排序 */}
-                    <div className="flex items-center gap-3 flex-wrap">
-                        {/* 搜索模式切换 */}
-                        <div className="flex items-center h-8 rounded-xl border border-border overflow-hidden">
-                            <button
-                                className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors ${searchMode === "path" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setSearchMode("path")}
-                            >
-                                <Search className="h-3.5 w-3.5" />
-                                {t("searchPath")}
-                            </button>
-                            <button
-                                className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${searchMode === "content" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setSearchMode("content")}
-                            >
-                                <FileSearch className="h-3.5 w-3.5" />
-                                {t("searchContentMode")}
-                            </button>
-                            <button
-                                className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${searchMode === "regex" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setSearchMode("regex")}
-                            >
-                                <Regex className="h-3.5 w-3.5" />
-                                {t("searchRegex")}
-                            </button>
-                        </div>
-                        {/* 排序选择 */}
-                        <div className="flex items-center h-8 rounded-xl border border-border overflow-hidden">
-                            <button
-                                className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors ${sortBy === "mtime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setSortBy("mtime")}
-                            >
-                                <Clock className="h-3.5 w-3.5" />
-                                {t("sortByMtime")}
-                            </button>
-                            <button
-                                className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "ctime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setSortBy("ctime")}
-                            >
-                                <Calendar className="h-3.5 w-3.5" />
-                                {t("sortByCtime")}
-                            </button>
-                            <button
-                                className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "path" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
-                                onClick={() => setSortBy("path")}
-                            >
-                                <FileText className="h-3.5 w-3.5" />
-                                {t("sortByPath")}
-                            </button>
-                            <Tooltip content={sortOrder === "desc" ? t("sortDesc") : t("sortAsc")} side="top" delay={200}>
-                                <button
-                                    className={`px-2.5 h-full text-xs flex items-center transition-colors border-l border-border hover:bg-muted`}
-                                    onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
-                                >
-                                    <ArrowUpDown className={`h-3.5 w-3.5 transition-transform ${sortOrder === "asc" ? "rotate-180" : ""}`} />
-                                </button>
-                            </Tooltip>
-                        </div>
-                        {regexError && (
+                    {regexError && (
+                        <div className="flex items-center gap-2 px-1">
                             <span className="text-xs text-destructive">{regexError}</span>
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
             </div>
 
@@ -349,6 +331,39 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             {totalRows} {t("note")}
                         </span>
                     </div>
+
+                    {/* 排序选择 */}
+                    <div className="flex items-center h-8 rounded-xl border border-border overflow-hidden bg-background shadow-sm ml-auto">
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors ${sortBy === "mtime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("mtime")}
+                        >
+                            <Clock className="h-3.5 w-3.5" />
+                            {t("sortByMtime")}
+                        </button>
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "ctime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("ctime")}
+                        >
+                            <Calendar className="h-3.5 w-3.5" />
+                            {t("sortByCtime")}
+                        </button>
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "path" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("path")}
+                        >
+                            <FileText className="h-3.5 w-3.5" />
+                            {t("sortByPath")}
+                        </button>
+                        <Tooltip content={sortOrder === "desc" ? t("sortDesc") : t("sortAsc")} side="top" delay={200}>
+                            <button
+                                className={`px-2.5 h-full text-xs flex items-center transition-colors border-l border-border hover:bg-muted`}
+                                onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
+                            >
+                                <ArrowUpDown className={`h-3.5 w-3.5 transition-transform ${sortOrder === "asc" ? "rotate-180" : ""}`} />
+                            </button>
+                        </Tooltip>
+                    </div>
                 </div>
             )}
 
@@ -377,6 +392,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             {totalRows} {t("menuTrash")}{t("note")}
                         </span>
                     </div>
+
 
                     {/* 批量操作控制 */}
                     {notes.length > 0 && (
@@ -411,6 +427,39 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             )}
                         </div>
                     )}
+
+                    {/* 排序选择 */}
+                    <div className="flex items-center h-8 rounded-xl border border-border overflow-hidden bg-background shadow-sm ml-auto">
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors ${sortBy === "mtime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("mtime")}
+                        >
+                            <Clock className="h-3.5 w-3.5" />
+                            {t("sortByMtime")}
+                        </button>
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "ctime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("ctime")}
+                        >
+                            <Calendar className="h-3.5 w-3.5" />
+                            {t("sortByCtime")}
+                        </button>
+                        <button
+                            className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "path" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
+                            onClick={() => setSortBy("path")}
+                        >
+                            <FileText className="h-3.5 w-3.5" />
+                            {t("sortByPath")}
+                        </button>
+                        <Tooltip content={sortOrder === "desc" ? t("sortDesc") : t("sortAsc")} side="top" delay={200}>
+                            <button
+                                className={`px-2.5 h-full text-xs flex items-center transition-colors border-l border-border hover:bg-muted`}
+                                onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
+                            >
+                                <ArrowUpDown className={`h-3.5 w-3.5 transition-transform ${sortOrder === "asc" ? "rotate-180" : ""}`} />
+                            </button>
+                        </Tooltip>
+                    </div>
                 </div>
             )}
 

@@ -196,7 +196,7 @@ export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
                         sanitize: false,
                     },
                 },
-                input: (val) => {
+                input: (val: string) => {
                     contentRef.current = val;
                     onChange?.(val);
                 },
