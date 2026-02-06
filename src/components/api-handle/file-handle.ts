@@ -187,12 +187,15 @@ export function useFileHandle() {
     /**
      * 获取仓库下的文件夹列表
      */
-    const handleFolderList = useCallback(async (vault: string, path: string = "", callback: (data: Folder[]) => void) => {
+    const handleFolderList = useCallback(async (vault: string, path: string = "", pathHash: string = "", callback: (data: Folder[]) => void) => {
         try {
             const apiUrl = env.API_URL.endsWith("/") ? env.API_URL.slice(0, -1) : env.API_URL;
             let url = `${apiUrl}/api/folders?vault=${encodeURIComponent(vault)}`;
             if (path) {
                 url += `&path=${encodeURIComponent(path)}`;
+            }
+            if (pathHash) {
+                url += `&path_hash=${encodeURIComponent(pathHash)}`;
             }
             const response = await fetch(addCacheBuster(url), {
                 method: "GET",
@@ -218,6 +221,7 @@ export function useFileHandle() {
     const handleFolderFiles = useCallback(async (
         vault: string,
         path: string = "",
+        pathHash: string = "",
         page: number,
         pageSize: number,
         sortBy: string = "mtime",
@@ -231,6 +235,9 @@ export function useFileHandle() {
             let url = `${apiUrl}/api/folder/files?vault=${encodeURIComponent(vault)}&page=${pageStr}&pageSize=${pageSizeStr}`;
             if (path) {
                 url += `&path=${encodeURIComponent(path)}`;
+            }
+            if (pathHash) {
+                url += `&path_hash=${encodeURIComponent(pathHash)}`;
             }
             if (sortBy) url += `&sortBy=${sortBy}`;
             if (sortOrder) url += `&sortOrder=${sortOrder}`;

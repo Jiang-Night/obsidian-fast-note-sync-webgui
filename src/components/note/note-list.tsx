@@ -52,6 +52,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
     const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
     const [viewMode, setViewMode] = useState<ViewMode>("folder");
     const [currentPath, setCurrentPath] = useState<string>("");
+    const [currentPathHash, setCurrentPathHash] = useState<string>("");
     const [folders, setFolders] = useState<Folder[]>([]);
     const { trashType, setModule } = useAppStore();
 
@@ -85,9 +86,9 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
 
         if (viewMode === "folder" && !isRecycle) {
             // 目录模式工作流：1. 加载子目录 2. 加载当前目录下的笔记
-            handleFolderList(vault, currentPath, (folderData) => {
+            handleFolderList(vault, currentPath, currentPathHash, (folderData) => {
                 setFolders(folderData || []);
-                handleFolderNotes(vault, currentPath, currentPage, currentPageSize, sortBy, sortOrder, (noteData) => {
+                handleFolderNotes(vault, currentPath, currentPathHash, currentPage, currentPageSize, sortBy, sortOrder, (noteData) => {
                     setNotes(noteData?.list || []);
                     setTotalRows(noteData?.pager?.totalRows || 0);
                     setLoading(false);
@@ -126,7 +127,6 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
         if (debouncedKeyword) {
             setViewMode("flat");
         }
-        setPage(1);
     }, [debouncedKeyword, currentPath, viewMode, setPage]);
 
     const handlePageChange = (newPage: number) => {
@@ -468,7 +468,11 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                 <div className="flex items-center gap-2 px-1 text-sm text-muted-foreground overflow-x-auto whitespace-nowrap scrollbar-hide">
                     <button
                         className="hover:text-primary transition-colors flex items-center"
-                        onClick={() => setCurrentPath("")}
+                        onClick={() => {
+                            setCurrentPath("");
+                            setCurrentPathHash("");
+                            setPage(1);
+                        }}
                     >
                         {vault}
                     </button>
@@ -480,6 +484,9 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                 onClick={() => {
                                     const path = arr.slice(0, index + 1).join("/");
                                     setCurrentPath(path);
+                                    // 注意：面包屑点击由于没有对应的 hash 暂时清空，或者保留逻辑看是否需要后端处理
+                                    setCurrentPathHash("");
+                                    setPage(1);
                                 }}
                             >
                                 {part}
@@ -507,7 +514,11 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             <article
                                 key={`folder-${folder.pathHash}`}
                                 className="rounded-xl border border-border bg-card p-4 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30"
-                                onClick={() => setCurrentPath(folder.path)}
+                                onClick={() => {
+                                    setCurrentPath(folder.path);
+                                    setCurrentPathHash(folder.pathHash);
+                                    setPage(1);
+                                }}
                             >
                                 <div className="flex items-center justify-between gap-4">
                                     <div className="flex items-start gap-3 min-w-0 flex-1">

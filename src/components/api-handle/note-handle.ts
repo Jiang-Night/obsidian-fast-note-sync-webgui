@@ -277,11 +277,14 @@ export function useNoteHandle() {
     }, [getHeaders])
 
     // 获取目录列表
-    const handleFolderList = useCallback(async (vault: string, path: string = "", callback: (data: Folder[]) => void) => {
+    const handleFolderList = useCallback(async (vault: string, path: string = "", pathHash: string = "", callback: (data: Folder[]) => void) => {
         try {
             let url = `${env.API_URL}/api/folders?vault=${encodeURIComponent(vault)}`;
             if (path) {
                 url += `&path=${encodeURIComponent(path)}`;
+            }
+            if (pathHash) {
+                url += `&path_hash=${encodeURIComponent(pathHash)}`;
             }
             const response = await fetch(addCacheBuster(url), {
                 method: "GET",
@@ -305,6 +308,7 @@ export function useNoteHandle() {
     const handleFolderNotes = useCallback(async (
         vault: string,
         path: string = "",
+        pathHash: string = "",
         page: number,
         pageSize: number,
         sortBy: string = "mtime",
@@ -317,6 +321,9 @@ export function useNoteHandle() {
             let url = `${env.API_URL}/api/folder/notes?vault=${encodeURIComponent(vault)}&page=${pageStr}&pageSize=${pageSizeStr}`;
             if (path) {
                 url += `&path=${encodeURIComponent(path)}`;
+            }
+            if (pathHash) {
+                url += `&path_hash=${encodeURIComponent(pathHash)}`;
             }
             if (sortBy) url += `&sortBy=${sortBy}`;
             if (sortOrder) url += `&sortOrder=${sortOrder}`;

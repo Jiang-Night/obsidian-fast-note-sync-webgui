@@ -58,6 +58,7 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
     const [selectedPaths, setSelectedPaths] = useState<Set<string>>(new Set());
     const [viewMode, setViewMode] = useState<ViewMode>("folder");
     const [currentPath, setCurrentPath] = useState<string>("");
+    const [currentPathHash, setCurrentPathHash] = useState<string>("");
     const [folders, setFolders] = useState<Folder[]>([]);
     const { trashType, setModule } = useAppStore();
 
@@ -77,9 +78,9 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
         setLoading(true);
 
         if (viewMode === "folder" && !isRecycle) {
-            handleFolderList(vault, currentPath, (folderData) => {
+            handleFolderList(vault, currentPath, currentPathHash, (folderData) => {
                 setFolders(folderData || []);
-                handleFolderFiles(vault, currentPath, currentPage, currentPageSize, sortBy, sortOrder, (fileData) => {
+                handleFolderFiles(vault, currentPath, currentPathHash, currentPage, currentPageSize, sortBy, sortOrder, (fileData) => {
                     setFiles(fileData.list || []);
                     setTotalRows(fileData.pager?.totalRows || 0);
                     setLoading(false);
@@ -105,7 +106,6 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
         if (debouncedKeyword) {
             setViewMode("flat");
         }
-        setPage(1);
     }, [debouncedKeyword, currentPath, viewMode, setPage]);
 
     const handlePageChange = (newPage: number) => {
@@ -282,7 +282,11 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                 <div className="flex items-center gap-2 px-1 text-sm text-muted-foreground overflow-x-auto whitespace-nowrap scrollbar-hide">
                     <button
                         className="hover:text-primary transition-colors flex items-center"
-                        onClick={() => setCurrentPath("")}
+                        onClick={() => {
+                            setCurrentPath("");
+                            setCurrentPathHash("");
+                            setPage(1);
+                        }}
                     >
                         {vault}
                     </button>
@@ -294,6 +298,8 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                                 onClick={() => {
                                     const path = arr.slice(0, index + 1).join("/");
                                     setCurrentPath(path);
+                                    setCurrentPathHash("");
+                                    setPage(1);
                                 }}
                             >
                                 {part}
@@ -480,7 +486,11 @@ export function FileList({ vault, vaults, onVaultChange, isRecycle = false, page
                             <article
                                 key={`folder-${folder.pathHash}`}
                                 className="rounded-xl border border-border bg-card p-4 cursor-pointer transition-all duration-200 hover:shadow-md hover:border-primary/30"
-                                onClick={() => setCurrentPath(folder.path)}
+                                onClick={() => {
+                                    setCurrentPath(folder.path);
+                                    setCurrentPathHash(folder.pathHash);
+                                    setPage(1);
+                                }}
                             >
                                 <div className="flex items-center justify-between gap-4">
                                     <div className="flex items-start gap-3 min-w-0 flex-1">
