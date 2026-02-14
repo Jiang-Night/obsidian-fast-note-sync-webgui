@@ -248,6 +248,8 @@ export default {
     fillAllFields: "Please fill all fields",
     invalidNumber: "Please enter a valid number",
     autoSaving: "Saving...",
+    appearanceAndSettings: "Appearance & Settings",
+    dataAndConfig: "Data & Configuration",
     // Color Schemes
     colorScheme: "Color Scheme",
     colorSchemeSwitched: "Switched to {{scheme}} scheme",

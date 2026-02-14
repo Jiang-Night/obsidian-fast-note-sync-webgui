@@ -1,6 +1,7 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuPortal, DropdownMenuLabel, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
+import { useSettingsStore, ToastPosition, COLOR_SCHEMES } from "@/lib/stores/settings-store";
+import { Clipboard, LogOut, ExternalLink, Lock, Palette, Bell, Check } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Clipboard, LogOut, ExternalLink, Lock } from "lucide-react";
 import { ChangePassword } from "@/components/user/change-password";
 import { toast } from "@/components/common/Toast";
 import { Button } from "@/components/ui/button";
@@ -31,6 +32,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
   const [configModalOpen, setConfigModalOpen] = useState(false)
   const [changePasswordOpen, setChangePasswordOpen] = useState(false)
   const [configModalIsError, setConfigModalIsError] = useState(false)
+  const { toastPosition, setToastPosition, colorScheme, setColorScheme } = useSettingsStore()
 
   const currentUid = localStorage.getItem("uid")
   const username = localStorage.getItem("username")
@@ -84,34 +86,94 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="w-48 rounded-xl shadow-lg"
+        className="w-56 rounded-xl shadow-lg p-2"
         sideOffset={8}
       >
-        {/* 用户 ID 显示 */}
-        <div className="px-3 py-2 text-xs text-muted-foreground border-b">
-          {t("userUid", { uid: currentUid })}
+        {/* 用户头部信息 */}
+        <div className="flex items-center gap-3 px-2 py-3 mb-2 bg-muted/30 rounded-lg">
+          <div className="size-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-lg ring-2 ring-background shadow-sm">
+            {username?.charAt(0)?.toUpperCase() || currentUid?.charAt(0)?.toUpperCase() || "U"}
+          </div>
+          <div className="flex flex-col min-w-0">
+            <span className="font-semibold text-sm truncate">{username || t("unknownUser")}</span>
+            <span className="text-xs text-muted-foreground truncate font-mono">UID: {currentUid}</span>
+          </div>
         </div>
 
-        {/* 复制配置 */}
-        <DropdownMenuItem onClick={handleCopyConfig}>
-          <Clipboard className="mr-2 size-4" />
-          {t("authTokenConfig")}
-        </DropdownMenuItem>
+        <DropdownMenuSeparator className="-mx-2 mb-2" />
 
-        <DropdownMenuItem onClick={() => {
-          setOpen(false);
-          setChangePasswordOpen(true);
-        }}>
-          <Lock className="mr-2 size-4" />
-          {t("changePassword")}
-        </DropdownMenuItem>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="px-2 py-1.5 text-xs font-normal text-muted-foreground">{t("appearanceAndSettings") || "外观与设置"}</DropdownMenuLabel>
 
-        <DropdownMenuSeparator />
+          {/* 外观设置 */}
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="rounded-lg">
+              <Palette className="mr-2 size-4 text-muted-foreground" />
+              <span>{t("colorScheme")}</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent className="rounded-xl">
+                <DropdownMenuRadioGroup value={colorScheme} onValueChange={(value) => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  setColorScheme(value as any);
+                  toast.success(t("colorSchemeSwitched", { scheme: t(COLOR_SCHEMES.find(s => s.value === value)?.label || "") }));
+                }}>
+                  {COLOR_SCHEMES.map((scheme) => (
+                    <DropdownMenuRadioItem key={scheme.value} value={scheme.value} className="rounded-lg cursor-pointer">
+                      <span className="mr-2 flex h-2 w-2 rounded-full" style={{ backgroundColor: scheme.color }} />
+                      {t(scheme.label)}
+                      {colorScheme === scheme.value && <Check className="ml-auto h-4 w-4" />}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger className="rounded-lg">
+              <Bell className="mr-2 size-4 text-muted-foreground" />
+              <span>{t("toastPosition")}</span>
+            </DropdownMenuSubTrigger>
+            <DropdownMenuPortal>
+              <DropdownMenuSubContent className="rounded-xl">
+                <DropdownMenuRadioGroup value={toastPosition} onValueChange={(value) => setToastPosition(value as ToastPosition)}>
+                  {(['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'] as ToastPosition[]).map((pos) => (
+                    <DropdownMenuRadioItem key={pos} value={pos} className="rounded-lg cursor-pointer">
+                      {t(`position.${pos}`)}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuSubContent>
+            </DropdownMenuPortal>
+          </DropdownMenuSub>
+
+          <DropdownMenuItem onClick={() => {
+            setOpen(false);
+            setChangePasswordOpen(true);
+          }} className="rounded-lg cursor-pointer">
+            <Lock className="mr-2 size-4 text-muted-foreground" />
+            {t("changePassword")}
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+
+        <DropdownMenuSeparator className="my-1" />
+
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="px-2 py-1.5 text-xs font-normal text-muted-foreground">{t("dataAndConfig") || "数据与配置"}</DropdownMenuLabel>
+          {/* 复制配置 */}
+          <DropdownMenuItem onClick={handleCopyConfig} className="rounded-lg cursor-pointer">
+            <Clipboard className="mr-2 size-4 text-muted-foreground" />
+            {t("authTokenConfig")}
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+
+        <DropdownMenuSeparator className="my-1" />
 
         {/* 登出 */}
         <DropdownMenuItem
           onClick={handleLogout}
-          className="text-destructive focus:text-destructive"
+          className="text-destructive focus:text-destructive rounded-lg cursor-pointer focus:bg-destructive/10"
         >
           <LogOut className="mr-2 size-4" />
           {t("logout")}

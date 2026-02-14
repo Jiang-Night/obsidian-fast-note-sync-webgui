@@ -1,6 +1,4 @@
-import { Info, GitBranch, Tag, Bell, Type, UserPlus, HardDrive, Trash2, Clock, Shield, Sun, Lock, Loader2, Palette, RefreshCw, ExternalLink, CheckCircle, AlertCircle } from "lucide-react";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { useSettingsStore, ToastPosition, COLOR_SCHEMES } from "@/lib/stores/settings-store";
+import { Info, GitBranch, Tag, UserPlus, HardDrive, Trash2, Clock, Shield, Loader2, RefreshCw, ExternalLink, CheckCircle, AlertCircle, Type, Lock } from "lucide-react";
 import { useUpdateCheck } from "@/components/api-handle/use-update-check";
 import { useVersion } from "@/components/api-handle/use-version";
 import { addCacheBuster } from "@/lib/utils/cache-buster";
@@ -15,10 +13,6 @@ import { Input } from "@/components/ui/input";
 import { useState, useEffect } from "react";
 import env from "@/env.ts";
 
-
-const TOAST_POSITIONS: ToastPosition[] = [
-    'top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right',
-];
 
 interface SystemConfig {
     fontSet: string
@@ -40,8 +34,8 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
     const [config, setConfig] = useState<SystemConfig | null>(null)
     const [loading, setLoading] = useState(true)
     const [saving, setSaving] = useState(false)
+
     const token = localStorage.getItem("token")
-    const { toastPosition, setToastPosition, colorScheme, setColorScheme } = useSettingsStore()
     const { versionInfo, isLoading: versionLoading } = useVersion()
     const { checkUpdate, isChecking, updateResult } = useUpdateCheck()
 
@@ -206,41 +200,7 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                     </div>
                 </div>
 
-                {/* 外观设置 */}
-                <div className="rounded-xl border border-border bg-card p-6 space-y-5">
-                    <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
-                        <Sun className="h-5 w-5" />
-                        {t("appearance")}
-                    </h2>
-                    <div className="space-y-3">
-                        <div className="flex items-center gap-3">
-                            <Palette className="h-5 w-5 text-muted-foreground" />
-                            <span className="text-sm font-medium">{t("colorScheme")}</span>
-                        </div>
-                        <div className="grid grid-cols-3 gap-2">
-                            {COLOR_SCHEMES.map((scheme) => (
-                                <button key={scheme.value} onClick={() => { setColorScheme(scheme.value); toast.success(t("colorSchemeSwitched", { scheme: t(scheme.label) })) }}
-                                    className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${colorScheme === scheme.value ? 'border-primary bg-primary/10' : 'border-border hover:border-primary/50'}`}>
-                                    <span className="w-4 h-4 rounded-full shrink-0" style={{ backgroundColor: scheme.color }} />
-                                    <span className="text-xs truncate">{t(scheme.label)}</span>
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                    <div className="border-t border-border" />
-                    <div className="flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                            <Bell className="h-5 w-5 text-muted-foreground" />
-                            <span className="text-sm font-medium">{t("toastPosition")}</span>
-                        </div>
-                        <Select value={toastPosition} onValueChange={(value) => setToastPosition(value as ToastPosition)}>
-                            <SelectTrigger className="w-36 rounded-xl"><SelectValue /></SelectTrigger>
-                            <SelectContent className="rounded-xl">
-                                {TOAST_POSITIONS.map((pos) => <SelectItem key={pos} value={pos} className="rounded-xl">{t(`position.${pos}`)}</SelectItem>)}
-                            </SelectContent>
-                        </Select>
-                    </div>
-                </div>
+
 
 
             </div>

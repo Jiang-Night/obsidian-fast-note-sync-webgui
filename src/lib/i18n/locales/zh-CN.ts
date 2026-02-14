@@ -248,6 +248,8 @@ export default {
     fillAllFields: "请填写所有字段",
     invalidNumber: "请输入有效数字",
     autoSaving: "保存中...",
+    appearanceAndSettings: "外观与设置",
+    dataAndConfig: "数据与配置",
     // 配色方案
     colorScheme: "配色方案",
     colorSchemeSwitched: "已切换到 {{scheme}} 配色",
