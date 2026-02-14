@@ -284,7 +284,14 @@ export function SystemSettings({ onBack }: { onBack?: () => void }) {
                                 {/* Host Details */}
                                 <div className="grid grid-cols-2 gap-y-2 text-xs">
                                     <div className="text-muted-foreground">{t("systemTime")}</div>
-                                    <div className="text-right font-medium">{new Date(systemInfo.host.currentTime).toLocaleString()}</div>
+                                    <div className="text-right font-medium">{(() => {
+                                        const date = new Date(systemInfo.host.currentTime);
+                                        const formatted = date.toLocaleString();
+                                        const offset = new Intl.DateTimeFormat(undefined, { timeZoneName: 'shortOffset' })
+                                            .formatToParts(date)
+                                            .find(p => p.type === 'timeZoneName')?.value || "";
+                                        return `${formatted} (${offset})`;
+                                    })()}</div>
 
                                     <div className="text-muted-foreground">{t("os")}</div>
                                     <div className="text-right truncate font-medium" title={systemInfo.host.osPretty}>{systemInfo.host.osPretty}</div>
