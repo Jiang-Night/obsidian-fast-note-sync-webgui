@@ -1,8 +1,8 @@
 export default {
     title: "Đăng nhập người dùng",
-    subtitle: "Dịch vụ đồng bộ ghi chú hiệu suất cao, độ trễ thấp được xây dựng bằng Golang + Websocket + Sqlite + React. Cần sử dụng cùng với Obsidian Fast Note Sync Plugin",
+    subtitle: "Dịch vụ đồng bộ ghi chú hiệu suất cao, độ trễ thấp được xây dựng bằng Golang + Websocket + Sqlite + React. Cần sử dụng cùng với Fast Note Sync Plugin",
     subtitlePrefix: "Dịch vụ đồng bộ ghi chú hiệu suất cao, độ trễ thấp trên Golang + Websocket + Sqlite + React. Cần dùng kèm",
-    subtitlePluginName: "Obsidian Fast Note Sync Plugin",
+    subtitlePluginName: "Fast Note Sync Plugin",
     subtitleSuffix: "",
     credentials: "Tên đăng nhập (hoặc Email)",
     username: "Tên đăng nhập",

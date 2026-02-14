@@ -1,8 +1,8 @@
 export default {
     title: "Kullanıcı Girişi",
-    subtitle: "Golang + Websocket + Sqlite + React ile oluşturulmuş yüksek performanslı, düşük gecikmeli not senkronizasyon servisi. Obsidian Fast Note Sync Eklentisi gerektirir.",
+    subtitle: "Golang + Websocket + Sqlite + React ile oluşturulmuş yüksek performanslı, düşük gecikmeli not senkronizasyon servisi. Fast Note Sync Eklentisi gerektirir.",
     subtitlePrefix: "Golang + Websocket + Sqlite + React ile oluşturulmuş yüksek performanslı, düşük gecikmeli not senkronizasyon servisi.",
-    subtitlePluginName: "Obsidian Fast Note Sync Plugin",
+    subtitlePluginName: "Fast Note Sync Plugin",
     subtitleSuffix: " gereklidir.",
     credentials: "Kullanıcı Adı (veya E-posta)",
     username: "Kullanıcı Adı",

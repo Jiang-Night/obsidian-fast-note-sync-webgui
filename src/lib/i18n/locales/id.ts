@@ -1,8 +1,8 @@
 export default {
     title: "Login Pengguna",
-    subtitle: "Layanan sinkronisasi catatan berperformace tinggi, latensi rendah yang dibangun dengan Golang + Websocket + Sqlite + React. Memerlukan Obsidian Fast Note Sync Plugin untuk bekerja sama.",
+    subtitle: "Layanan sinkronisasi catatan berperformace tinggi, latensi rendah yang dibangun dengan Golang + Websocket + Sqlite + React. Memerlukan Fast Note Sync Plugin untuk bekerja sama.",
     subtitlePrefix: "Layanan sinkronisasi catatan berperformance tinggi, latensi rendah yang dibangun dengan Golang + Websocket + Sqlite + React.",
-    subtitlePluginName: "Obsidian Fast Note Sync Plugin",
+    subtitlePluginName: "Fast Note Sync Plugin",
     subtitleSuffix: " diperlukan untuk digunakan bersama.",
     credentials: "Nama Pengguna (atau Email)",
     username: "Nama Pengguna",

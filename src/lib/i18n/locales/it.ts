@@ -1,8 +1,8 @@
 export default {
     title: "Accesso Utente",
-    subtitle: "Servizio di sincronizzazione note ad alte prestazioni e bassa latenza, costruito con Golang + Websocket + Sqlite + React. Richiede il plugin Obsidian Fast Note Sync.",
+    subtitle: "Servizio di sincronizzazione note ad alte prestazioni e bassa latenza, costruito con Golang + Websocket + Sqlite + React. Richiede il plugin Fast Note Sync.",
     subtitlePrefix: "Servizio di sincronizzazione note ad alte prestazioni e bassa latenza, costruito con Golang + Websocket + Sqlite + React.",
-    subtitlePluginName: "Obsidian Fast Note Sync Plugin",
+    subtitlePluginName: "Fast Note Sync Plugin",
     subtitleSuffix: " richiesto.",
     credentials: "Nome utente (o Email)",
     username: "Nome utente",

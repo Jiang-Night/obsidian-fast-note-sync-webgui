@@ -1,8 +1,8 @@
 export default {
     title: "用戶登錄",
-    subtitle: "基於 Golang + Websocket + Sqlite + React 構建的高性能 低延遲 筆記同步服務, 需要 Obsidian Fast Note Sync Plugin 配合使用",
+    subtitle: "基於 Golang + Websocket + Sqlite + React 構建的高性能 低延遲 筆記同步服務, 需要 Fast Note Sync Plugin 配合使用",
     subtitlePrefix: "基於 Golang + Websocket + Sqlite + React 構建的高性能 低延遲 筆記同步服務, 需要和",
-    subtitlePluginName: "Obsidian Fast Note Sync Plugin",
+    subtitlePluginName: "Fast Note Sync Plugin",
     subtitleSuffix: "配合使用",
     credentials: "用戶名 ( 或 郵箱 )",
     username: "用戶名",

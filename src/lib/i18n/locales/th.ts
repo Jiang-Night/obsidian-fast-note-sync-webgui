@@ -1,8 +1,8 @@
 export default {
     title: "เข้าสู่ระบบผู้ใช้",
-    subtitle: "บริการซิงค์โน้ตประสิทธิภาพสูง ความหน่วงต่ำ สร้างด้วย Golang + Websocket + Sqlite + React ต้องใช้ร่วมกับ Obsidian Fast Note Sync Plugin",
+    subtitle: "บริการซิงค์โน้ตประสิทธิภาพสูง ความหน่วงต่ำ สร้างด้วย Golang + Websocket + Sqlite + React ต้องใช้ร่วมกับ Fast Note Sync Plugin",
     subtitlePrefix: "บริการซิงค์โน้ตประสิทธิภาพสูง ความหน่วงต่ำ สร้างด้วย Golang + Websocket + Sqlite + React ต้องใช้ร่วมกับ ",
-    subtitlePluginName: "Obsidian Fast Note Sync Plugin",
+    subtitlePluginName: "Fast Note Sync Plugin",
     subtitleSuffix: "",
     credentials: "ชื่อผู้ใช้ (หรือ อีเมล)",
     username: "ชื่อผู้ใช้",
