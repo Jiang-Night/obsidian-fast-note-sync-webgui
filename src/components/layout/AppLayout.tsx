@@ -1,3 +1,5 @@
+import { AnimatedBackground } from "@/components/user/animated-background";
+import { useSettingsStore } from "@/lib/stores/settings-store";
 import { useAppStore } from "@/stores/app-store";
 import { useMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
@@ -33,6 +35,7 @@ export function AppLayout({
   className,
 }: AppLayoutProps) {
   const { zenMode } = useAppStore()
+  const { colorScheme } = useSettingsStore()
   // useMobile hook 保留用于未来移动端适配
   useMobile()
 
@@ -43,7 +46,12 @@ export function AppLayout({
         className
       )}
     >
-      <div className="flex flex-col h-full">
+      {/* Background Animation for Manus Scheme */}
+      {colorScheme === 'manus' && (
+        <AnimatedBackground />
+      )}
+
+      <div className="flex flex-col h-full relative z-10">
         {/* Top Bar - 顶部栏（非 Zen 模式显示） */}
         {!zenMode && <TopBar onLogout={onLogout} />}
 

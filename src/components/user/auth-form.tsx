@@ -1,12 +1,12 @@
 import "../../styles/auth.css";
 
 import { createLoginSchema, createRegisterSchema, type LoginFormData, type RegisterFormData } from "@/lib/validations/user-schema";
-import { Sun, Moon, User, Lock, Mail, KeyRound, Github, LogIn, Wifi } from "lucide-react";
 import { AnimatedBackground } from "@/components/user/animated-background";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { motion, AnimatePresence, type Variants } from "motion/react";
 import { useTheme } from "@/components/context/theme-context";
 import { useAuth } from "@/components/api-handle/use-auth";
+import { Sun, Moon, Github, Wifi } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/components/common/Toast";
 import { useTranslation } from "react-i18next";
@@ -21,20 +21,18 @@ interface AuthFormProps {
 }
 
 const formVariants: Variants = {
-  hidden: { opacity: 0, scale: 0.98, filter: "blur(4px)" },
+  hidden: { opacity: 0, y: 5 },
   visible: {
     opacity: 1,
-    scale: 1,
-    filter: "blur(0px)",
+    y: 0,
     transition: {
-      duration: 0.4,
-      ease: [0.22, 1, 0.36, 1],
+      duration: 0.3,
+      ease: "easeOut",
     }
   },
   exit: {
     opacity: 0,
-    scale: 0.98,
-    filter: "blur(4px)",
+    y: -5,
     transition: { duration: 0.2 }
   }
 };
@@ -89,7 +87,10 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
 
   return (
     <div className={`auth-page-container ${resolvedTheme}`}>
-      <AnimatedBackground />
+      {/* Restore Animated Background */}
+      <div className="auth-background-layer">
+        <AnimatedBackground />
+      </div>
 
       {/* Floating Actions (Top Right) */}
       <div className="auth-floating-actions">
@@ -98,14 +99,14 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
           className="auth-floating-switcher"
           title="Source Code"
         >
-          <Github />
+          <Github size={18} />
         </button>
         <button
           onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
           className="auth-floating-switcher"
           title={resolvedTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         >
-          {resolvedTheme === 'dark' ? <Sun /> : <Moon />}
+          {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
         </button>
         <LanguageSwitcher
           showText={false}
@@ -113,30 +114,20 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
         />
       </div>
 
-      <main className="relative z-50 w-full max-w-md px-6 py-12">
+      <main className="relative z-50 w-full px-6 py-12 flex flex-col items-center">
         {/* Header Section */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="auth-logo-wrapper flex flex-col items-center"
-        >
+        <div className="auth-logo-wrapper">
           <div className="auth-logo-box">
-            <Wifi size={44} className="auth-logo-icon" strokeWidth={2.5} />
+            <Wifi size={40} className="auth-logo-icon" />
           </div>
           <h1 className="auth-title">Fast Note Sync</h1>
           <p className="auth-subtitle">
             {t("subtitle") || "Welcome Back"}
           </p>
-        </motion.div>
+        </div>
 
         {/* Auth Card */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="auth-card"
-        >
+        <div className="auth-card">
           {/* Tabs Switcher at Top */}
           <div className="auth-tabs-container">
             <div className="auth-tabs">
@@ -164,33 +155,30 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                 animate="visible"
                 exit="exit"
                 onSubmit={loginForm.handleSubmit(handleLoginSubmit)}
-                className="space-y-4"
               >
-                <div className="space-y-4">
+                <div>
                   <div className="relative group">
-                    <User className={`absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 opacity-20 group-focus-within:opacity-70 transition-opacity`} />
                     <Input
                       placeholder={t("credentialsPlaceholder")}
                       {...loginForm.register("credentials")}
-                      className="auth-input pl-12 h-14"
+                      className="auth-input"
                     />
                     {loginForm.formState.errors.credentials && (
-                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-4">
+                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-1 mb-2">
                         {loginForm.formState.errors.credentials.message}
                       </p>
                     )}
                   </div>
 
                   <div className="relative group">
-                    <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 opacity-20 group-focus-within:opacity-70 transition-opacity`} />
                     <Input
                       type="password"
                       placeholder={t("passwordPlaceholder")}
                       {...loginForm.register("password")}
-                      className="auth-input pl-12 h-14"
+                      className="auth-input"
                     />
                     {loginForm.formState.errors.password && (
-                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-4">
+                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-1 mb-2">
                         {loginForm.formState.errors.password.message}
                       </p>
                     )}
@@ -200,19 +188,16 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="auth-button-primary mt-6"
+                  className="auth-button-primary"
                 >
                   {isLoading ? (
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                      className="w-5 h-5 border-2 border-current border-t-transparent rounded-full"
+                      className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                     />
                   ) : (
-                    <>
-                      <LogIn className="w-5 h-5" />
-                      {t("login")}
-                    </>
+                    t("login")
                   )}
                 </button>
               </motion.form>
@@ -224,63 +209,58 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                 animate="visible"
                 exit="exit"
                 onSubmit={registerForm.handleSubmit(handleRegisterSubmit)}
-                className="space-y-3"
               >
-                <div className="space-y-3">
+                <div className="space-y-0">
                   <div className="relative group">
-                    <User className={`absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 opacity-20 group-focus-within:opacity-70 transition-opacity`} />
                     <Input
                       placeholder={t("usernamePlaceholder")}
                       {...registerForm.register("username")}
-                      className="auth-input pl-12 h-12"
+                      className="auth-input"
                     />
                     {registerForm.formState.errors.username && (
-                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-4">
+                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-1 mb-2">
                         {registerForm.formState.errors.username.message}
                       </p>
                     )}
                   </div>
 
                   <div className="relative group">
-                    <Mail className={`absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 opacity-20 group-focus-within:opacity-70 transition-opacity`} />
                     <Input
                       type="email"
                       placeholder={t("emailPlaceholder")}
                       {...registerForm.register("email")}
-                      className="auth-input pl-12 h-12"
+                      className="auth-input"
                     />
                     {registerForm.formState.errors.email && (
-                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-4">
+                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-1 mb-2">
                         {registerForm.formState.errors.email.message}
                       </p>
                     )}
                   </div>
 
                   <div className="relative group">
-                    <Lock className={`absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 opacity-20 group-focus-within:opacity-70 transition-opacity`} />
                     <Input
                       type="password"
                       placeholder={t("passwordPlaceholder")}
                       {...registerForm.register("password")}
-                      className="auth-input pl-12 h-12"
+                      className="auth-input"
                     />
                     {registerForm.formState.errors.password && (
-                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-4">
+                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-1 mb-2">
                         {registerForm.formState.errors.password.message}
                       </p>
                     )}
                   </div>
 
                   <div className="relative group">
-                    <KeyRound className={`absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 opacity-20 group-focus-within:opacity-70 transition-opacity`} />
                     <Input
                       type="password"
                       placeholder={t("confirmPasswordPlaceholder")}
                       {...registerForm.register("confirmPassword")}
-                      className="auth-input pl-12 h-12"
+                      className="auth-input"
                     />
                     {registerForm.formState.errors.confirmPassword && (
-                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-4">
+                      <p className="text-[10px] text-destructive/80 font-bold uppercase tracking-wider mt-1 ml-1 mb-2">
                         {registerForm.formState.errors.confirmPassword.message}
                       </p>
                     )}
@@ -290,13 +270,13 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="auth-button-primary mt-4"
+                  className="auth-button-primary"
                 >
                   {isLoading ? (
                     <motion.div
                       animate={{ rotate: 360 }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                      className="w-5 h-5 border-2 border-current border-t-transparent rounded-full"
+                      className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                     />
                   ) : t("registerButton")}
                 </button>
@@ -304,20 +284,15 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
             )}
           </AnimatePresence>
 
-        </motion.div>
+        </div>
 
         {/* Footer info & GitHub Link */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-          className="mt-10 text-center space-y-6"
-        >
+        <div className="auth-footer-wrapper">
           <footer
             className="auth-brand-footer"
             dangerouslySetInnerHTML={{ __html: t("footerTitle") }}
           />
-        </motion.div>
+        </div>
       </main>
     </div>
   )

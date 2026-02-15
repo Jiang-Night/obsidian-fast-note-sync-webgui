@@ -11,6 +11,7 @@ export type ToastPosition =
   | 'bottom-right';
 
 export type ColorScheme =
+  | 'manus'      // Manuscript 风格
   | 'green'      // 默认绿色
   | 'blue'       // 蓝色 #2563EB
   | 'sky-blue'   // 天蓝色 #9fc2e2
@@ -20,6 +21,7 @@ export type ColorScheme =
   | 'teal';      // 青色
 
 export const COLOR_SCHEMES: { value: ColorScheme; label: string; color: string }[] = [
+  { value: 'manus', label: 'colorScheme.manus', color: '#34322d' },
   { value: 'green', label: 'colorScheme.green', color: '#4ade80' },
   { value: 'blue', label: 'colorScheme.blue', color: '#2563EB' },
   { value: 'sky-blue', label: 'colorScheme.skyBlue', color: '#9fc2e2' },

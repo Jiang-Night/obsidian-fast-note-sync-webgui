@@ -58,7 +58,6 @@ export default {
     close: "关闭",
     cancel: "取消",
     confirm: "确定",
-    or: "或",
     success: "成功",
     error: "错误",
     warning: "警告",
@@ -274,6 +273,7 @@ export default {
     // 配色方案
     colorScheme: "配色方案",
     colorSchemeSwitched: "已切换到 {{scheme}} 配色",
+    "colorScheme.manus": "标准",
     "colorScheme.green": "绿色",
     "colorScheme.blue": "蓝色",
     "colorScheme.skyBlue": "天蓝",

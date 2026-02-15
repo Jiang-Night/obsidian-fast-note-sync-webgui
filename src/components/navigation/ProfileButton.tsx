@@ -1,7 +1,7 @@
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuPortal, DropdownMenuLabel, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
-import { useSettingsStore, ToastPosition, COLOR_SCHEMES } from "@/lib/stores/settings-store";
-import { Clipboard, LogOut, ExternalLink, Lock, Palette, Bell, Check } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, DropdownMenuSub, DropdownMenuSubContent, DropdownMenuSubTrigger, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuPortal, DropdownMenuGroup } from "@/components/ui/dropdown-menu";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useSettingsStore, ToastPosition } from "@/lib/stores/settings-store";
+import { Clipboard, LogOut, ExternalLink, Lock, Bell } from "lucide-react";
 import { ChangePassword } from "@/components/user/change-password";
 import { toast } from "@/components/common/Toast";
 import { Button } from "@/components/ui/button";
@@ -32,7 +32,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
   const [configModalOpen, setConfigModalOpen] = useState(false)
   const [changePasswordOpen, setChangePasswordOpen] = useState(false)
   const [configModalIsError, setConfigModalIsError] = useState(false)
-  const { toastPosition, setToastPosition, colorScheme, setColorScheme } = useSettingsStore()
+  const { toastPosition, setToastPosition } = useSettingsStore()
 
   const currentUid = localStorage.getItem("uid")
   const username = localStorage.getItem("username")
@@ -103,32 +103,9 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
         <DropdownMenuSeparator className="-mx-2 mb-2" />
 
         <DropdownMenuGroup>
-          <DropdownMenuLabel className="px-2 py-1.5 text-xs font-normal text-muted-foreground">{t("appearanceAndSettings") || "外观与设置"}</DropdownMenuLabel>
 
-          {/* 外观设置 */}
-          <DropdownMenuSub>
-            <DropdownMenuSubTrigger className="rounded-lg">
-              <Palette className="mr-2 size-4 text-muted-foreground" />
-              <span>{t("colorScheme")}</span>
-            </DropdownMenuSubTrigger>
-            <DropdownMenuPortal>
-              <DropdownMenuSubContent className="rounded-xl">
-                <DropdownMenuRadioGroup value={colorScheme} onValueChange={(value) => {
-                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                  setColorScheme(value as any);
-                  toast.success(t("colorSchemeSwitched", { scheme: t(COLOR_SCHEMES.find(s => s.value === value)?.label || "") }));
-                }}>
-                  {COLOR_SCHEMES.map((scheme) => (
-                    <DropdownMenuRadioItem key={scheme.value} value={scheme.value} className="rounded-lg cursor-pointer">
-                      <span className="mr-2 flex h-2 w-2 rounded-full" style={{ backgroundColor: scheme.color }} />
-                      {t(scheme.label)}
-                      {colorScheme === scheme.value && <Check className="ml-auto h-4 w-4" />}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuSubContent>
-            </DropdownMenuPortal>
-          </DropdownMenuSub>
+
+
 
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="rounded-lg">
@@ -160,7 +137,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
         <DropdownMenuSeparator className="my-1" />
 
         <DropdownMenuGroup>
-          <DropdownMenuLabel className="px-2 py-1.5 text-xs font-normal text-muted-foreground">{t("dataAndConfig") || "数据与配置"}</DropdownMenuLabel>
+
           {/* 复制配置 */}
           <DropdownMenuItem onClick={handleCopyConfig} className="rounded-lg cursor-pointer">
             <Clipboard className="mr-2 size-4 text-muted-foreground" />

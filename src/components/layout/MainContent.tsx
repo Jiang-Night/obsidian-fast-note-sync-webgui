@@ -40,7 +40,7 @@ export function MainContent({ children, className }: MainContentProps) {
           {children}
         </div>
       ) : (
-        <div className="bg-card rounded-lg sm:rounded-xl shadow-sm p-3 sm:p-6 md:p-5 min-h-full">
+        <div className="bg-card rounded-lg sm:rounded-xl shadow-sm p-3 sm:p-6 md:p-5 h-auto">
           <div className="px-1">
             {children}
           </div>
