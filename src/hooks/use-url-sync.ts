@@ -43,9 +43,11 @@ export function useUrlSync(
             }
 
             // 映射 query key 到 module
-            let module: ModuleId = 'vaults';
+            let module: ModuleId = 'dashboard';
 
-            if (params.has('settings')) module = 'settings';
+            if (params.has('dashboard')) module = 'dashboard';
+            else if (params.has('vaults')) module = 'vaults';
+            else if (params.has('settings')) module = 'settings';
             else if (params.has('notes')) module = 'notes';
             else if (params.has('files')) module = 'files';
             else if (params.has('trash')) module = 'trash';
@@ -83,10 +85,8 @@ export function useUrlSync(
 
         const params = new URLSearchParams();
 
-        // 根据当前模块添加对应的 key (无值)
-        if (currentModule !== 'vaults') {
-            params.set(currentModule, '');
-        }
+        // 所有模块都添加对应的 URL 参数
+        params.set(currentModule, '');
 
         // 添加参数
         if (activeVault) params.set('vault', activeVault);

@@ -13,7 +13,7 @@ import { create } from 'zustand';
  * - sync: 远端备份（计划中）
  * - git: Git 自动化（计划中）
  */
-export type ModuleId = 'vaults' | 'notes' | 'files' | 'trash' | 'settings' | 'sync' | 'git';
+export type ModuleId = 'dashboard' | 'vaults' | 'notes' | 'files' | 'trash' | 'settings' | 'sync' | 'git';
 
 /**
  * 应用状态接口
@@ -49,7 +49,7 @@ interface AppState {
 
 /** 默认状态 */
 const defaultState = {
-  currentModule: 'vaults' as ModuleId,
+  currentModule: 'dashboard' as ModuleId,
   zenMode: false,
   userMenuOpen: false,
   trashType: 'notes' as 'notes' | 'files',
@@ -97,6 +97,14 @@ export const useAppStore = create<AppState>()(
         currentModule: state.currentModule,
         trashType: state.trashType
       }),
+      // 迁移逻辑：如果持久化的值是旧的默认值 'vaults'，则更新为新的默认值 'dashboard'
+      onRehydrateStorage: () => (state) => {
+        if (state && state.currentModule === 'vaults') {
+          // 检查是否是首次访问（没有手动选择过）
+          // 如果用户从未手动切换过模块，则迁移到新的默认值
+          state.currentModule = 'dashboard';
+        }
+      },
     }
   )
 );

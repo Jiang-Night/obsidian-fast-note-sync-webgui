@@ -1,7 +1,8 @@
-import { Database, FileText, Trash2, Settings, RefreshCw, GitBranch, Paperclip } from "lucide-react";
+import { Database, FileText, Trash2, Settings, RefreshCw, GitBranch, Paperclip, Layout } from "lucide-react";
 import { useAppStore, type ModuleId } from "@/stores/app-store";
 import { NavItem } from "@/components/navigation/NavItem";
 import { useTranslation } from "react-i18next";
+import { useMobile } from "@/hooks/use-mobile";
 import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 
@@ -23,6 +24,7 @@ interface FloatingNavProps {
 export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
   const { t } = useTranslation()
   const { currentModule, setModule, versionInfo } = useAppStore()
+  const isMobile = useMobile()
 
   const navItems: Array<{
     id: ModuleId
@@ -30,6 +32,7 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
     labelKey: string
     adminOnly?: boolean
   }> = [
+      { id: "dashboard", icon: Layout, labelKey: "menuDashboard", adminOnly: true },
       { id: "vaults", icon: Database, labelKey: "menuVaults" },
       { id: "notes", icon: FileText, labelKey: "menuNotes" },
       { id: "files", icon: Paperclip, labelKey: "menuFiles" },
@@ -51,37 +54,57 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
 
   return (
     <div className={cn(
-      // 移动端：fixed 定位，不占用文档流空间
-      "fixed bottom-1 left-1/2 -translate-x-1/2 z-50",
-      // 桌面端：相对定位，由于父容器 overflow:hidden 且 MainContent 独立滚动，这里自然会保持固定
-      "md:relative md:bottom-auto md:left-auto md:translate-x-0 md:pt-6 md:pl-4",
+      // 移动端：fixed 定位，限制最大宽度（预留左右各 1.5rem 边距）并居中
+      "fixed bottom-1 left-1/2 -translate-x-1/2 z-50 max-w-[calc(100vw-3rem)] w-auto",
+      // 桌面端：相对定位
+      "md:relative md:bottom-auto md:left-auto md:translate-x-0 md:pt-6 md:pl-4 md:max-w-none",
       className
     )}>
       <motion.nav
         aria-label="Main Navigation"
         className={cn(
-          // 移动端：水平排列
-          "flex items-center gap-1 p-2",
-          // 桌面端：垂直排列
-          "md:flex-col md:gap-1 md:p-2",
+          // 移动端：水平排列，启用横向滚动并隐藏滚动条
+          "flex items-center gap-1 p-2 overflow-x-auto no-scrollbar",
+          // 桌面端：垂直排列，重置滚动
+          "md:flex-col md:gap-1 md:p-2 md:overflow-visible",
           // 样式
           "bg-sidebar text-sidebar-foreground border border-sidebar-border rounded-lg",
           "custom-shadow backdrop-blur-sm"
         )}
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.3 }}
+        initial={{ opacity: 0, scale: 0.9, x: 0 }}
+        animate={isMobile ? {
+          opacity: 1,
+          scale: 1,
+          x: [0, -30, 10, 0]
+        } : {
+          opacity: 1,
+          scale: 1,
+          x: 0
+        }}
+        transition={isMobile ? {
+          opacity: { duration: 0.3 },
+          scale: { duration: 0.3 },
+          x: { duration: 1.2, times: [0, 0.4, 0.7, 1], ease: "easeInOut" }
+        } : {
+          duration: 0.3
+        }}
       >
         {visibleItems.map((item) => (
-          <NavItem
-            key={item.id}
-            icon={item.icon}
-            label={t(item.labelKey)}
-            isActive={currentModule === item.id}
-            onClick={() => setModule(item.id)}
-            tooltipSide="right"
-            showDot={item.id === 'settings' && !!versionInfo?.versionIsNew}
-          />
+          <>
+            <NavItem
+              key={item.id}
+              icon={item.icon}
+              label={t(item.labelKey)}
+              isActive={currentModule === item.id}
+              onClick={() => setModule(item.id)}
+              tooltipSide="right"
+              showDot={item.id === 'settings' && !!versionInfo?.versionIsNew}
+            />
+            {/* 在看板和笔记仓库之间添加分隔线（仅桌面端） */}
+            {item.id === 'dashboard' && (
+              <div className="hidden md:block w-8 h-px bg-border/50 my-1" />
+            )}
+          </>
         ))}
 
         {/* 计划中的功能 - 桌面端显示 */}

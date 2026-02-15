@@ -22,8 +22,8 @@ export function MainContent({ children, className }: MainContentProps) {
   const { currentModule } = useAppStore()
   const isMobile = useMobile()
 
-  // 设置页面不需要外层卡片容器
-  const isSettingsPage = currentModule === 'settings'
+  // 设置页面、概况页面和同步页面不需要外层卡片容器
+  const isPlainPage = currentModule === 'settings' || currentModule === 'dashboard' || currentModule === 'sync'
 
   return (
     <main
@@ -31,11 +31,11 @@ export function MainContent({ children, className }: MainContentProps) {
         "flex-1 overflow-y-auto",
         "p-2 sm:p-4 md:p-6",
         // 设置页面不需要额外底部留白，其他页面在移动端需要为底部导航留空间
-        isMobile && !isSettingsPage && "pb-18",
+        isMobile && !isPlainPage && "pb-18",
         className
       )}
     >
-      {isSettingsPage ? (
+      {isPlainPage ? (
         <div>
           {children}
         </div>

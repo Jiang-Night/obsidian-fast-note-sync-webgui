@@ -1,6 +1,6 @@
+import { useState, useEffect, lazy, Suspense, useCallback } from "react";
 import { useVaultHandle } from "@/components/api-handle/vault-handle";
 import { useUserHandle } from "@/components/api-handle/user-handle";
-import { useState, useEffect, lazy, Suspense } from "react";
 import { useAuth } from "@/components/context/auth-context";
 import { AppLayout } from "@/components/layout/AppLayout";
 import { useUrlSync } from "@/hooks/use-url-sync";
@@ -16,6 +16,7 @@ const FileManager = lazy(() => import("@/components/file/file-manager").then(m =
 const SystemSettings = lazy(() => import("@/components/layout/system-settings").then(m => ({ default: m.SystemSettings })));
 const VaultList = lazy(() => import("@/components/vault/vault-list").then(m => ({ default: m.VaultList })));
 const AuthForm = lazy(() => import("@/components/user/auth-form").then(m => ({ default: m.AuthForm })));
+const SyncBackup = lazy(() => import("@/components/layout/sync-backup").then(m => ({ default: m.SyncBackup })));
 const ComingSoon = lazy(() => import("@/components/common/ComingSoon").then(m => ({ default: m.ComingSoon })));
 
 // 加载占位符
@@ -31,7 +32,12 @@ function App() {
   const { handleVaultList } = useVaultHandle()
   const { handleUserInfo } = useUserHandle()
 
-  const { currentModule, setModule, zenMode, setZenMode, resetState, trashType } = useAppStore()
+  const currentModule = useAppStore(state => state.currentModule)
+  const setModule = useAppStore(state => state.setModule)
+  const zenMode = useAppStore(state => state.zenMode)
+  const setZenMode = useAppStore(state => state.setZenMode)
+  const resetState = useAppStore(state => state.resetState)
+  const trashType = useAppStore(state => state.trashType)
 
   const [activeVault, setActiveVault] = useState<string | null>(null)
 
@@ -70,64 +76,60 @@ function App() {
     }
   }, [currentModule, isLoggedIn, handleVaultList, t, setModule, activeVault])
 
+  const handleFontsUpdate = useCallback((fontUrl: string) => {
+    const oldLink = document.getElementById("dynamic-font-link")
+    if (oldLink) oldLink.remove()
+    const oldStyle = document.getElementById("dynamic-font-style")
+    if (oldStyle) oldStyle.remove()
+    document.body.style.fontFamily = ""
+
+    if (!fontUrl) return
+
+    let finalUrl = fontUrl
+    if (!fontUrl.includes("/") && !fontUrl.includes("://")) {
+      finalUrl = `/static/fonts/${fontUrl}.css`
+    }
+
+    const fullUrl = finalUrl
+    const pathOnly = finalUrl.split('?')[0].split('#')[0]
+    const isCss = pathOnly.toLowerCase().endsWith(".css") || finalUrl.includes("fonts.googleapis.com")
+    const isDirectFont = /\.(woff2|woff|ttf|otf)$/i.test(pathOnly)
+
+    if (isCss) {
+      const link = document.createElement("link")
+      link.id = "dynamic-font-link"
+      link.rel = "stylesheet"
+      link.href = fullUrl
+      link.crossOrigin = "anonymous"
+      document.head.appendChild(link)
+
+      if (fullUrl.includes("fonts.googleapis.com")) {
+        const familyMatch = fullUrl.match(/family=([^&:]+)/)
+        if (familyMatch) {
+          const familyName = decodeURIComponent(familyMatch[1]).replace(/\+/g, ' ')
+          document.body.style.fontFamily = `'${familyName}', sans-serif`
+        }
+      }
+    } else if (isDirectFont) {
+      const style = document.createElement("style")
+      style.id = "dynamic-font-style"
+      const familyName = "DynamicCustomFont"
+      style.textContent = `
+        @font-face {
+          font-family: '${familyName}';
+          src: url('${fullUrl}');
+          font-weight: normal;
+          font-style: normal;
+          font-display: swap;
+        }
+        body { font-family: '${familyName}', sans-serif !important; }
+      `
+      document.head.appendChild(style)
+    }
+  }, [])
+
   useEffect(() => {
     let isMounted = true
-    let currentFontUrl = ""
-
-    const updateFonts = (fontUrl: string) => {
-      if (currentFontUrl === fontUrl) return
-      currentFontUrl = fontUrl
-
-      const oldLink = document.getElementById("dynamic-font-link")
-      if (oldLink) oldLink.remove()
-      const oldStyle = document.getElementById("dynamic-font-style")
-      if (oldStyle) oldStyle.remove()
-      document.body.style.fontFamily = ""
-
-      if (!fontUrl) return
-
-      let finalUrl = fontUrl
-      if (!fontUrl.includes("/") && !fontUrl.includes("://")) {
-        finalUrl = `/static/fonts/${fontUrl}.css`
-      }
-
-      const fullUrl = finalUrl
-      const pathOnly = finalUrl.split('?')[0].split('#')[0]
-      const isCss = pathOnly.toLowerCase().endsWith(".css") || finalUrl.includes("fonts.googleapis.com")
-      const isDirectFont = /\.(woff2|woff|ttf|otf)$/i.test(pathOnly)
-
-      if (isCss) {
-        const link = document.createElement("link")
-        link.id = "dynamic-font-link"
-        link.rel = "stylesheet"
-        link.href = fullUrl
-        link.crossOrigin = "anonymous"
-        document.head.appendChild(link)
-
-        if (fullUrl.includes("fonts.googleapis.com")) {
-          const familyMatch = fullUrl.match(/family=([^&:]+)/)
-          if (familyMatch) {
-            const familyName = decodeURIComponent(familyMatch[1]).replace(/\+/g, ' ')
-            document.body.style.fontFamily = `'${familyName}', sans-serif`
-          }
-        }
-      } else if (isDirectFont) {
-        const style = document.createElement("style")
-        style.id = "dynamic-font-style"
-        const familyName = "DynamicCustomFont"
-        style.textContent = `
-          @font-face {
-            font-family: '${familyName}';
-            src: url('${fullUrl}');
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-          }
-          body { font-family: '${familyName}', sans-serif !important; }
-        `
-        document.head.appendChild(style)
-      }
-    }
 
     const fetchConfig = async () => {
       try {
@@ -136,7 +138,7 @@ function App() {
         if (response.ok && isMounted) {
           const res = await response.json()
           if (res.code > 0 && res.data) {
-            updateFonts(res.data.fontSet || res.data.FontSet || "")
+            handleFontsUpdate(res.data.fontSet || res.data.FontSet || "")
             if (res.data.registerIsEnable !== undefined) {
               setRegisterIsEnable(res.data.registerIsEnable)
             }
@@ -157,20 +159,24 @@ function App() {
     return () => {
       isMounted = false
     }
-  }, [t])
+  }, [handleFontsUpdate])
 
-  const handleAuthSuccess = () => {
+  const handleAuthSuccess = useCallback(() => {
     login()
-  }
+  }, [login])
 
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     logout()
     resetState()
-  }
+  }, [logout, resetState])
 
-  const handleToggleZenMode = () => {
+  const handleToggleZenMode = useCallback(() => {
     setZenMode(!zenMode)
-  }
+  }, [zenMode, setZenMode])
+
+  const handleNavigateToVaults = useCallback(() => {
+    setModule("vaults")
+  }, [setModule])
 
   if (!isLoggedIn) {
     return (
@@ -184,6 +190,11 @@ function App() {
 
   const renderModuleContent = () => {
     switch (currentModule) {
+      case "dashboard":
+        return (
+          <SystemSettings isDashboard={true} onBack={handleNavigateToVaults} />
+        )
+
       case "notes":
         if (!vaultsLoaded || !activeVault) {
           return (
@@ -263,16 +274,11 @@ function App() {
           return null
         }
         return (
-          <SystemSettings onBack={() => setModule("vaults")} />
+          <SystemSettings onBack={handleNavigateToVaults} />
         )
 
       case "sync":
-        return (
-          <ComingSoon
-            title={t("menuSync") || "远端备份"}
-            description={t("syncComingSoon") || "远端备份功能正在开发中，将支持 S3、OSS、WebDAV 等多种存储后端。"}
-          />
-        )
+        return <SyncBackup />
 
       case "git":
         return (

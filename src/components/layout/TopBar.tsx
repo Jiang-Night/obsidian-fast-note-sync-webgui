@@ -30,6 +30,7 @@ export function TopBar({ onLogout, className }: TopBarProps) {
 
   // 模块名称映射
   const moduleNames: Record<ModuleId, string> = {
+    dashboard: t("menuDashboard"),
     vaults: t("menuVaults"),
     notes: t("menuNotes"),
     trash: t("menuTrash"),

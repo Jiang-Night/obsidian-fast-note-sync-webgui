@@ -116,7 +116,7 @@ export function NavItem({
   ) : null
 
   return (
-    <div className="relative">
+    <div className="relative flex-shrink-0">
       <motion.button
         ref={buttonRef}
         onClick={onClick}

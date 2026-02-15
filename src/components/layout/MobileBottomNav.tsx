@@ -1,8 +1,9 @@
-import { useTranslation } from "react-i18next"
-import { Database, FileText, Trash2, Settings } from "lucide-react"
-import { cn } from "@/lib/utils"
-import { useAppStore, type ModuleId } from "@/stores/app-store"
-import { NavItem } from "@/components/navigation/NavItem"
+import { Database, FileText, Trash2, Settings, Layout } from "lucide-react";
+import { useAppStore, type ModuleId } from "@/stores/app-store";
+import { NavItem } from "@/components/navigation/NavItem";
+import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
+
 
 interface MobileBottomNavProps {
   /** 是否为管理员 */
@@ -13,7 +14,7 @@ interface MobileBottomNavProps {
 
 /**
  * MobileBottomNav - 移动端底部导航栏
- * 
+ *
  * 现代设计的水平导航条：
  * - 固定在视口底部
  * - 毛玻璃效果 (bg-card/80 backdrop-blur-lg)
@@ -31,11 +32,12 @@ export function MobileBottomNav({ isAdmin, className }: MobileBottomNavProps) {
     labelKey: string
     adminOnly?: boolean
   }> = [
-    { id: "vaults", icon: Database, labelKey: "menuVaults" },
-    { id: "notes", icon: FileText, labelKey: "menuNotes" },
-    { id: "trash", icon: Trash2, labelKey: "menuTrash" },
-    { id: "settings", icon: Settings, labelKey: "menuSettings", adminOnly: true },
-  ]
+      { id: "dashboard", icon: Layout, labelKey: "menuDashboard", adminOnly: true },
+      { id: "vaults", icon: Database, labelKey: "menuVaults" },
+      { id: "notes", icon: FileText, labelKey: "menuNotes" },
+      { id: "trash", icon: Trash2, labelKey: "menuTrash" },
+      { id: "settings", icon: Settings, labelKey: "menuSettings", adminOnly: true },
+    ]
 
   // 过滤出可见的导航项
   const visibleItems = navItems.filter(

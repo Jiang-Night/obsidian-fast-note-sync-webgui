@@ -80,6 +80,7 @@ export default {
     passwordChangedSuccess: "Password changed successfully",
     passwordChangeFailed: "Failed to change password",
     submitting: "Submitting...",
+    menuDashboard: "Dashboard",
     menuVaults: "Vaults",
     menuNotes: "Notes",
     menuTrash: "Trash",
