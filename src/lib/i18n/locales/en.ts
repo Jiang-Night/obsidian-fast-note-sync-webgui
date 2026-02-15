@@ -1,9 +1,8 @@
 export default {
-    title: "User Login",
-    subtitle: "High-performance, low-latency note synchronization service built with Golang + Websocket + Sqlite + React. Requires Fast Note Sync Plugin to work together.",
-    subtitlePrefix: "High-performance, low-latency note synchronization service built with Golang + Websocket + Sqlite + React. Needs to be used together with ",
-    subtitlePluginName: "Fast Note Sync Plugin",
-    subtitleSuffix: "",
+    title: "Fast Note Sync",
+    footerTitle: "Built with Golang + Websocket + Sqlite + React,\nRequires <a href='https://github.com/haierkeys/obsidian-fast-note-sync' target='_blank'>Obsidian Fast Note Sync Plugin</a> to work together",
+    loginSub: "High-performance, low-latency note sync, management, REST service",
+    registerSub: "High-performance, low-latency note sync, management, REST service",
     credentials: "Username (or Email)",
     username: "Username",
     password: "Password",

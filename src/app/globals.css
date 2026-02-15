@@ -17,8 +17,8 @@
   --card-foreground: oklch(0.3514 0.025 84.4589);
   --popover: oklch(0.9796 0.0057 84.5661);
   --popover-foreground: oklch(0.3514 0.025 84.4589);
-  --primary: oklch(0.6205 0.1199 144.8607);
-  --primary-foreground: oklch(0.9789 0.0101 145.4977);
+  --primary: oklch(0.2 0 0);
+  --primary-foreground: oklch(0.98 0 0);
   --secondary: oklch(0.9204 0.0149 98.297);
   --secondary-foreground: oklch(0.4006 0.0305 86.8158);
   --muted: oklch(0.9399 0.0124 91.5213);
@@ -29,7 +29,7 @@
   --destructive-foreground: oklch(0.9796 0.0101 32.5158);
   --border: oklch(0.8795 0.0142 88.6926);
   --input: oklch(0.8795 0.0142 88.6926);
-  --ring: oklch(0.6205 0.1199 144.8607);
+  --ring: oklch(0.2 0 0);
   --chart-1: oklch(0.6809 0.1201 145.0433);
   --chart-2: oklch(0.6195 0.11 147.8559);
   --chart-3: oklch(0.5605 0.1006 149.7572);
@@ -44,8 +44,8 @@
   --sidebar-border: oklch(0.8795 0.0142 88.6926);
   --sidebar-ring: oklch(0.6205 0.1199 144.8607);
   /* 光斑颜色 */
-  --glow-1: oklch(0.65 0.12 145);
-  --glow-2: oklch(0.7 0.1 160);
+  --glow-1: oklch(0.5 0 0);
+  --glow-2: oklch(0.7 0 0);
 
   /* 圆角系统 */
   --radius: 0.5rem;
@@ -657,24 +657,6 @@ html.dark[data-color-scheme="teal"],
     opacity: 0.5;
     z-index: 0;
     pointer-events: none;
-  }
-
-  /* 左上角 - 光斑 */
-  body::before {
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle at 40% 30%, var(--glow-1) 0%, color-mix(in oklch, var(--glow-1) 60%, transparent) 40%, transparent 70%);
-    top: -5%;
-    left: -5%;
-  }
-
-  /* 右下角 - 光斑 */
-  body::after {
-    width: 280px;
-    height: 280px;
-    background: radial-gradient(circle at 50% 50%, var(--glow-2) 0%, color-mix(in oklch, var(--glow-2) 50%, transparent) 50%, transparent 75%);
-    bottom: 5%;
-    right: -3%;
   }
 
   /* 深色主题背景装饰调整 */

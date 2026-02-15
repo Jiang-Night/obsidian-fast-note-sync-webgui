@@ -1,13 +1,15 @@
-import React from "react"
-import ReactDOM from "react-dom/client"
+import "@/lib/i18n/translations";
+import "@/app/globals.css";
 
-import { AuthProvider } from "./components/context/auth-context"
-import { ConfirmDialogProvider } from "@/components/context/confirm-dialog-context"
-import { ThemeProvider } from "@/components/context/theme-context"
-import { Toaster } from "@/components/ui/sonner"
-import App from "./App"
-import "@/lib/i18n/translations"
-import "@/app/globals.css"
+import { ConfirmDialogProvider } from "@/components/context/confirm-dialog-context";
+import { ThemeProvider } from "@/components/context/theme-context";
+import { Toaster } from "@/components/ui/sonner";
+import ReactDOM from "react-dom/client";
+import React from "react";
+
+import { AuthProvider } from "./components/context/auth-context";
+import App from "./App";
+
 
 // 初始化配色方案
 const initColorScheme = () => {
