@@ -3,21 +3,21 @@ import "../../styles/auth.css";
 import { Player } from "@lottiefiles/react-lottie-player";
 import { memo, useState, useEffect } from "react";
 
-import manusLight from "../../assets/manus_light.json";
-import manusDark from "../../assets/manus_dark.json";
+import defaultLight from "../../assets/default_light.json";
+import defaultDark from "../../assets/default_dark.json";
 import { useTheme } from "../context/theme-context";
 
 
 /**
- * Authentic Manus Lottie Animation Background
- * Exactly the same implementation as Manus project
+ * Authentic default Lottie Animation Background
+ * Exactly the same implementation as default project
  */
 export const AnimatedBackground = memo(() => {
     const { resolvedTheme } = useTheme();
-    const [animationData, setAnimationData] = useState<any>(manusDark);
+    const [animationData, setAnimationData] = useState<any>(defaultDark);
 
     useEffect(() => {
-        setAnimationData(resolvedTheme === 'dark' ? manusDark : manusLight);
+        setAnimationData(resolvedTheme === 'dark' ? defaultDark : defaultLight);
     }, [resolvedTheme]);
 
     return (
@@ -32,13 +32,13 @@ export const AnimatedBackground = memo(() => {
                 />
             </div>
 
-            {/* Grid Layer - Match Manus logic */}
-            <div className={`absolute inset-0 auth-manus-grid z-10 transition-opacity duration-500 ${resolvedTheme === 'dark' ? 'opacity-100' : 'opacity-40'}`} />
+            {/* Grid Layer - Match default logic */}
+            <div className={`absolute inset-0 auth-default-grid z-10 transition-opacity duration-500 ${resolvedTheme === 'dark' ? 'opacity-100' : 'opacity-40'}`} />
 
-            {/* Vignette Mask - Match Manus logic */}
+            {/* Vignette Mask - Match default logic */}
             <div className={`absolute inset-0 auth-vignette-mask z-20 transition-opacity duration-500 ${resolvedTheme === 'dark' ? 'opacity-100' : 'opacity-30'}`} />
 
-            {/* Noise Overlay - Match Manus logic */}
+            {/* Noise Overlay - Match default logic */}
             <div className="absolute inset-0 auth-noise-overlay z-30 opacity-40" />
         </div>
     );

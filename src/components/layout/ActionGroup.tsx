@@ -1,7 +1,7 @@
 import { useTheme } from "@/components/context/theme-context";
+import { Sun, Moon, SunMoon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import { Sun, Moon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { ColorSchemeSwitcher } from "./ColorSchemeSwitcher";
@@ -17,17 +17,19 @@ interface ActionGroupProps {
  * ActionGroup - 操作按钮组
  *
  * 包含常用操作按钮：
- * - 主题切换 (sun/moon icon)
+ * - 主题切换 (sun/moon/sun-moon icon)
  * - 语言切换 (languages icon)
  * - 使用 ghost variant 按钮
  * - 统一的 gap-1 间距
  */
 export function ActionGroup({ className }: ActionGroupProps) {
   const { t } = useTranslation()
-  const { resolvedTheme, setTheme } = useTheme()
+  const { theme, resolvedTheme, setTheme } = useTheme()
 
   const handleThemeToggle = () => {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark")
+    if (theme === "light") setTheme("dark");
+    else if (theme === "dark") setTheme("auto");
+    else setTheme("light");
   }
 
   return (
@@ -39,11 +41,14 @@ export function ActionGroup({ className }: ActionGroupProps) {
         className="size-9"
         onClick={handleThemeToggle}
         aria-label={t("toggleTheme")}
+        title={t(theme === "auto" ? "themeAuto" : (resolvedTheme === "dark" ? "themeDark" : "themeLight"))}
       >
-        {resolvedTheme === "dark" ? (
-          <Sun className="size-5" />
-        ) : (
+        {theme === "auto" ? (
+          <SunMoon className="size-5 text-primary" />
+        ) : resolvedTheme === "dark" ? (
           <Moon className="size-5" />
+        ) : (
+          <Sun className="size-5" />
         )}
       </Button>
 

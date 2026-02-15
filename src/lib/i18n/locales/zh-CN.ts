@@ -273,7 +273,7 @@ export default {
     // 配色方案
     colorScheme: "配色方案",
     colorSchemeSwitched: "已切换到 {{scheme}} 配色",
-    "colorScheme.manus": "标准",
+    "colorScheme.default": "标准",
     "colorScheme.green": "绿色",
     "colorScheme.blue": "蓝色",
     "colorScheme.skyBlue": "天蓝",
@@ -281,6 +281,10 @@ export default {
     "colorScheme.orange": "橙色",
     "colorScheme.rose": "玫瑰",
     "colorScheme.teal": "青色",
+    themeAuto: "自动 (18:00-06:00 暗色)",
+    themeLight: "浅色",
+    themeDark: "深色",
+    themeSystem: "系统",
     // 右键菜单
     contextMenu: "上下文菜单",
     undo: "撤销",

@@ -1,14 +1,14 @@
 /* src/styles/auth.css */
 
 .auth-page-container {
-  --manus-bg: #ffffff;
-  --manus-text-primary: rgb(52, 50, 45);
-  --manus-text-secondary: rgb(133, 132, 129);
-  --manus-border: rgba(0, 0, 0, 0.12);
-  --manus-input-bg: #ffffff;
-  --manus-button-bg: rgb(137, 137, 136); /* Default disabled-ish look, or active color */
-  --manus-button-text: #ffffff;
-  --manus-accent: #000000;
+  --default-bg: #ffffff;
+  --default-text-primary: rgb(52, 50, 45);
+  --default-text-secondary: rgb(133, 132, 129);
+  --default-border: rgba(0, 0, 0, 0.12);
+  --default-input-bg: #ffffff;
+  --default-button-bg: rgb(137, 137, 136); /* Default disabled-ish look, or active color */
+  --default-button-text: #ffffff;
+  --default-accent: #000000;
 
   position: relative;
   min-height: 100vh;
@@ -19,8 +19,8 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--manus-bg);
-  color: var(--manus-text-primary);
+  background-color: var(--default-bg);
+  color: var(--default-text-primary);
   overflow: hidden; /* Ensure background animation doesn't scroll */
   /* Dotted background pattern */
   background-image: radial-gradient(circle, #d1d1d1 1px, transparent 1px);
@@ -43,19 +43,19 @@ body:has(.auth-page-container)::after {
 }
 
 .auth-page-container.dark {
-  /* For now, keep light mode as default since Manus is light, but provide dark overrides if needed later */
-  --manus-bg: #1a1a1a;
-  --manus-text-primary: #ededed;
-  --manus-text-secondary: #a1a1a1;
+  /* For now, keep light mode as default since default is light, but provide dark overrides if needed later */
+  --default-bg: #1a1a1a;
+  --default-text-primary: #ededed;
+  --default-text-secondary: #a1a1a1;
   background-image: radial-gradient(circle, #333 1px, transparent 1px);
 }
 
-/* Main Content Container - Centered, no visible card border by default similar to Manus */
+/* Main Content Container - Centered, no visible card border by default similar to default */
 .auth-card {
   position: relative;
   z-index: 50;
   width: 100%;
-  max-width: 360px; /* Manus is quite narrow */
+  max-width: 360px; /* default is quite narrow */
   padding: 0;
   margin: 0 auto;
 }
@@ -80,7 +80,7 @@ body:has(.auth-page-container)::after {
   border: 1px solid rgba(0, 0, 0, 0.08); /* Restore border */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Restore shadow */
   margin-bottom: 1.5rem;
-  color: var(--manus-text-primary);
+  color: var(--default-text-primary);
 }
 
 .auth-page-container.dark .auth-logo-box {
@@ -93,14 +93,14 @@ body:has(.auth-page-container)::after {
 .auth-title {
   font-size: 24px;
   font-weight: 500;
-  color: var(--manus-text-primary);
+  color: var(--default-text-primary);
   margin-bottom: 0.5rem;
   text-align: center;
 }
 
 .auth-subtitle {
   font-size: 14px;
-  color: var(--manus-text-secondary);
+  color: var(--default-text-secondary);
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -124,7 +124,7 @@ body:has(.auth-page-container)::after {
   padding: 0.5rem 1rem;
   font-size: 14px;
   font-weight: 500;
-  color: var(--manus-text-secondary);
+  color: var(--default-text-secondary);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -132,10 +132,10 @@ body:has(.auth-page-container)::after {
 }
 
 .auth-tab.active {
-  color: var(--manus-text-primary);
+  color: var(--default-text-primary);
   background: transparent;
   box-shadow: none;
-  border-bottom: 2px solid var(--manus-text-primary);
+  border-bottom: 2px solid var(--default-text-primary);
   border-radius: 0;
 }
 
@@ -151,7 +151,7 @@ body:has(.auth-page-container)::after {
   box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12) !important;
   background: rgba(255, 255, 255, 0.8) !important; /* Slight transparency for bg */
   backdrop-filter: blur(8px);
-  color: var(--manus-text-primary) !important;
+  color: var(--default-text-primary) !important;
   margin-bottom: 1rem !important;
   transition: box-shadow 0.2s ease !important;
 }
@@ -167,6 +167,22 @@ body:has(.auth-page-container)::after {
   box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2) !important; /* Darker ring on focus */
 }
 
+/* Browser Autofill Overrides */
+.auth-input:-webkit-autofill,
+.auth-input:-webkit-autofill:hover,
+.auth-input:-webkit-autofill:focus,
+.auth-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #000000 !important;
+}
+
+.auth-page-container.dark .auth-input:-webkit-autofill,
+.auth-page-container.dark .auth-input:-webkit-autofill:hover,
+.auth-page-container.dark .auth-input:-webkit-autofill:focus,
+.auth-page-container.dark .auth-input:-webkit-autofill:active {
+  -webkit-text-fill-color: #a1a1a1 !important;
+  -webkit-box-shadow: 0 0 0 30px rgba(42, 42, 42, 0.8) inset !important; /* Match dark input bg approximation */
+}
+
 /* Primary Button */
 .auth-button-primary {
   width: 100%;
@@ -175,7 +191,7 @@ body:has(.auth-page-container)::after {
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  background-color: var(--manus-text-primary); /* Use dark text color for button bg */
+  background-color: var(--default-text-primary); /* Use dark text color for button bg */
   color: #ffffff;
   font-size: 14px;
   font-weight: 500;
@@ -213,7 +229,7 @@ body:has(.auth-page-container)::after {
 .auth-brand-footer {
   text-align: center;
   font-size: 12px;
-  color: var(--manus-text-secondary);
+  color: var(--default-text-secondary);
   opacity: 0.7;
   max-width: 400px;
   line-height: 1.5;
@@ -227,7 +243,7 @@ body:has(.auth-page-container)::after {
 }
 
 .auth-brand-footer a:hover {
-  color: var(--manus-text-primary);
+  color: var(--default-text-primary);
 }
 
 /* Floating Actions - keep them but minimal */
@@ -250,7 +266,7 @@ body:has(.auth-page-container)::after {
   border: 1px solid rgba(0, 0, 0, 0.08) !important;
   background: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  color: var(--manus-text-secondary);
+  color: var(--default-text-secondary);
   display: flex !important;
   align-items: center;
   justify-content: center;
@@ -262,7 +278,7 @@ body:has(.auth-page-container)::after {
 .auth-floating-switcher:hover {
   background: #fcfcfc;
   border-color: rgba(0, 0, 0, 0.15);
-  color: var(--manus-text-primary);
+  color: var(--default-text-primary);
   transform: translateY(-1px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.08);
 }

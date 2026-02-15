@@ -11,7 +11,7 @@ export type ToastPosition =
   | 'bottom-right';
 
 export type ColorScheme =
-  | 'manus'      // Manuscript 风格
+  | 'default'      // defaultcript 风格
   | 'green'      // 默认绿色
   | 'blue'       // 蓝色 #2563EB
   | 'sky-blue'   // 天蓝色 #9fc2e2
@@ -21,7 +21,7 @@ export type ColorScheme =
   | 'teal';      // 青色
 
 export const COLOR_SCHEMES: { value: ColorScheme; label: string; color: string }[] = [
-  { value: 'manus', label: 'colorScheme.manus', color: '#34322d' },
+  { value: 'default', label: 'colorScheme.default', color: '#34322d' },
   { value: 'green', label: 'colorScheme.green', color: '#4ade80' },
   { value: 'blue', label: 'colorScheme.blue', color: '#2563EB' },
   { value: 'sky-blue', label: 'colorScheme.skyBlue', color: '#9fc2e2' },
@@ -43,7 +43,7 @@ export const useSettingsStore = create<SettingsState>()(
     (set) => ({
       toastPosition: 'top-center',
       setToastPosition: (position) => set({ toastPosition: position }),
-      colorScheme: 'green',
+      colorScheme: 'default',
       setColorScheme: (scheme) => {
         // 更新 HTML 的 data-color-scheme 属性
         document.documentElement.setAttribute('data-color-scheme', scheme);

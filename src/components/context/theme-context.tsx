@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-type Theme = 'light' | 'dark' | 'system';
+
+type Theme = 'light' | 'dark' | 'system' | 'auto';
 
 interface ThemeContextType {
   theme: Theme;
@@ -19,15 +20,21 @@ function getSystemTheme(): 'light' | 'dark' {
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
+function getAutoTheme(): 'light' | 'dark' {
+  const hour = new Date().getHours();
+  // 18:00 - 06:00 为暗黑主题
+  return (hour >= 18 || hour < 6) ? 'dark' : 'light';
+}
+
 function updateMetaThemeColor(theme: 'light' | 'dark') {
   let metaThemeColor = document.querySelector('meta[name="theme-color"]');
-  
+
   if (!metaThemeColor) {
     metaThemeColor = document.createElement('meta');
     metaThemeColor.setAttribute('name', 'theme-color');
     document.head.appendChild(metaThemeColor);
   }
-  
+
   metaThemeColor.setAttribute('content', theme === 'dark' ? DARK_THEME_COLOR : LIGHT_THEME_COLOR);
 }
 
@@ -51,32 +58,54 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
 }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window === 'undefined') return defaultTheme;
-    
+
     try {
       const stored = localStorage.getItem(storageKey);
-      if (stored === 'light' || stored === 'dark' || stored === 'system') {
+      if (stored === 'light' || stored === 'dark' || stored === 'system' || stored === 'auto') {
         return stored;
       }
     } catch {
       // localStorage not available, use default
     }
-    
+
     return defaultTheme;
   });
 
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>(() => {
-    if (theme === 'system') {
-      return getSystemTheme();
-    }
+    if (theme === 'system') return getSystemTheme();
+    if (theme === 'auto') return getAutoTheme();
     return theme;
   });
 
   // Apply theme on mount and when theme changes
   useEffect(() => {
-    const resolved = theme === 'system' ? getSystemTheme() : theme;
+    let resolved: 'light' | 'dark';
+    if (theme === 'system') {
+      resolved = getSystemTheme();
+    } else if (theme === 'auto') {
+      resolved = getAutoTheme();
+    } else {
+      resolved = theme;
+    }
+
     setResolvedTheme(resolved);
     applyTheme(resolved);
   }, [theme]);
+
+  // Timer for auto theme mode
+  useEffect(() => {
+    if (theme !== 'auto') return;
+
+    const interval = setInterval(() => {
+      const newResolved = getAutoTheme();
+      if (newResolved !== resolvedTheme) {
+        setResolvedTheme(newResolved);
+        applyTheme(newResolved);
+      }
+    }, 60000); // 每分钟检查一次
+
+    return () => clearInterval(interval);
+  }, [theme, resolvedTheme]);
 
   // Persist theme to localStorage
   useEffect(() => {
@@ -92,7 +121,7 @@ export const ThemeProvider: React.FC<ThemeProviderProps> = ({
     if (theme !== 'system') return;
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    
+
     const handleChange = (e: MediaQueryListEvent) => {
       const newTheme = e.matches ? 'dark' : 'light';
       setResolvedTheme(newTheme);

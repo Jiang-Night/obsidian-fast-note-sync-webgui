@@ -46,8 +46,8 @@ export function AppLayout({
         className
       )}
     >
-      {/* Background Animation for Manus Scheme */}
-      {colorScheme === 'manus' && (
+      {/* Background Animation for default Scheme */}
+      {colorScheme === 'default' && (
         <AnimatedBackground />
       )}
 

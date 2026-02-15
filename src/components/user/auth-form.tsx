@@ -4,9 +4,9 @@ import { createLoginSchema, createRegisterSchema, type LoginFormData, type Regis
 import { AnimatedBackground } from "@/components/user/animated-background";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { motion, AnimatePresence, type Variants } from "motion/react";
+import { Sun, Moon, SunMoon, Github, Wifi } from "lucide-react";
 import { useTheme } from "@/components/context/theme-context";
 import { useAuth } from "@/components/api-handle/use-auth";
-import { Sun, Moon, Github, Wifi } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/components/common/Toast";
 import { useTranslation } from "react-i18next";
@@ -40,7 +40,7 @@ const formVariants: Variants = {
 export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) {
   const { t } = useTranslation()
   const { isLoading, login, registerUser } = useAuth()
-  const { setTheme, resolvedTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme()
   const [activeTab, setActiveTab] = useState<'login' | 'register'>('login')
 
   const loginSchema = createLoginSchema(t)
@@ -102,11 +102,21 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
           <Github size={18} />
         </button>
         <button
-          onClick={() => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')}
+          onClick={() => {
+            if (theme === "light") setTheme("dark");
+            else if (theme === "dark") setTheme("auto");
+            else setTheme("light");
+          }}
           className="auth-floating-switcher"
-          title={resolvedTheme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+          title={t(theme === "auto" ? "themeAuto" : (resolvedTheme === "dark" ? "themeDark" : "themeLight"))}
         >
-          {resolvedTheme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+          {theme === "auto" ? (
+            <SunMoon size={18} />
+          ) : resolvedTheme === "dark" ? (
+            <Moon size={18} />
+          ) : (
+            <Sun size={18} />
+          )}
         </button>
         <LanguageSwitcher
           showText={false}

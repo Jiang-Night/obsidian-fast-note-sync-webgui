@@ -139,19 +139,17 @@ export function NoteManager({
     let content;
     if (view === "editor") {
         content = (
-            <div className="h-[calc(100vh-140px)] min-h-[500px]">
-                <NoteEditor
-                    vault={vault}
-                    note={selectedNote}
-                    onBack={handleBack}
-                    onSaveSuccess={handleSaveSuccess}
-                    onViewHistory={() => selectedNote && handleViewHistory(selectedNote)}
-                    isMaximized={isMaximized}
-                    onToggleMaximize={onToggleMaximize}
-                    isRecycle={isRecycle}
-                    initialPreviewMode={initialPreviewMode}
-                />
-            </div>
+            <NoteEditor
+                vault={vault}
+                note={selectedNote}
+                onBack={handleBack}
+                onSaveSuccess={handleSaveSuccess}
+                onViewHistory={() => selectedNote && handleViewHistory(selectedNote)}
+                isMaximized={isMaximized}
+                onToggleMaximize={onToggleMaximize}
+                isRecycle={isRecycle}
+                initialPreviewMode={initialPreviewMode}
+            />
         );
     } else {
         content = (
