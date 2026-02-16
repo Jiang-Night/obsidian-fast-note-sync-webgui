@@ -105,7 +105,6 @@ export default {
     "ui.vault.attachmentCount": "Attachments",
     "ui.vault.totalSize": "Total Size: {{size}}",
     "ui.vault.authTokenConfig": "Auth Config",
-    "ui.vault.authTokenConfigTo": "Go to Auth Config",
     "ui.vault.copyConfigSuccess": "Configuration copied to clipboard",
     "ui.vault.copyConfigError": "Copy failed, please copy manually",
     "ui.vault.oneClickImport": "Import to Obsidian",

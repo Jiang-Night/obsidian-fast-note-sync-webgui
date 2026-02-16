@@ -558,7 +558,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
                 onClick={(e) => handleViewConfig("", e)}
               >
                 <Clipboard className="h-4 w-4 mr-2" />
-                {t("ui.vault.authTokenConfigTo")}
+                {t("ui.vault.oneClickImport")}
               </Button>
             </div>
           )}
