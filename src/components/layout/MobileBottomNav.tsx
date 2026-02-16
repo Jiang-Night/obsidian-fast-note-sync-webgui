@@ -32,11 +32,11 @@ export function MobileBottomNav({ isAdmin, className }: MobileBottomNavProps) {
     labelKey: string
     adminOnly?: boolean
   }> = [
-      { id: "dashboard", icon: Layout, labelKey: "menuDashboard", adminOnly: true },
-      { id: "vaults", icon: Database, labelKey: "menuVaults" },
-      { id: "notes", icon: FileText, labelKey: "menuNotes" },
-      { id: "trash", icon: Trash2, labelKey: "menuTrash" },
-      { id: "settings", icon: Settings, labelKey: "menuSettings", adminOnly: true },
+      { id: "dashboard", icon: Layout, labelKey: "ui.nav.menuDashboard", adminOnly: true },
+      { id: "vaults", icon: Database, labelKey: "ui.nav.menuVaults" },
+      { id: "notes", icon: FileText, labelKey: "ui.nav.menuNotes" },
+      { id: "trash", icon: Trash2, labelKey: "ui.nav.menuTrash" },
+      { id: "settings", icon: Settings, labelKey: "ui.nav.menuSettings", adminOnly: true },
     ]
 
   // 过滤出可见的导航项

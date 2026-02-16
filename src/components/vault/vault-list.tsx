@@ -119,7 +119,7 @@ function SortableVaultCard({
             }
           }}
         >
-          <dt className="text-xs text-muted-foreground group-hover/stat:text-primary transition-colors">{t("note") || "笔记"}</dt>
+          <dt className="text-xs text-muted-foreground group-hover/stat:text-primary transition-colors">{t("ui.vault.note")}</dt>
           <dd className="text-xl font-semibold flex items-center justify-between gap-1">
             <span>{vault.noteCount}</span>
             {vault.noteSize !== undefined && (
@@ -138,7 +138,7 @@ function SortableVaultCard({
             }
           }}
         >
-          <dt className="text-xs text-muted-foreground group-hover/stat:text-primary transition-colors">{t("attachmentCount") || "附件"}</dt>
+          <dt className="text-xs text-muted-foreground group-hover/stat:text-primary transition-colors">{t("ui.vault.attachmentCount")}</dt>
           <dd className="text-xl font-semibold flex items-center justify-between gap-1">
             <span>{vault.fileCount || "0"}</span>
             {vault.fileSize !== undefined && (
@@ -152,10 +152,10 @@ function SortableVaultCard({
 
       {/* 底部信息 */}
       <div className="flex items-center justify-between text-xs text-muted-foreground">
-        <span>{t("totalSize", { size: formatBytes(vault.size) })}</span>
+        <span>{t("ui.vault.totalSize", { size: formatBytes(vault.size) })}</span>
         <div className="flex items-center gap-3">
           {vault.createdAt && (
-            <Tooltip content={t("createdAt") || "创建时间"} side="top" delay={300}>
+            <Tooltip content={t("ui.common.createdAt")} side="top" delay={300}>
               <span className="flex items-center gap-1">
                 <Clock className="h-3 w-3" />
                 {vault.createdAt}
@@ -163,7 +163,7 @@ function SortableVaultCard({
             </Tooltip>
           )}
           {vault.updatedAt && (
-            <Tooltip content={t("updatedAt") || "更新时间"} side="top" delay={300}>
+            <Tooltip content={t("ui.common.updatedAt")} side="top" delay={300}>
               <span className="flex items-center gap-1">
                 <RefreshCw className="h-3 w-3" />
                 {vault.updatedAt}
@@ -177,7 +177,7 @@ function SortableVaultCard({
       <div className="flex items-center justify-end gap-1 pt-2 border-t border-border">
         {editingId === vault.id ? (
           <>
-            <Tooltip content={t("save") || "保存"} side="top" delay={200}>
+            <Tooltip content={t("ui.common.save")} side="top" delay={200}>
               <Button
                 variant="ghost"
                 size="icon"
@@ -190,7 +190,7 @@ function SortableVaultCard({
                 <Check className="h-4 w-4" />
               </Button>
             </Tooltip>
-            <Tooltip content={t("cancel") || "取消"} side="top" delay={200}>
+            <Tooltip content={t("ui.common.cancel")} side="top" delay={200}>
               <Button
                 variant="ghost"
                 size="icon"
@@ -206,7 +206,7 @@ function SortableVaultCard({
           </>
         ) : (
           <>
-            <Tooltip content={t("authTokenConfig") || "查看配置"} side="top" delay={200}>
+            <Tooltip content={t("ui.vault.authTokenConfig")} side="top" delay={200}>
               <Button
                 variant="ghost"
                 size="icon"
@@ -217,7 +217,7 @@ function SortableVaultCard({
               </Button>
             </Tooltip>
 
-            <Tooltip content={t("editVault")} side="top" delay={200}>
+            <Tooltip content={t("ui.vault.edit")} side="top" delay={200}>
               <Button
                 variant="ghost"
                 size="icon"
@@ -227,7 +227,7 @@ function SortableVaultCard({
                 <Pencil className="h-4 w-4" />
               </Button>
             </Tooltip>
-            <Tooltip content={t("deleteVault")} side="top" delay={200}>
+            <Tooltip content={t("ui.vault.delete")} side="top" delay={200}>
               <Button
                 variant="ghost"
                 size="icon"
@@ -312,7 +312,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
       }
       if (showNotification) {
         setIsRefreshing(false)
-        toast.success(t("refreshSuccess") || "刷新成功")
+        toast.success(t("ui.common.refreshSuccess"))
       }
     })
   }, [handleVaultList, t])
@@ -345,7 +345,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
   }
 
   const handleDelete = async (id: string) => {
-    openConfirmDialog(t("confirmDelete"), "confirm", async () => {
+    openConfirmDialog(t("ui.vault.confirmDelete"), "confirm", async () => {
       await handleVaultDelete(id)
       setVaults(vaults.filter((vault) => vault.id !== id))
     })
@@ -361,7 +361,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
   // 保存编辑
   const saveEdit = (vault: VaultType) => {
     if (!editingName.trim()) {
-      toast.error(t("vaultNameRequired") || "仓库名称不能为空")
+      toast.error(t("ui.vault.nameRequired"))
       return
     }
     handleVaultUpdate({ ...vault, vault: editingName.trim() }, () => {
@@ -379,7 +379,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
   // 添加新仓库
   const handleAdd = () => {
     if (!newVaultName.trim()) {
-      toast.error(t("vaultNameRequired") || "仓库名称不能为空")
+      toast.error(t("ui.vault.nameRequired"))
       return
     }
     handleVaultUpdate({ vault: newVaultName.trim() } as VaultType, () => {
@@ -432,13 +432,13 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
       navigator.clipboard
         .writeText(configText)
         .then(() => {
-          toast.success(t("copyConfigSuccess"))
+          toast.success(t("ui.vault.copyConfigSuccess"))
         })
         .catch((err) => {
-          toast.error(t("error") + err)
+          toast.error(t("ui.common.error") + err)
         })
     } else {
-      toast.error(t("copyConfigError"))
+      toast.error(t("ui.vault.copyConfigError"))
     }
   }
 
@@ -450,9 +450,9 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
         {/* 左侧：数量显示 */}
         <div className="flex items-center gap-3">
           <span className="text-sm text-muted-foreground">
-            {t("vaultCount", { count: filteredVaults.length })}
+            {t("ui.vault.count", { count: filteredVaults.length })}
             {searchKeyword && vaults.length !== filteredVaults.length && (
-              <span className="ml-1">/ {t("vaultCount", { count: vaults.length })}</span>
+              <span className="ml-1">/ {t("ui.vault.count", { count: vaults.length })}</span>
             )}
           </span>
         </div>
@@ -463,7 +463,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               type="text"
-              placeholder={t("searchVault") || "搜索仓库..."}
+              placeholder={t("ui.vault.searchPlaceholder")}
               className="pl-9 pr-8 rounded-xl"
               value={searchKeyword}
               onChange={(e) => setSearchKeyword(e.target.value)}
@@ -477,7 +477,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
               </button>
             )}
           </div>
-          <Tooltip content={t("refresh")} side="bottom" delay={200}>
+          <Tooltip content={t("ui.common.refresh")} side="bottom" delay={200}>
             <Button
               variant="outline"
               size="icon"
@@ -494,7 +494,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
             disabled={isAdding}
           >
             <Plus className="h-4 w-4 sm:mr-2" />
-            <span className="hidden sm:inline">{t("addVault")}</span>
+            <span className="hidden sm:inline">{t("ui.vault.add")}</span>
           </Button>
         </div>
       </div>
@@ -509,7 +509,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
             <Input
               value={newVaultName}
               onChange={(e) => setNewVaultName(e.target.value)}
-              placeholder={t("vaultName")}
+              placeholder={t("ui.vault.name")}
               className="flex-1 rounded-xl"
               autoFocus
               onKeyDown={(e) => {
@@ -547,7 +547,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
       {filteredVaults.length === 0 && !isAdding ? (
         <div className="rounded-xl border border-border bg-card p-12 text-center space-y-4">
           <p className="text-muted-foreground">
-            {searchKeyword ? t("noSearchResults") || "没有找到匹配的仓库" : t("noVaults")}
+            {searchKeyword ? t("ui.common.noSearchResults") : t("ui.vault.noVaults")}
           </p>
           {!searchKeyword && (
             <div className="flex flex-col items-center gap-4">
@@ -558,7 +558,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
                 onClick={(e) => handleViewConfig("", e)}
               >
                 <Clipboard className="h-4 w-4 mr-2" />
-                {t("authTokenConfigTo") || "授权配置"}
+                {t("ui.vault.authTokenConfigTo")}
               </Button>
             </div>
           )}
@@ -602,7 +602,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
         <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl mx-auto rounded-lg sm:rounded-xl">
           <DialogHeader>
             <DialogTitle className="text-base sm:text-lg truncate pr-8">
-              {configModalIsError ? t("copyConfigError") : (t("authTokenConfig") || "授权配置")}
+              {configModalIsError ? t("ui.vault.copyConfigError") : t("ui.vault.authTokenConfig")}
               {configVaultName && ` - ${configVaultName}`}
             </DialogTitle>
           </DialogHeader>
@@ -612,7 +612,7 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
             </pre>
             <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 text-nowrap">
               <Button variant="outline" onClick={() => setConfigModalOpen(false)} className="w-full sm:w-auto rounded-xl">
-                {t("close") || "关闭"}
+                {t("ui.common.close")}
               </Button>
               <Button
                 className="w-full sm:w-auto rounded-xl bg-sky-700 hover:bg-sky-900 text-white transition-colors border-none shadow-sm"
@@ -621,12 +621,12 @@ export function VaultList({ onNavigateToNotes, onNavigateToAttachments }: VaultL
                 }}
               >
                 <ExternalLink className="h-4 w-4 mr-2" />
-                {t("oneClickImport")}
+                {t("ui.vault.oneClickImport")}
               </Button>
 
               <Button onClick={handleCopyConfig} className="w-full sm:w-auto rounded-xl">
                 <Clipboard className="h-4 w-4 mr-2" />
-                {t("copy") || "复制"}
+                {t("ui.common.copy")}
               </Button>
 
             </div>

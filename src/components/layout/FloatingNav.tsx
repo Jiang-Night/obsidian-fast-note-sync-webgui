@@ -32,12 +32,12 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
     labelKey: string
     adminOnly?: boolean
   }> = [
-      { id: "dashboard", icon: Layout, labelKey: "menuDashboard", adminOnly: true },
-      { id: "vaults", icon: Database, labelKey: "menuVaults" },
-      { id: "notes", icon: FileText, labelKey: "menuNotes" },
-      { id: "files", icon: Paperclip, labelKey: "menuFiles" },
-      { id: "trash", icon: Trash2, labelKey: "menuTrash" },
-      { id: "settings", icon: Settings, labelKey: "menuSettings", adminOnly: true },
+      { id: "dashboard", icon: Layout, labelKey: "ui.nav.menuDashboard", adminOnly: true },
+      { id: "vaults", icon: Database, labelKey: "ui.nav.menuVaults" },
+      { id: "notes", icon: FileText, labelKey: "ui.nav.menuNotes" },
+      { id: "files", icon: Paperclip, labelKey: "ui.nav.menuFiles" },
+      { id: "trash", icon: Trash2, labelKey: "ui.nav.menuTrash" },
+      { id: "settings", icon: Settings, labelKey: "ui.nav.menuSettings", adminOnly: true },
     ]
 
   // 计划中的功能
@@ -46,8 +46,8 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
     icon: typeof Database
     labelKey: string
   }> = [
-      { id: "sync", icon: RefreshCw, labelKey: "menuSync" },
-      { id: "git", icon: GitBranch, labelKey: "menuGit" },
+      { id: "sync", icon: RefreshCw, labelKey: "ui.nav.menuSync" },
+      { id: "git", icon: GitBranch, labelKey: "ui.nav.menuGit" },
     ]
 
   const visibleItems = navItems.filter(item => !item.adminOnly || isAdmin)

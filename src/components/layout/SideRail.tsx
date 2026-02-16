@@ -37,16 +37,16 @@ export function SideRail({ isAdmin, onLogout, className }: SideRailProps) {
     adminOnly?: boolean
     isPlanned?: boolean
   }> = [
-      { id: "vaults", icon: Database, labelKey: "menuVaults" },
-      { id: "notes", icon: FileText, labelKey: "menuNotes" },
-      { id: "trash", icon: Trash2, labelKey: "menuTrash" },
-      { id: "settings", icon: Settings, labelKey: "menuSettings", adminOnly: true },
+      { id: "vaults", icon: Database, labelKey: "ui.nav.menuVaults" },
+      { id: "notes", icon: FileText, labelKey: "ui.nav.menuNotes" },
+      { id: "trash", icon: Trash2, labelKey: "ui.nav.menuTrash" },
+      { id: "settings", icon: Settings, labelKey: "ui.nav.menuSettings", adminOnly: true },
     ]
 
   // 计划中的功能
   const plannedItems = [
-    { id: "sync", icon: RefreshCw, labelKey: "menuSync", isPlanned: true },
-    { id: "git", icon: GitBranch, labelKey: "menuGit", isPlanned: true },
+    { id: "sync", icon: RefreshCw, labelKey: "ui.nav.menuSync", isPlanned: true },
+    { id: "git", icon: GitBranch, labelKey: "ui.nav.menuGit", isPlanned: true },
   ]
 
   const handleNavClick = (id: ModuleId) => {

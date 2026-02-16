@@ -21,14 +21,14 @@ export type ColorScheme =
   | 'teal';      // 青色
 
 export const COLOR_SCHEMES: { value: ColorScheme; label: string; color: string }[] = [
-  { value: 'default', label: 'colorScheme.default', color: '#34322d' },
-  { value: 'green', label: 'colorScheme.green', color: '#4ade80' },
-  { value: 'blue', label: 'colorScheme.blue', color: '#2563EB' },
-  { value: 'sky-blue', label: 'colorScheme.skyBlue', color: '#9fc2e2' },
-  { value: 'purple', label: 'colorScheme.purple', color: '#a78bfa' },
-  { value: 'orange', label: 'colorScheme.orange', color: '#fb923c' },
-  { value: 'rose', label: 'colorScheme.rose', color: '#fb7185' },
-  { value: 'teal', label: 'colorScheme.teal', color: '#2dd4bf' },
+  { value: 'default', label: 'ui.settings.colorScheme.default', color: '#34322d' },
+  { value: 'green', label: 'ui.settings.colorScheme.green', color: '#4ade80' },
+  { value: 'blue', label: 'ui.settings.colorScheme.blue', color: '#2563EB' },
+  { value: 'sky-blue', label: 'ui.settings.colorScheme.skyBlue', color: '#9fc2e2' },
+  { value: 'purple', label: 'ui.settings.colorScheme.purple', color: '#a78bfa' },
+  { value: 'orange', label: 'ui.settings.colorScheme.orange', color: '#fb923c' },
+  { value: 'rose', label: 'ui.settings.colorScheme.rose', color: '#fb7185' },
+  { value: 'teal', label: 'ui.settings.colorScheme.teal', color: '#2dd4bf' },
 ];
 
 interface SettingsState {

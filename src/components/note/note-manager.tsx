@@ -117,10 +117,10 @@ export function NoteManager({
             <div className="rounded-xl border border-border bg-card p-12 flex flex-col items-center justify-center">
                 <Database className="h-16 w-16 text-muted-foreground/30 mb-4" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                    {t("noVaultsForNotes")}
+                    {t("ui.note.noVaults")}
                 </h3>
                 <p className="text-muted-foreground mb-6 text-center">
-                    {t("createVaultFirst")}
+                    {t("ui.note.createVaultFirst")}
                 </p>
                 <Button
                     onClick={() => {
@@ -130,7 +130,7 @@ export function NoteManager({
                     }}
                     className="rounded-xl"
                 >
-                    {t("goToVaultManagement")}
+                    {t("ui.note.goToVaultManagement")}
                 </Button>
             </div>
         );

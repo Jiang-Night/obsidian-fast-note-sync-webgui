@@ -1,8 +1,9 @@
+import { Scissors, Copy, Clipboard, CheckSquare, RotateCcw, RotateCw } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useTranslation } from "react-i18next";
 import { createPortal } from "react-dom";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
-import { Scissors, Copy, Clipboard, CheckSquare, RotateCcw, RotateCw } from "lucide-react";
+
 
 interface ContextMenuProps {
   children: React.ReactNode;
@@ -28,7 +29,7 @@ function deleteSelection(): void {
   if (!selection || selection.rangeCount === 0) return;
 
   const activeElement = document.activeElement as HTMLElement;
-  
+
   // 处理 input/textarea
   if (activeElement?.tagName === "INPUT" || activeElement?.tagName === "TEXTAREA") {
     const input = activeElement as HTMLInputElement | HTMLTextAreaElement;
@@ -56,7 +57,7 @@ function deleteSelection(): void {
 
 // 插入文本的辅助函数
 async function pasteTextToElement(
-  text: string, 
+  text: string,
   targetElement: HTMLElement | null,
   savedRange: Range | null
 ): Promise<void> {
@@ -64,12 +65,12 @@ async function pasteTextToElement(
 
   // 找到实际的可编辑元素
   let editableElement: HTMLElement | null = null;
-  
+
   if (targetElement.tagName === "INPUT" || targetElement.tagName === "TEXTAREA") {
     editableElement = targetElement;
   } else {
-    editableElement = targetElement.isContentEditable 
-      ? targetElement 
+    editableElement = targetElement.isContentEditable
+      ? targetElement
       : targetElement.closest("[contenteditable='true']") as HTMLElement;
   }
 
@@ -100,9 +101,9 @@ async function pasteTextToElement(
   }
 
   // 使用 execCommand 插入文本（虽然已弃用但对富文本编辑器最可靠）
-   
+
   const success = document.execCommand("insertText", false, text);
-  
+
   if (!success) {
     // 后备方案：手动插入
     const selection = window.getSelection();
@@ -135,9 +136,9 @@ export function ContextMenuProvider({ children }: ContextMenuProps) {
   // 检查是否可以撤销/重做
   const checkUndoRedo = useCallback(() => {
     const activeElement = document.activeElement as HTMLElement;
-    if (activeElement?.isContentEditable || 
-        activeElement?.tagName === "INPUT" || 
-        activeElement?.tagName === "TEXTAREA") {
+    if (activeElement?.isContentEditable ||
+      activeElement?.tagName === "INPUT" ||
+      activeElement?.tagName === "TEXTAREA") {
       // 对于可编辑元素，假设可以撤销（浏览器会处理）
       setCanUndo(true);
       setCanRedo(true);
@@ -149,10 +150,10 @@ export function ContextMenuProvider({ children }: ContextMenuProps) {
 
   const handleContextMenu = useCallback((e: MouseEvent) => {
     e.preventDefault();
-    
+
     // 保存触发右键菜单的元素
     targetElementRef.current = e.target as HTMLElement;
-    
+
     // 保存当前选区（用于粘贴时恢复）
     const selection = window.getSelection();
     if (selection && selection.rangeCount > 0) {
@@ -160,28 +161,28 @@ export function ContextMenuProvider({ children }: ContextMenuProps) {
     } else {
       savedRangeRef.current = null;
     }
-    
+
     // 检查是否有选中的文本
     setHasSelection(!!selection && selection.toString().length > 0);
-    
+
     // 检查撤销/重做状态
     checkUndoRedo();
-    
+
     // 计算菜单位置，确保不超出屏幕
     let x = e.clientX;
     let y = e.clientY;
-    
+
     // 菜单大小估算（增加了菜单项）
     const menuWidth = 200;
     const menuHeight = 220;
-    
+
     if (x + menuWidth > window.innerWidth) {
       x = window.innerWidth - menuWidth - 8;
     }
     if (y + menuHeight > window.innerHeight) {
       y = window.innerHeight - menuHeight - 8;
     }
-    
+
     setPosition({ x, y });
     setVisible(true);
     setFocusedIndex(-1);
@@ -233,7 +234,7 @@ export function ContextMenuProvider({ children }: ContextMenuProps) {
     document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("click", handleClick);
     document.addEventListener("keydown", handleKeyDown);
-    
+
     return () => {
       document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("click", handleClick);
@@ -269,12 +270,12 @@ export function ContextMenuProvider({ children }: ContextMenuProps) {
   const handlePaste = useCallback(async () => {
     const target = targetElementRef.current;
     const range = savedRangeRef.current;
-    
+
     setVisible(false);
-    
+
     // 延迟执行，确保菜单关闭后焦点可以恢复
     await new Promise(resolve => setTimeout(resolve, 10));
-    
+
     try {
       const text = await navigator.clipboard.readText();
       await pasteTextToElement(text, target, range);
@@ -285,7 +286,7 @@ export function ContextMenuProvider({ children }: ContextMenuProps) {
 
   const handleSelectAll = useCallback(() => {
     const activeElement = document.activeElement as HTMLElement;
-    
+
     if (activeElement?.tagName === "INPUT" || activeElement?.tagName === "TEXTAREA") {
       const input = activeElement as HTMLInputElement | HTMLTextAreaElement;
       input.select();
@@ -333,45 +334,51 @@ export function ContextMenuProvider({ children }: ContextMenuProps) {
   }, []);
 
   const menuItems: MenuItem[] = [
-    { 
-      icon: RotateCcw, 
-      label: t("undo") || "撤销", 
-      action: handleUndo, 
+    {
+      icon: RotateCcw,
+      label: t("ui.note.undo"),
+
+      action: handleUndo,
       disabled: !canUndo,
       shortcut: "Ctrl+Z"
     },
-    { 
-      icon: RotateCw, 
-      label: t("redo") || "重做", 
-      action: handleRedo, 
+    {
+      icon: RotateCw,
+      label: t("ui.note.redo"),
+
+      action: handleRedo,
       disabled: !canRedo,
       shortcut: "Ctrl+Y"
     },
-    { type: "separator", label: "", action: () => {} },
-    { 
-      icon: Scissors, 
-      label: t("cut") || "剪切", 
-      action: handleCut, 
+    { type: "separator", label: "", action: () => { } },
+    {
+      icon: Scissors,
+      label: t("ui.note.cut"),
+
+      action: handleCut,
       disabled: !hasSelection,
       shortcut: "Ctrl+X"
     },
-    { 
-      icon: Copy, 
-      label: t("copy") || "复制", 
-      action: handleCopy, 
+    {
+      icon: Copy,
+      label: t("ui.note.copy"),
+
+      action: handleCopy,
       disabled: !hasSelection,
       shortcut: "Ctrl+C"
     },
-    { 
-      icon: Clipboard, 
-      label: t("paste") || "粘贴", 
+    {
+      icon: Clipboard,
+      label: t("ui.note.paste"),
+
       action: handlePaste,
       shortcut: "Ctrl+V"
     },
-    { type: "separator", label: "", action: () => {} },
-    { 
-      icon: CheckSquare, 
-      label: t("selectAll") || "全选", 
+    { type: "separator", label: "", action: () => { } },
+    {
+      icon: CheckSquare,
+      label: t("ui.note.selectAll"),
+
       action: handleSelectAll,
       shortcut: "Ctrl+A"
     },
@@ -387,7 +394,7 @@ export function ContextMenuProvider({ children }: ContextMenuProps) {
         <div
           ref={menuRef}
           role="menu"
-          aria-label={t("contextMenu") || "上下文菜单"}
+          aria-label={t("ui.note.contextMenu")}
           className={cn(
             "fixed z-[9999] min-w-[180px]",
             "bg-popover/95 text-popover-foreground backdrop-blur-md",
@@ -402,9 +409,9 @@ export function ContextMenuProvider({ children }: ContextMenuProps) {
             {menuItems.map((item, index) => {
               if (item.type === "separator") {
                 return (
-                  <div 
-                    key={`sep-${index}`} 
-                    className="h-px bg-border/50 my-1.5 mx-2" 
+                  <div
+                    key={`sep-${index}`}
+                    className="h-px bg-border/50 my-1.5 mx-2"
                     role="separator"
                   />
                 );

@@ -79,7 +79,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
   const toggleTab = (tab: 'login' | 'register') => {
     if (tab === activeTab) return
     if (tab === 'register' && !registerIsEnable) {
-      toast.info(t("registerClosed"))
+      toast.info(t("ui.auth.registerClosed"))
       return
     }
     setActiveTab(tab)
@@ -108,7 +108,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
             else setTheme("light");
           }}
           className="auth-floating-switcher"
-          title={t(theme === "auto" ? "themeAuto" : (resolvedTheme === "dark" ? "themeDark" : "themeLight"))}
+          title={t(theme === "auto" ? "ui.settings.themeAuto" : (resolvedTheme === "dark" ? "ui.settings.themeDark" : "ui.settings.themeLight"))}
         >
           {theme === "auto" ? (
             <SunMoon size={18} />
@@ -132,7 +132,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
           </div>
           <h1 className="auth-title">Fast Note Sync</h1>
           <p className="auth-subtitle">
-            {t("subtitle") || "Welcome Back"}
+            {t("ui.common.subtitle")}
           </p>
         </div>
 
@@ -145,13 +145,13 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                 onClick={() => toggleTab('login')}
                 className={`auth-tab ${activeTab === 'login' ? 'active' : ''}`}
               >
-                {t("login")}
+                {t("ui.auth.login")}
               </button>
               <button
                 onClick={() => toggleTab('register')}
                 className={`auth-tab ${activeTab === 'register' ? 'active' : ''}`}
               >
-                {t("registerButton") || t("register")}
+                {t("ui.auth.registerButton")}
               </button>
             </div>
           </div>
@@ -169,7 +169,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                 <div>
                   <div className="relative group">
                     <Input
-                      placeholder={t("credentialsPlaceholder")}
+                      placeholder={t("ui.auth.credentialsPlaceholder")}
                       {...loginForm.register("credentials")}
                       className="auth-input"
                     />
@@ -183,7 +183,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                   <div className="relative group">
                     <Input
                       type="password"
-                      placeholder={t("passwordPlaceholder")}
+                      placeholder={t("ui.auth.passwordPlaceholder")}
                       {...loginForm.register("password")}
                       className="auth-input"
                     />
@@ -207,7 +207,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                       className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                     />
                   ) : (
-                    t("login")
+                    t("ui.auth.login")
                   )}
                 </button>
               </motion.form>
@@ -223,7 +223,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                 <div className="space-y-0">
                   <div className="relative group">
                     <Input
-                      placeholder={t("usernamePlaceholder")}
+                      placeholder={t("ui.auth.usernamePlaceholder")}
                       {...registerForm.register("username")}
                       className="auth-input"
                     />
@@ -237,7 +237,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                   <div className="relative group">
                     <Input
                       type="email"
-                      placeholder={t("emailPlaceholder")}
+                      placeholder={t("ui.auth.emailPlaceholder")}
                       {...registerForm.register("email")}
                       className="auth-input"
                     />
@@ -251,7 +251,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                   <div className="relative group">
                     <Input
                       type="password"
-                      placeholder={t("passwordPlaceholder")}
+                      placeholder={t("ui.auth.passwordPlaceholder")}
                       {...registerForm.register("password")}
                       className="auth-input"
                     />
@@ -265,7 +265,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                   <div className="relative group">
                     <Input
                       type="password"
-                      placeholder={t("confirmPasswordPlaceholder")}
+                      placeholder={t("ui.auth.confirmPasswordPlaceholder")}
                       {...registerForm.register("confirmPassword")}
                       className="auth-input"
                     />
@@ -288,7 +288,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                       className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
                     />
-                  ) : t("registerButton")}
+                  ) : t("ui.auth.registerButton")}
                 </button>
               </motion.form>
             )}
@@ -300,7 +300,7 @@ export function AuthForm({ onSuccess, registerIsEnable = true }: AuthFormProps) 
         <div className="auth-footer-wrapper">
           <footer
             className="auth-brand-footer"
-            dangerouslySetInnerHTML={{ __html: t("footerTitle") }}
+            dangerouslySetInnerHTML={{ __html: t("ui.common.footerTitle") }}
           />
         </div>
       </main>

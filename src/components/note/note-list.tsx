@@ -71,7 +71,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                 new RegExp(searchKeyword);
                 setRegexError(null);
             } catch {
-                setRegexError(t("invalidRegex") || "Invalid regex");
+                setRegexError(t("ui.note.invalidRegex"));
             }
         } else {
             setRegexError(null);
@@ -138,7 +138,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
     const onDelete = (e: React.MouseEvent, note: Note) => {
         e.stopPropagation();
         const title = note.path.replace(/\.md$/, "");
-        openConfirmDialog(t("deleteNoteConfirm", { title }), "confirm", () => {
+        openConfirmDialog(t("ui.note.deleteNoteConfirm", { title }), "confirm", () => {
             handleDeleteNote(vault, note.path, note.pathHash, () => {
                 fetchNotes();
             });
@@ -148,7 +148,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
     const onRestore = (e: React.MouseEvent, note: Note) => {
         e.stopPropagation();
         const title = note.path.replace(/\.md$/, "");
-        openConfirmDialog(t("restoreNoteConfirm", { title }), "confirm", () => {
+        openConfirmDialog(t("ui.note.restoreNoteConfirm", { title }), "confirm", () => {
             handleRestoreNote(vault, note.path, note.pathHash, () => {
                 fetchNotes();
             });
@@ -177,7 +177,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
     const onBatchRestore = () => {
         if (selectedPaths.size === 0) return;
 
-        openConfirmDialog(t("batchRestoreConfirm", { count: selectedPaths.size }), "confirm", async () => {
+        openConfirmDialog(t("ui.file.batchRestoreConfirm", { count: selectedPaths.size }), "confirm", async () => {
             setLoading(true);
             const selectedNotes = notes.filter(n => selectedPaths.has(n.pathHash));
 
@@ -226,7 +226,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground pointer-events-none" />
                             <Input
                                 type="text"
-                                placeholder={t("searchPlaceholder")}
+                                placeholder={t("ui.note.searchPlaceholder")}
                                 className={`pl-9 pr-14 rounded-xl ${regexError ? "border-destructive" : ""}`}
                                 value={searchKeyword}
                                 onChange={(e) => setSearchKeyword(e.target.value)}
@@ -256,7 +256,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                         >
                                             <div className="flex items-center gap-2">
                                                 <FolderSearch className="h-4 w-4" />
-                                                <span>{t("searchPath")}</span>
+                                                <span>{t("ui.note.searchPath")}</span>
                                             </div>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
@@ -265,7 +265,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                         >
                                             <div className="flex items-center gap-2">
                                                 <FileText className="h-4 w-4" />
-                                                <span>{t("searchContentMode")}</span>
+                                                <span>{t("ui.note.searchContentMode")}</span>
                                             </div>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
@@ -274,7 +274,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                         >
                                             <div className="flex items-center gap-2">
                                                 <Regex className="h-4 w-4" />
-                                                <span>{t("searchRegex")}</span>
+                                                <span>{t("ui.note.searchRegex")}</span>
                                             </div>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
@@ -293,7 +293,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                         {!isRecycle && (
                             <Button onClick={onCreateNote} className="rounded-xl shrink-0">
                                 <Plus className="h-4 w-4 sm:mr-2" />
-                                <span className="hidden sm:inline">{t("newNote")}</span>
+                                <span className="hidden sm:inline">{t("ui.note.newNote")}</span>
                             </Button>
                         )}
                     </div>
@@ -318,17 +318,17 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                     setViewMode("folder");
                                 }}
                             >
-                                {t("viewFolder") || "目录浏览"}
+                                {t("ui.note.viewFolder")}
                             </button>
                             <button
                                 className={`px-4 h-full text-xs font-medium transition-colors border-l border-border ${viewMode === 'flat' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
                                 onClick={() => setViewMode("flat")}
                             >
-                                {t("viewFlat") || "平铺浏览"}
+                                {t("ui.note.viewFlat")}
                             </button>
                         </div>
                         <span className="text-sm font-medium text-muted-foreground mr-2">
-                            {totalRows} {t("note")}
+                            {totalRows} {t("ui.note.note")}
                         </span>
                     </div>
 
@@ -339,23 +339,23 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             onClick={() => setSortBy("mtime")}
                         >
                             <Clock className="h-3.5 w-3.5" />
-                            {t("sortByMtime")}
+                            {t("ui.note.sortByMtime")}
                         </button>
                         <button
                             className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "ctime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
                             onClick={() => setSortBy("ctime")}
                         >
                             <Calendar className="h-3.5 w-3.5" />
-                            {t("sortByCtime")}
+                            {t("ui.note.sortByCtime")}
                         </button>
                         <button
                             className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "path" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
                             onClick={() => setSortBy("path")}
                         >
                             <FileText className="h-3.5 w-3.5" />
-                            {t("sortByPath")}
+                            {t("ui.note.sortByPath")}
                         </button>
-                        <Tooltip content={sortOrder === "desc" ? t("sortDesc") : t("sortAsc")} side="top" delay={200}>
+                        <Tooltip content={sortOrder === "desc" ? t("ui.note.sortDesc") : t("ui.note.sortAsc")} side="top" delay={200}>
                             <button
                                 className={`px-2.5 h-full text-xs flex items-center transition-colors border-l border-border hover:bg-muted`}
                                 onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
@@ -381,19 +381,19 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                 className={`px-4 h-full text-xs font-medium transition-colors ${trashType === 'notes' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
                                 onClick={() => setModule("trash", "notes")}
                             >
-                                {t("note") || "笔记"}
+                                {t("ui.note.note")}
                             </button>
                             <button
                                 className={`px-4 h-full text-xs font-medium transition-colors border-l border-border ${trashType === 'files' ? "bg-primary text-primary-foreground" : "hover:bg-muted"}`}
                                 onClick={() => setModule("trash", "files")}
                             >
-                                {t("file") || "附件"}
+                                {t("ui.file.file")}
                             </button>
                         </div>
 
                         {/* 数量统计 */}
                         <span className="text-sm font-medium text-muted-foreground mr-2">
-                            {totalRows} {t("menuTrash")}{t("note")}
+                            {totalRows} {t("ui.nav.menuTrash")}{t("ui.note.note")}
                         </span>
                     </div>
 
@@ -409,14 +409,14 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                     className="rounded-md"
                                 />
                                 <label htmlFor="select-all" className="text-xs font-medium cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
-                                    {t("selectAll") || "全选"}
+                                    {t("ui.common.selectAll")}
                                 </label>
                             </div>
 
                             {selectedPaths.size > 0 && (
                                 <div className="flex items-center gap-3 animate-in fade-in slide-in-from-left-2 duration-200">
                                     <span className="text-xs text-primary font-semibold bg-primary/10 px-2 py-0.5 rounded-full">
-                                        {t("selectedCount", { count: selectedPaths.size })}
+                                        {t("ui.file.selectedCount", { count: selectedPaths.size })}
                                     </span>
                                     <Button
                                         variant="outline"
@@ -425,7 +425,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                         className="h-8 rounded-lg text-green-600 border-green-200 hover:bg-green-50 hover:text-green-700 hover:border-green-300 shadow-sm"
                                     >
                                         <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
-                                        {t("batchRestore")}
+                                        {t("ui.file.batchRestore")}
                                     </Button>
                                 </div>
                             )}
@@ -439,23 +439,23 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             onClick={() => setSortBy("mtime")}
                         >
                             <Clock className="h-3.5 w-3.5" />
-                            {t("sortByMtime")}
+                            {t("ui.note.sortByMtime")}
                         </button>
                         <button
                             className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "ctime" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
                             onClick={() => setSortBy("ctime")}
                         >
                             <Calendar className="h-3.5 w-3.5" />
-                            {t("sortByCtime")}
+                            {t("ui.note.sortByCtime")}
                         </button>
                         <button
                             className={`px-3 h-full text-xs flex items-center gap-1.5 transition-colors border-l border-border ${sortBy === "path" ? "bg-accent text-accent-foreground" : "hover:bg-muted"}`}
                             onClick={() => setSortBy("path")}
                         >
                             <FileText className="h-3.5 w-3.5" />
-                            {t("sortByPath")}
+                            {t("ui.note.sortByPath")}
                         </button>
-                        <Tooltip content={sortOrder === "desc" ? t("sortDesc") : t("sortAsc")} side="top" delay={200}>
+                        <Tooltip content={sortOrder === "desc" ? t("ui.note.sortDesc") : t("ui.note.sortAsc")} side="top" delay={200}>
                             <button
                                 className={`px-2.5 h-full text-xs flex items-center transition-colors border-l border-border hover:bg-muted`}
                                 onClick={() => setSortOrder(sortOrder === "desc" ? "asc" : "desc")}
@@ -508,11 +508,11 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
             {loading ? (
                 <div className="rounded-xl border border-border bg-card p-12 text-center text-muted-foreground">
                     <RefreshCw className="h-6 w-6 animate-spin mx-auto mb-2" />
-                    {t("loading") || "加载中..."}
+                    {t("ui.common.loading")}
                 </div>
             ) : (!Array.isArray(notes) || notes.length === 0) && (!Array.isArray(folders) || folders.length === 0 || viewMode === "flat") ? (
                 <div className="rounded-xl border border-border bg-card p-12 text-center text-muted-foreground">
-                    {t("noNotes")}
+                    {t("ui.note.noNotes")}
                 </div>
             ) : (
                 <div className="-mx-2 px-2">
@@ -538,13 +538,13 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                                 {folder.path.split("/").pop()}
                                             </h3>
                                             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-xs text-muted-foreground">
-                                                <Tooltip content={t("createdAt")} side="top" delay={300}>
+                                                <Tooltip content={t("ui.common.createdAt")} side="top" delay={300}>
                                                     <span className="hidden sm:flex items-center gap-1">
                                                         <Calendar className="h-3.5 w-3.5" />
                                                         {format(new Date(folder.ctime), "yyyy-MM-dd HH:mm")}
                                                     </span>
                                                 </Tooltip>
-                                                <Tooltip content={t("updatedAt")} side="top" delay={300}>
+                                                <Tooltip content={t("ui.common.updatedAt")} side="top" delay={300}>
                                                     <span className="flex items-center gap-1">
                                                         <Clock className="h-3.5 w-3.5" />
                                                         {format(new Date(folder.mtime), "yyyy-MM-dd HH:mm")}
@@ -589,20 +589,20 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                                 {(viewMode === "folder" && !isRecycle ? note.path.split("/").pop() : note.path)?.replace(/\.md$/, "")}
                                             </h3>
                                             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-1.5 text-xs text-muted-foreground">
-                                                <Tooltip content={t("createdAt")} side="top" delay={300}>
+                                                <Tooltip content={t("ui.common.createdAt")} side="top" delay={300}>
                                                     <span className="hidden sm:flex items-center gap-1">
                                                         <Calendar className="h-3.5 w-3.5" />
                                                         {format(new Date(note.ctime), "yyyy-MM-dd HH:mm")}
                                                     </span>
                                                 </Tooltip>
-                                                <Tooltip content={t("updatedAt")} side="top" delay={300}>
+                                                <Tooltip content={t("ui.common.updatedAt")} side="top" delay={300}>
                                                     <span className="flex items-center gap-1">
                                                         <Clock className="h-3.5 w-3.5" />
                                                         {format(new Date(note.mtime), "yyyy-MM-dd HH:mm")}
                                                     </span>
                                                 </Tooltip>
                                                 {note.version > 0 && (
-                                                    <Tooltip content={t("history")} side="top" delay={300}>
+                                                    <Tooltip content={t("ui.history.title")} side="top" delay={300}>
                                                         <span className="flex items-center gap-1">
                                                             <History className="h-3.5 w-3.5" />
                                                             v{note.version}
@@ -615,7 +615,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
 
                                     {/* 右侧：操作按钮 */}
                                     <div className="flex items-center gap-1 shrink-0">
-                                        <Tooltip content={t("viewNote")} side="top" delay={200}>
+                                        <Tooltip content={t("ui.note.viewNote")} side="top" delay={200}>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
@@ -628,7 +628,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                                 <Eye className="h-4 w-4" />
                                             </Button>
                                         </Tooltip>
-                                        <Tooltip content={t("editNote")} side="top" delay={200}>
+                                        <Tooltip content={t("ui.note.editNote")} side="top" delay={200}>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
@@ -641,7 +641,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                                 <Pencil className="h-4 w-4" />
                                             </Button>
                                         </Tooltip>
-                                        <Tooltip content={t("history") || "历史记录"} side="top" delay={200}>
+                                        <Tooltip content={t("ui.history.title")} side="top" delay={200}>
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
@@ -655,7 +655,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                             </Button>
                                         </Tooltip>
                                         {!isRecycle && (
-                                            <Tooltip content={t("delete")} side="top" delay={200}>
+                                            <Tooltip content={t("ui.common.delete")} side="top" delay={200}>
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
@@ -667,7 +667,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                                             </Tooltip>
                                         )}
                                         {isRecycle && (
-                                            <Tooltip content={t("restore")} side="top" delay={200}>
+                                            <Tooltip content={t("ui.common.restore")} side="top" delay={200}>
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
@@ -690,7 +690,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
             {notes.length > 0 && (
                 <div className="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-4 pt-2 shrink-0">
                     <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <span>{t("of")} {totalRows} {t("results")}</span>
+                        <span>{t("ui.common.of")} {totalRows} {t("ui.note.results")}</span>
                         <Select value={pageSize.toString()} onValueChange={(val) => {
                             const newSize = parseInt(val);
                             setPageSize(newSize);
@@ -702,7 +702,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             <SelectContent className="rounded-xl">
                                 {[10, 20, 50, 100].map((size) => (
                                     <SelectItem key={size} value={size.toString()} className="rounded-xl">
-                                        {size} {t("perPage")}
+                                        {size} {t("ui.common.perPage")}
                                     </SelectItem>
                                 ))}
                             </SelectContent>
@@ -717,7 +717,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             className="rounded-xl"
                         >
                             <ChevronLeft className="h-4 w-4" />
-                            {t("previous")}
+                            {t("ui.common.previous")}
                         </Button>
                         <span className="text-sm font-medium px-2">
                             {page} / {totalPages}
@@ -729,7 +729,7 @@ export function NoteList({ vault, vaults, onVaultChange, onSelectNote, onCreateN
                             disabled={page === totalPages || loading}
                             className="rounded-xl"
                         >
-                            {t("next")}
+                            {t("ui.common.next")}
                             <ChevronRight className="h-4 w-4" />
                         </Button>
                     </div>

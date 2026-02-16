@@ -22,7 +22,7 @@ export function ColorSchemeSwitcher({ className }: ColorSchemeSwitcherProps) {
                     variant="ghost"
                     size="icon"
                     className={cn("size-9", className)}
-                    aria-label={t("colorScheme")}
+                    aria-label={t("ui.settings.colorScheme")}
                 >
                     <Palette className="size-5" />
                 </Button>
@@ -33,7 +33,7 @@ export function ColorSchemeSwitcher({ className }: ColorSchemeSwitcherProps) {
                     onValueChange={(value) => {
                         // eslint-disable-next-line @typescript-eslint/no-explicit-any
                         setColorScheme(value as any);
-                        toast.success(t("colorSchemeSwitched", { scheme: t(COLOR_SCHEMES.find(s => s.value === value)?.label || "") }));
+                        toast.success(t("ui.settings.colorSchemeSwitched", { scheme: t(COLOR_SCHEMES.find(s => s.value === value)?.label || "") }));
                     }}
                 >
                     {COLOR_SCHEMES.map((scheme) => (

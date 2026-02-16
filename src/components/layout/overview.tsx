@@ -13,7 +13,7 @@ export function Overview() {
         return (
             <div className="flex items-center justify-center p-12 bg-card rounded-xl border border-border">
                 <Loader2 className="h-6 w-6 animate-spin text-muted-foreground mr-2" />
-                <span className="text-sm text-muted-foreground">{t("loading")}</span>
+                <span className="text-sm text-muted-foreground">{t("ui.common.loading")}</span>
             </div>
         )
     }
@@ -22,7 +22,7 @@ export function Overview() {
         return (
             <div className="flex flex-col items-center justify-center p-12 bg-card rounded-xl border border-border space-y-2">
                 <AlertCircle className="h-8 w-8 text-destructive opacity-50" />
-                <div className="text-sm text-destructive">{t("error")}</div>
+                <div className="text-sm text-destructive">{t("ui.common.error")}</div>
             </div>
         )
     }
@@ -32,7 +32,7 @@ export function Overview() {
             <div className="flex items-center justify-between">
                 <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
                     <Server className="h-5 w-5" />
-                    {t("serverSystemInfo")}
+                    {t("ui.system.serviceInfo")}
                 </h2>
                 <Button
                     variant="ghost"
@@ -50,10 +50,10 @@ export function Overview() {
                 <div className="space-y-4">
                     <div className="flex items-center gap-2 text-sm font-bold text-primary">
                         <Activity className="h-4 w-4" />
-                        {t("runtimeInfo")}
+                        {t("ui.system.runtimeInfo")}
                     </div>
                     <div className="grid grid-cols-2 gap-y-2 text-xs">
-                        <div className="text-muted-foreground">{t("goVersion")} / {t("goroutines")} / {t("numGc")}</div>
+                        <div className="text-muted-foreground">{t("ui.system.goVersion")} / {t("ui.system.goroutines")} / {t("ui.system.numGc")}</div>
                         <div className="text-right font-medium text-[11px] sm:text-xs">
                             {systemInfo.host.os}/{systemInfo.host.arch}
                             <span className="text-muted-foreground mx-1.5 opacity-50">|</span>
@@ -62,7 +62,7 @@ export function Overview() {
                             <span className="font-mono">{systemInfo.runtimeStatus.numGc}</span>
                         </div>
 
-                        <div className="text-muted-foreground">{t("startTime")} / {t("serviceUptime")}</div>
+                        <div className="text-muted-foreground">{t("ui.system.startTime")} / {t("ui.system.serviceUptime")}</div>
                         <div className="text-right text-[11px] font-medium whitespace-nowrap">
                             <span>{(() => {
                                 const date = new Date(systemInfo.startTime);
@@ -80,7 +80,7 @@ export function Overview() {
 
                         <div className="col-span-2 space-y-2 mt-1">
                             <div className="flex justify-between text-xs">
-                                <span className="text-muted-foreground">{t("heapMemory")}</span>
+                                <span className="text-muted-foreground">{t("ui.system.heapMemory")}</span>
                                 <span className="font-medium">
                                     {formatFileSize(systemInfo.runtimeStatus.memAlloc)} / {formatFileSize(systemInfo.runtimeStatus.memSys)}
                                 </span>
@@ -101,12 +101,12 @@ export function Overview() {
                 <div className="space-y-6">
                     <div className="flex items-center gap-2 text-sm font-bold text-primary">
                         <Cpu className="h-4 w-4" />
-                        {t("hostInfo")}
+                        {t("ui.system.hostInfo")}
                     </div>
 
                     {/* Host Details */}
                     <div className="grid grid-cols-2 gap-y-2 text-xs">
-                        <div className="text-muted-foreground">{t("systemTime")}</div>
+                        <div className="text-muted-foreground">{t("ui.system.systemTime")}</div>
                         <div className="text-right font-medium">{(() => {
                             const date = new Date(systemInfo.host.currentTime);
                             const formatted = date.toLocaleString();
@@ -116,7 +116,7 @@ export function Overview() {
                             return `${formatted} (${offset})`;
                         })()}</div>
 
-                        <div className="text-muted-foreground">{t("os")} / {t("kernelVersion")}</div>
+                        <div className="text-muted-foreground">{t("ui.system.os")} / {t("ui.system.kernelVersion")}</div>
                         <div className="text-right font-medium text-[10px] sm:text-xs truncate" title={`${systemInfo.host.osPretty} (${systemInfo.host.kernelVersion})`}>
                             {systemInfo.host.osPretty}
                             <span className="text-muted-foreground mx-1.5 opacity-50">|</span>
@@ -127,10 +127,10 @@ export function Overview() {
                     {/* CPU Details */}
                     <div className="space-y-2">
                         <div className="grid grid-cols-2 gap-y-1.5 text-xs">
-                            <div className="text-muted-foreground">{t("modelName")}</div>
+                            <div className="text-muted-foreground">{t("ui.system.modelName")}</div>
                             <div className="font-medium truncate text-right" title={systemInfo.cpu.modelName}>{systemInfo.cpu.modelName}</div>
 
-                            <div className="text-muted-foreground">{t("physicalCores")} / {t("cpuLoad")}</div>
+                            <div className="text-muted-foreground">{t("ui.system.physicalCores")} / {t("ui.system.cpuLoad")}</div>
                             <div className="text-right font-medium">
                                 {systemInfo.cpu.logicalCores}/{systemInfo.cpu.physicalCores}
                                 <span className="text-muted-foreground mx-1.5 opacity-50">|</span>
@@ -143,7 +143,7 @@ export function Overview() {
                     <div className="space-y-2.5">
                         <div className="space-y-2">
                             <div className="flex justify-between text-xs">
-                                <span className="text-muted-foreground">{t("memoryUsage")} / {t("usedMemory")} / {t("totalMemory")}</span>
+                                <span className="text-muted-foreground">{t("ui.system.memoryUsage")} / {t("ui.system.usedMemory")} / {t("ui.system.totalMemory")}</span>
                                 <span className="font-medium">
                                     <span className="font-semibold">{systemInfo.memory.usedPercent.toFixed(1)}%</span>
                                     <span className="text-muted-foreground mx-1.5 opacity-50">|</span>

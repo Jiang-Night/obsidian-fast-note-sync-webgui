@@ -2,7 +2,7 @@ export type StorageType = "oss" | "s3" | "r2" | "minio" | "localfs" | "webdav"
 export const StorageTypeValue = ["oss", "s3", "r2", "minio", "localfs", "webdav"]
 
 export interface StorageConfig {
-  id: string
+  id?: number | string
   type: StorageType
   endpoint?: string
   region?: string

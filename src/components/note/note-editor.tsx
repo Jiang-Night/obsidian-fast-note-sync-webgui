@@ -100,22 +100,16 @@ export function NoteEditor({
         }
     }, [note, vault, handleGetNote, isRecycle]);
 
-    // 只在 note.id 变化时加载（首次进入或切换笔记）
+    // 当 note.id 变化时（首次进入或切换笔记）或从有笔记切换到新建笔记时加载
     useEffect(() => {
         if (note?.id !== initialNoteIdRef.current) {
             initialNoteIdRef.current = note?.id;
             loadNote();
         } else if (!note && initialNoteIdRef.current !== undefined) {
-            // 从有笔记切换到新建笔记
             initialNoteIdRef.current = undefined;
             loadNote();
         }
-    }, [note?.id, loadNote]);
-
-    // 首次挂载时加载
-    useEffect(() => {
-        loadNote();
-    }, [loadNote]);
+    }, [note?.id, loadNote, note]);
 
     // 清理定时器
     useEffect(() => {
@@ -262,7 +256,7 @@ export function NoteEditor({
     // 新建笔记首次保存
     const handleFirstSave = useCallback(() => {
         if (!path) {
-            toast.error(t("noteTitleRequired") || "请输入笔记标题");
+            toast.error(t("ui.note.noteTitleRequired"));
             return;
         }
         const currentContent = editorRef.current?.getValue() || content;
@@ -290,7 +284,7 @@ export function NoteEditor({
                         value={path}
                         onChange={handleNewNoteTitleChange}
                         onKeyDown={(e) => e.key === "Enter" && handleFirstSave()}
-                        placeholder={t("noteTitlePlaceholder")?.replace(" (e.g., note.md)", "").replace(" (例如: note.md)", "")}
+                        placeholder={t("ui.note.noteTitlePlaceholder")?.replace(" (e.g., note.md)", "").replace(" (例如: note.md)", "")}
                         className="font-bold text-sm sm:text-lg border-none shadow-none focus-visible:ring-0 px-1 sm:px-2 flex-1 h-7 sm:h-auto"
                         autoFocus
                     />
@@ -357,7 +351,7 @@ export function NoteEditor({
                     <div className="flex items-center gap-1.5 text-xs text-muted-foreground shrink-0">
                         {/* 版本号显示 */}
                         {originalNote?.version !== undefined && originalNote.version > 0 && (
-                            <Tooltip content={t("historyVersion")} side="bottom" delay={200}>
+                            <Tooltip content={t("ui.history.title")} side="bottom" delay={200}>
                                 <span className="flex items-center gap-0.5 px-1 py-0.5 rounded bg-muted/50 text-muted-foreground hover:bg-muted cursor-default">
                                     <History className="h-3 w-3" />
                                     <span>v{originalNote.version}</span>
@@ -368,7 +362,7 @@ export function NoteEditor({
                         {saving ? (
                             <>
                                 <Cloud className="h-3 w-3 sm:h-3.5 sm:w-3.5 animate-pulse" />
-                                <span className="hidden sm:inline">{t("saving") || "保存中..."}</span>
+                                <span className="hidden sm:inline">{t("ui.common.saving")}</span>
                             </>
                         ) : lastSavedAt ? (
                             <>
@@ -406,7 +400,7 @@ export function NoteEditor({
 
                 <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
                     {note && (
-                        <Tooltip content={t("refresh")} side="bottom" delay={200}>
+                        <Tooltip content={t("ui.common.refresh")} side="bottom" delay={200}>
                             <Button
                                 onClick={loadNote}
                                 variant="outline"
@@ -418,7 +412,7 @@ export function NoteEditor({
                         </Tooltip>
                     )}
                     {note && (
-                        <Tooltip content={isPreviewMode ? t("editNote") : t("viewNote")} side="bottom" delay={200}>
+                        <Tooltip content={isPreviewMode ? t("ui.note.editNote") : t("ui.note.viewNote")} side="bottom" delay={200}>
                             <Button
                                 onClick={() => setIsPreviewMode(!isPreviewMode)}
                                 variant="outline"
@@ -430,7 +424,7 @@ export function NoteEditor({
                         </Tooltip>
                     )}
                     {note && onViewHistory && (
-                        <Tooltip content={t("history") || "历史"} side="bottom" delay={200}>
+                        <Tooltip content={t("ui.history.title")} side="bottom" delay={200}>
                             <Button
                                 onClick={onViewHistory}
                                 variant="outline"
@@ -441,7 +435,7 @@ export function NoteEditor({
                             </Button>
                         </Tooltip>
                     )}
-                    <Tooltip content={isFullscreen ? (t("exitFullscreen") || "退出全屏") : (t("fullscreen") || "全屏")} side="bottom" delay={200}>
+                    <Tooltip content={isFullscreen ? t("ui.note.exitFullscreen") : t("ui.note.fullscreen")} side="bottom" delay={200}>
                         <Button
                             onClick={toggleFullscreen}
                             variant="outline"
@@ -469,7 +463,7 @@ export function NoteEditor({
                                 value={content}
                                 onChange={handleContentChange}
                                 readOnly={isRecycle || isPreviewMode}
-                                placeholder={t("noteContentPlaceholder")}
+                                placeholder={t("ui.note.noteContentPlaceholder")}
                                 vault={vault}
                                 fileLinks={originalNote?.fileLinks}
                                 initialMode={isPreviewMode ? "preview" : "sv"}

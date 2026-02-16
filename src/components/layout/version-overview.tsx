@@ -15,7 +15,7 @@ export function VersionOverview() {
         if (versionInfo?.version) {
             const result = await checkUpdate(versionInfo.version)
             if (result) {
-                toast.success(result.hasUpdate ? t("newVersionAvailable") : t("alreadyLatest"))
+                toast.success(result.hasUpdate ? t("ui.system.newVersionAvailable") : t("ui.system.alreadyLatest"))
             }
         }
     }
@@ -24,12 +24,12 @@ export function VersionOverview() {
         <div className="rounded-xl border border-border bg-card p-6 space-y-5 custom-shadow">
             <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
                 <Info className="h-5 w-5" />
-                {t("versionInfo")}
+                {t("ui.system.versionInfo")}
             </h2>
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     <GitBranch className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm font-medium">{t("githubRepo")}</span>
+                    <span className="text-sm font-medium">{t("ui.system.githubRepo")}</span>
                 </div>
                 <a href="https://github.com/haierkeys/fast-note-sync-service" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline truncate max-w-[200px] sm:max-w-none">
                     fast-note-sync-service
@@ -38,10 +38,10 @@ export function VersionOverview() {
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     <Tag className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm font-medium">{t("currentVersion")}</span>
+                    <span className="text-sm font-medium">{t("ui.system.currentVersion")}</span>
                 </div>
                 <code className="text-sm font-mono text-muted-foreground">
-                    {versionLoading ? t("loading") : (versionInfo?.version || t("unknown"))}
+                    {versionLoading ? t("ui.common.loading") : (versionInfo?.version || t("ui.common.unknown"))}
                 </code>
             </div>
             <div className="border-t border-border" />
@@ -49,10 +49,10 @@ export function VersionOverview() {
                 <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
                         <RefreshCw className={`h-5 w-5 text-muted-foreground ${isChecking ? 'animate-spin' : ''}`} />
-                        <span className="text-sm font-medium">{t("checkUpdate")}</span>
+                        <span className="text-sm font-medium">{t("ui.system.checkUpdate")}</span>
                     </div>
                     <Button variant="outline" size="sm" onClick={handleCheckUpdate} disabled={isChecking || versionLoading || !versionInfo?.version} className="rounded-xl">
-                        {isChecking ? t("checking") : t("checkNow")}
+                        {isChecking ? t("ui.system.checking") : t("ui.system.checkNow")}
                     </Button>
                 </div>
                 {updateResult || versionInfo?.versionIsNew ? (
@@ -61,12 +61,12 @@ export function VersionOverview() {
                             {(updateResult?.hasUpdate || versionInfo?.versionIsNew) ? <AlertCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" /> : <CheckCircle className="h-5 w-5 text-green-500 shrink-0 mt-0.5" />}
                             <div className="flex-1 space-y-2">
                                 <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium">{(updateResult?.hasUpdate || versionInfo?.versionIsNew) ? t("newVersionAvailable") : t("alreadyLatest")}</span>
+                                    <span className="text-sm font-medium">{(updateResult?.hasUpdate || versionInfo?.versionIsNew) ? t("ui.system.newVersionAvailable") : t("ui.system.alreadyLatest")}</span>
                                     {(updateResult?.latestVersion || versionInfo?.versionNewName) && <code className="text-xs font-mono bg-background px-2 py-0.5 rounded">{updateResult?.latestVersion || versionInfo?.versionNewName}</code>}
                                 </div>
                                 {(updateResult?.hasUpdate || versionInfo?.versionIsNew) && (updateResult?.releaseUrl || versionInfo?.versionNewLink) && (
                                     <a href={updateResult?.releaseUrl || versionInfo?.versionNewLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm text-primary hover:underline">
-                                        {t("viewRelease")} <ExternalLink className="h-3 w-3" />
+                                        {t("ui.system.viewRelease")} <ExternalLink className="h-3 w-3" />
                                     </a>
                                 )}
                             </div>

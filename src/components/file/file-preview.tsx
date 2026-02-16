@@ -59,7 +59,7 @@ export function FilePreview({ file, url, onClose }: FilePreviewProps) {
                 <div className="flex items-center justify-between p-3 border-b border-border bg-muted/50">
                     <div className="flex flex-col min-w-0">
                         <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                            {isImage ? t("imagePreview") : isAudio ? t("audioPreview") : isVideo ? t("videoPreview") : isPdf ? t("pdfPreview") : isCode ? t("codePreview") : t("fileDetail")}
+                            {isImage ? t("ui.file.imagePreview") : isAudio ? t("ui.file.audioPreview") : isVideo ? t("ui.file.videoPreview") : isPdf ? t("ui.file.pdfPreview") : isCode ? t("ui.file.codePreview") : t("ui.file.detail")}
                         </span>
                         <h3 className="text-sm font-semibold truncate pr-2" title={fileName}>
                             {fileName}
@@ -153,13 +153,13 @@ export function FilePreview({ file, url, onClose }: FilePreviewProps) {
                                 {isPdf ? <FileText className="w-10 h-10" /> : isCode ? <FileCode className="w-10 h-10" /> : <Paperclip className="w-10 h-10" />}
                             </div>
                             <div className="text-center">
-                                <p className="text-sm text-muted-foreground">{t("unsupportedPreview")}</p>
+                                <p className="text-sm text-muted-foreground">{t("ui.file.unsupportedPreview")}</p>
                                 <Button
                                     variant="link"
                                     className="text-primary mt-1 h-auto p-0"
                                     onClick={() => window.open(url, '_blank')}
                                 >
-                                    {t("openInNewWindow")}
+                                    {t("ui.file.openInNewWindow")}
                                 </Button>
                             </div>
                         </div>
@@ -175,7 +175,7 @@ export function FilePreview({ file, url, onClose }: FilePreviewProps) {
                         onClick={() => window.open(url, '_blank')}
                     >
                         <Download className="h-3.5 w-3.5" />
-                        {t("browserDownload")}
+                        {t("ui.file.browserDownload")}
                     </Button>
                 </div>
             </motion.div>

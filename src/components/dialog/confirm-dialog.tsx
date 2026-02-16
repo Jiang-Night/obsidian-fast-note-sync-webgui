@@ -25,27 +25,27 @@ const typeConfig: Record<DialogType, {
   success: {
     icon: CheckCircle,
     iconClass: "text-green-500",
-    titleKey: "success",
+    titleKey: "ui.common.success",
   },
   error: {
     icon: XCircle,
     iconClass: "text-red-500",
-    titleKey: "error",
+    titleKey: "ui.common.error",
   },
   warning: {
     icon: AlertTriangle,
     iconClass: "text-yellow-500",
-    titleKey: "warning",
+    titleKey: "ui.common.warning",
   },
   info: {
     icon: Info,
     iconClass: "text-blue-500",
-    titleKey: "info",
+    titleKey: "ui.common.info",
   },
   confirm: {
     icon: HelpCircle,
     iconClass: "text-amber-500",
-    titleKey: "confirm",
+    titleKey: "ui.common.confirm",
   },
 }
 
@@ -132,13 +132,13 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                   className={cn(buttonVariants({ variant: "outline" }), "w-full sm:w-auto rounded-xl")}
                   onClick={onCancel}
                 >
-                  {t("cancel")}
+                  {t("ui.common.cancel")}
                 </AlertDialogPrimitive.Cancel>
                 <AlertDialogPrimitive.Action
                   className={cn(buttonVariants({ variant: "destructive" }), "w-full sm:w-auto rounded-xl")}
                   onClick={onConfirm}
                 >
-                  {t("confirm")}
+                  {t("ui.common.confirm")}
                 </AlertDialogPrimitive.Action>
               </>
             ) : (
@@ -146,7 +146,7 @@ export const ConfirmDialog: React.FC<ConfirmDialogProps> = ({
                 className={cn(buttonVariants({ variant: "default" }), "w-full sm:w-auto rounded-xl")}
                 onClick={handleNonConfirmClose}
               >
-                {t("close")}
+                {t("ui.common.close")}
               </AlertDialogPrimitive.Action>
             )}
           </div>

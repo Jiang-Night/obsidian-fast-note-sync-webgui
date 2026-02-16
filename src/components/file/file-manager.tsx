@@ -61,10 +61,10 @@ export function FileManager({
             <div className="rounded-xl border border-border bg-card p-12 flex flex-col items-center justify-center">
                 <Database className="h-16 w-16 text-muted-foreground/30 mb-4" />
                 <h3 className="text-lg font-semibold text-foreground mb-2">
-                    {t("noVaultsForFiles") || "暂无仓库"}
+                    {t("ui.file.noVaults")}
                 </h3>
                 <p className="text-muted-foreground mb-6 text-center">
-                    {t("createVaultFirst") || "请先创建仓库"}
+                    {t("ui.file.createVaultFirst")}
                 </p>
                 <Button
                     onClick={() => {
@@ -74,7 +74,7 @@ export function FileManager({
                     }}
                     className="rounded-xl"
                 >
-                    {t("goToVaultManagement") || "前往仓库管理"}
+                    {t("ui.note.goToVaultManagement")}
                 </Button>
             </div>
         );

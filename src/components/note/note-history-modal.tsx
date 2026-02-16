@@ -179,7 +179,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
         return (
             <div
                 className="diff-content overflow-auto max-h-[500px] p-6 bg-slate-50 rounded-xl border border-slate-200 font-mono text-[13px] leading-7 shadow-inner text-slate-700 select-text selection:bg-blue-100 selection:text-blue-900"
-                dangerouslySetInnerHTML={{ __html: html || `<div class="text-center py-4 opacity-50 italic">${t("noHistory")}</div>` }}
+                dangerouslySetInnerHTML={{ __html: html || `<div class="text-center py-4 opacity-50 italic">${t("ui.history.noHistory")}</div>` }}
             />
         );
     };
@@ -249,11 +249,11 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2 font-normal overflow-hidden text-sm sm:text-base">
                         <History className="h-4 w-4 shrink-0 text-muted-foreground opacity-70" />
-                        <span className="hidden sm:inline shrink-0 text-muted-foreground">{t("noteHistory")}:</span>
+                        <span className="hidden sm:inline shrink-0 text-muted-foreground">{t("ui.history.title")}:</span>
                         <span className="truncate text-foreground font-medium">{String(notePath || "").replace(/\.md$/, "")}</span>
                     </DialogTitle>
                     <DialogDescription className="sr-only">
-                        {t("noteHistoryDescription", "查看和恢复笔记的历史版本")}
+                        {t("ui.history.description")}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -266,20 +266,20 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
-                                            <TableHead className="w-[80px]">{t("historyVersion")}</TableHead>
-                                            <TableHead>{t("clientSource")}</TableHead>
-                                            <TableHead>{t("updatedAt")}</TableHead>
-                                            <TableHead className="text-right pr-7">{t("viewDetail")}</TableHead>
+                                            <TableHead className="w-[80px]">{t("ui.history.versionLabel")}</TableHead>
+                                            <TableHead>{t("ui.history.clientSource")}</TableHead>
+                                            <TableHead>{t("ui.common.updatedAt")}</TableHead>
+                                            <TableHead className="text-right pr-7">{t("ui.common.viewDetail")}</TableHead>
                                         </TableRow>
                                     </TableHeader>
                                     <TableBody>
                                         {loading ? (
                                             <TableRow>
-                                                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">{t("loadingHistory")}</TableCell>
+                                                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">{t("ui.history.loading")}</TableCell>
                                             </TableRow>
                                         ) : !Array.isArray(historyList) || Array.isArray(historyList) && historyList.length === 0 ? (
                                             <TableRow>
-                                                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">{t("noHistory")}</TableCell>
+                                                <TableCell colSpan={4} className="text-center py-8 text-muted-foreground">{t("ui.history.noHistory")}</TableCell>
                                             </TableRow>
                                         ) : (
                                             historyList.filter(item => item !== null).map((item) => (
@@ -296,7 +296,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                                     </TableCell>
                                                     <TableCell className="text-right">
                                                         <Button variant="ghost" size="sm" onClick={() => handleViewDetail(item.id)}>
-                                                            {t("view")}
+                                                            {t("ui.common.view")}
                                                         </Button>
                                                     </TableCell>
                                                 </TableRow>
@@ -309,9 +309,9 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                             {/* 移动端卡片列表 */}
                             <div className="sm:hidden divide-y">
                                 {loading ? (
-                                    <div className="text-center py-8 text-muted-foreground">{t("loadingHistory")}</div>
+                                    <div className="text-center py-8 text-muted-foreground">{t("ui.history.loading")}</div>
                                 ) : !Array.isArray(historyList) || historyList.length === 0 ? (
-                                    <div className="text-center py-8 text-muted-foreground">{t("noHistory")}</div>
+                                    <div className="text-center py-8 text-muted-foreground">{t("ui.history.noHistory")}</div>
                                 ) : (
                                     historyList.filter(item => item !== null).map((item) => (
                                         <div
@@ -339,7 +339,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                         {totalPages > 1 && (
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-2 px-2">
                                 <p className="text-xs sm:text-sm text-muted-foreground">
-                                    {t("historyCount", { count: totalRows })}
+                                    {t("ui.history.count", { count: totalRows })}
                                 </p>
                                 <div className="flex items-center space-x-2">
                                     <Button
@@ -350,7 +350,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                         className="h-8 px-2 sm:px-3"
                                     >
                                         <ChevronLeft className="h-4 w-4" />
-                                        <span className="hidden sm:inline ml-1">{t("previous")}</span>
+                                        <span className="hidden sm:inline ml-1">{t("ui.common.previous")}</span>
                                     </Button>
                                     <span className="text-xs sm:text-sm font-medium">
                                         {page} / {totalPages}
@@ -362,7 +362,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                         disabled={page === totalPages || loading}
                                         className="h-8 px-2 sm:px-3"
                                     >
-                                        <span className="hidden sm:inline mr-1">{t("next")}</span>
+                                        <span className="hidden sm:inline mr-1">{t("ui.common.next")}</span>
                                         <ChevronRight className="h-4 w-4" />
                                     </Button>
                                 </div>
@@ -375,13 +375,13 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                                     <h3 className="text-base sm:text-lg font-semibold flex items-baseline gap-2">
                                         <FileText className="h-4 w-4 self-center" />
-                                        <span>{t("diffDetails", { version: selectedHistory.version })}</span>
+                                        <span>{t("ui.history.diffDetails", { version: selectedHistory.version })}</span>
                                         <div className="flex items-baseline gap-2 ml-2 text-[10px] font-normal uppercase tracking-wider">
                                             <span className="px-1.5 py-0 rounded bg-green-100 text-muted-foreground/60 border border-green-200/50 leading-tight">
-                                                {t("diffLegendAdd")}
+                                                {t("ui.history.diffLegendAdd")}
                                             </span>
                                             <span className="px-1.5 py-0 rounded bg-red-100 text-muted-foreground/60 border border-red-200/50 leading-tight">
-                                                {t("diffLegendDel")}
+                                                {t("ui.history.diffLegendDel")}
                                             </span>
                                         </div>
                                     </h3>
@@ -395,7 +395,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                                 className="h-8 px-3 text-blue-600 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
                                             >
                                                 <RotateCcw className="h-3.5 w-3.5 mr-1.5" />
-                                                {t("restoreToVersion")}
+                                                {t("ui.history.restoreToVersion")}
                                             </Button>
                                         )}
                                         <div className="flex items-center space-x-2 bg-slate-100 px-2 sm:px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm">
@@ -412,7 +412,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                                 htmlFor="showDiffOnly"
                                                 className="text-xs sm:text-sm font-medium leading-none cursor-pointer text-slate-700"
                                             >
-                                                {t("showDiffOnly")}
+                                                {t("ui.history.showDiffOnly")}
                                             </Label>
                                         </div>
                                         <div className="flex items-center space-x-2 bg-slate-100 px-2 sm:px-3 py-1.5 rounded-lg border border-slate-200 shadow-sm">
@@ -429,7 +429,7 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                                 htmlFor="showOriginalContent"
                                                 className="text-xs sm:text-sm font-medium leading-none cursor-pointer text-slate-700"
                                             >
-                                                {t("showOriginalContent")}
+                                                {t("ui.history.showOriginalContent")}
                                             </Label>
                                         </div>
                                     </div>
@@ -450,13 +450,13 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
                                                     setTimeout(() => setCopied(false), 2000);
                                                 }
                                             }}
-                                            title={t("copyNote")}
+                                            title={t("ui.note.copyNote")}
                                         >
                                             {copied ? (
                                                 <div className="flex items-center gap-1 text-green-600 animate-in fade-in zoom-in duration-200">
                                                     <Check className="h-3.5 w-3.5" />
                                                     <span className="text-xs font-medium">
-                                                        {t("copied", "已复制")}
+                                                        {t("ui.common.copied")}
                                                     </span>
                                                 </div>
                                             ) : (
@@ -477,15 +477,15 @@ export function NoteHistoryModal({ isOpen, onClose, vault, notePath, pathHash, i
             <AlertDialog open={restoreConfirmOpen} onOpenChange={setRestoreConfirmOpen}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
-                        <AlertDialogTitle>{t("restoreVersionConfirmTitle")}</AlertDialogTitle>
+                        <AlertDialogTitle>{t("ui.history.restoreConfirmTitle")}</AlertDialogTitle>
                         <AlertDialogDescription>
-                            {t("restoreVersionConfirmDesc", { version: selectedHistory?.version })}
+                            {t("ui.history.restoreConfirmDesc", { version: selectedHistory?.version })}
                         </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>
-                        <AlertDialogCancel disabled={restoring}>{t("cancel")}</AlertDialogCancel>
+                        <AlertDialogCancel disabled={restoring}>{t("ui.common.cancel")}</AlertDialogCancel>
                         <AlertDialogAction onClick={handleRestore} disabled={restoring}>
-                            {restoring ? t("restoring") : t("confirm")}
+                            {restoring ? t("ui.common.restoring") : t("ui.common.confirm")}
                         </AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>

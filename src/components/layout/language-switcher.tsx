@@ -18,7 +18,7 @@ export function LanguageSwitcher({ className, showText = false }: LanguageSwitch
             <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size={showText ? "default" : "icon"} className={className}>
                     <Languages className={showText ? "mr-2 h-4 w-4" : "h-5 w-5"} />
-                    {showText && t("switchLanguage")}
+                    {showText && t("ui.common.switchLanguage")}
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="max-h-[300px] overflow-y-auto">

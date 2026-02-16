@@ -66,7 +66,7 @@ function transformObsidianSyntax(
 export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
     ({ value, onChange, readOnly = false, placeholder, vault = "", fileLinks = {}, initialMode = "sv" }, ref) => {
         const { resolvedTheme } = useTheme();
-        const { i18n } = useTranslation();
+        const { t, i18n } = useTranslation();
         const containerRef = useRef<HTMLDivElement>(null);
         const vditorRef = useRef<Vditor | null>(null);
         const contentRef = useRef(value);
@@ -99,7 +99,7 @@ export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
             },
             exportPDF: () => {
                 if (isReady && vditorRef.current) {
-                    vditorRef.current.tip("PDF 导出功能开发中...", 2000);
+                    vditorRef.current.tip(t("ui.note.exportPdfPlanned"), 2000);
                 }
             },
             exportHTML: () => {
@@ -114,7 +114,7 @@ export const VditorEditor = forwardRef<VditorEditorRef, VditorEditorProps>(
                     URL.revokeObjectURL(url);
                 }
             },
-        }), [isReady]);
+        }), [isReady, t]);
 
         useEffect(() => {
             if (!containerRef.current) return;

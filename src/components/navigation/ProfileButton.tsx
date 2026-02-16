@@ -77,7 +77,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
             open && "ring-ring",
             className
           )}
-          aria-label={t("userUid", { uid: currentUid })}
+          aria-label={t("ui.auth.userUid", { uid: currentUid })}
         >
           <span className="text-sm font-medium text-muted-foreground">
             {username?.charAt(0)?.toUpperCase() || currentUid?.charAt(0)?.toUpperCase() || "U"}
@@ -95,7 +95,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
             {username?.charAt(0)?.toUpperCase() || currentUid?.charAt(0)?.toUpperCase() || "U"}
           </div>
           <div className="flex flex-col min-w-0">
-            <span className="font-semibold text-sm truncate">{username || t("unknownUser")}</span>
+            <span className="font-semibold text-sm truncate">{username || t("ui.auth.unknownUser")}</span>
             <span className="text-xs text-muted-foreground truncate font-mono">UID: {currentUid}</span>
           </div>
         </div>
@@ -110,14 +110,14 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
           <DropdownMenuSub>
             <DropdownMenuSubTrigger className="rounded-lg">
               <Bell className="mr-2 size-4 text-muted-foreground" />
-              <span>{t("toastPosition")}</span>
+              <span>{t("ui.settings.toastPosition")}</span>
             </DropdownMenuSubTrigger>
             <DropdownMenuPortal>
               <DropdownMenuSubContent className="rounded-xl">
                 <DropdownMenuRadioGroup value={toastPosition} onValueChange={(value) => setToastPosition(value as ToastPosition)}>
                   {(['top-left', 'top-center', 'top-right', 'bottom-left', 'bottom-center', 'bottom-right'] as ToastPosition[]).map((pos) => (
                     <DropdownMenuRadioItem key={pos} value={pos} className="rounded-lg cursor-pointer">
-                      {t(`position.${pos}`)}
+                      {t(`ui.settings.position.${pos}`)}
                     </DropdownMenuRadioItem>
                   ))}
                 </DropdownMenuRadioGroup>
@@ -130,7 +130,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
             setChangePasswordOpen(true);
           }} className="rounded-lg cursor-pointer">
             <Lock className="mr-2 size-4 text-muted-foreground" />
-            {t("changePassword")}
+            {t("ui.auth.changePassword")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
@@ -141,7 +141,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
           {/* 复制配置 */}
           <DropdownMenuItem onClick={handleCopyConfig} className="rounded-lg cursor-pointer">
             <Clipboard className="mr-2 size-4 text-muted-foreground" />
-            {t("authTokenConfig")}
+            {t("ui.vault.authTokenConfig")}
           </DropdownMenuItem>
         </DropdownMenuGroup>
 
@@ -153,7 +153,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
           className="text-destructive focus:text-destructive rounded-lg cursor-pointer focus:bg-destructive/10"
         >
           <LogOut className="mr-2 size-4" />
-          {t("logout")}
+          {t("ui.auth.logout")}
         </DropdownMenuItem>
       </DropdownMenuContent>
 
@@ -162,7 +162,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
         <DialogContent className="w-[calc(100vw-2rem)] max-w-2xl mx-auto rounded-lg sm:rounded-xl">
           <DialogHeader>
             <DialogTitle className="text-base sm:text-lg truncate pr-8">
-              {configModalIsError ? t("copyConfigError") : (t("authTokenConfig") || "仓库配置")}
+              {configModalIsError ? t("ui.obsidian.copyConfigError") : (t("ui.vault.authTokenConfig"))}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
@@ -171,7 +171,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
             </pre>
             <div className="flex flex-col-reverse sm:flex-row justify-end gap-2 text-nowrap">
               <Button variant="outline" onClick={() => setConfigModalOpen(false)} className="w-full sm:w-auto rounded-xl">
-                {t("close") || "关闭"}
+                {t("ui.common.close")}
               </Button>
               <Button
                 className="w-full sm:w-auto rounded-xl bg-sky-700 hover:bg-sky-900 text-white transition-colors border-none shadow-sm"
@@ -180,19 +180,19 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
                 }}
               >
                 <ExternalLink className="h-4 w-4 mr-2" />
-                {t("oneClickImport")}
+                {t("ui.obsidian.oneClickImport")}
               </Button>
 
               <Button
                 onClick={() => {
                   navigator.clipboard.writeText(getConfigJson())
-                    .then(() => toast.success(t("copyConfigSuccess")))
-                    .catch(err => toast.error(t("error") + err));
+                    .then(() => toast.success(t("ui.obsidian.copyConfigSuccess")))
+                    .catch(err => toast.error(t("ui.common.error") + err));
                 }}
                 className="w-full sm:w-auto rounded-xl"
               >
                 <Clipboard className="h-4 w-4 mr-2" />
-                {t("copy") || "复制"}
+                {t("ui.common.copy")}
               </Button>
 
             </div>
@@ -204,7 +204,7 @@ export function ProfileButton({ onLogout, className }: ProfileButtonProps) {
       <Dialog open={changePasswordOpen} onOpenChange={setChangePasswordOpen}>
         <DialogContent className="max-w-md rounded-xl">
           <DialogHeader>
-            <DialogTitle>{t("changePassword")}</DialogTitle>
+            <DialogTitle>{t("ui.auth.changePassword")}</DialogTitle>
           </DialogHeader>
           <ChangePassword close={() => setChangePasswordOpen(false)} />
         </DialogContent>

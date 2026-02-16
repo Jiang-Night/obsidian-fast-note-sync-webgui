@@ -40,8 +40,8 @@ export function ActionGroup({ className }: ActionGroupProps) {
         size="icon"
         className="size-9"
         onClick={handleThemeToggle}
-        aria-label={t("toggleTheme")}
-        title={t(theme === "auto" ? "themeAuto" : (resolvedTheme === "dark" ? "themeDark" : "themeLight"))}
+        aria-label={t("ui.common.toggleTheme")}
+        title={t(theme === "auto" ? "ui.settings.themeAuto" : (resolvedTheme === "dark" ? "ui.settings.themeDark" : "ui.settings.themeLight"))}
       >
         {theme === "auto" ? (
           <SunMoon className="size-5 text-primary" />

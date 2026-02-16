@@ -59,17 +59,17 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
     const handleSaveConfig = async () => {
         if (!config) return
         if (config.historyKeepVersions < 100) {
-            toast.error(t("historyKeepVersionsMinError"))
+            toast.error(t("ui.settings.historyKeepVersionsMinError"))
             return
         }
         if (config.historySaveDelay) {
             const seconds = parseDurationToSeconds(config.historySaveDelay)
             if (seconds === null) {
-                toast.error(t("historySaveDelayFormatError") || "历史记录保存延迟格式无效")
+                toast.error(t("ui.settings.historySaveDelayFormatError"))
                 return
             }
             if (seconds < 10) {
-                toast.error(t("historySaveDelayMinError"))
+                toast.error(t("ui.settings.historySaveDelayMinError"))
                 return
             }
         }
@@ -86,12 +86,12 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
             })
             const res = await response.json()
             if (res.code === 0 || (res.code < 100 && res.code > 0)) {
-                toast.success(t("saveSuccess"))
+                toast.success(t("ui.settings.saveSuccess"))
             } else {
-                toast.error(res.message || t("saveFailed"))
+                toast.error(res.message || t("ui.settings.saveFailed"))
             }
         } catch {
-            toast.error(t("saveFailed"))
+            toast.error(t("ui.settings.saveFailed"))
         } finally {
             setSaving(false)
         }
@@ -108,21 +108,21 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                 if (res.code === 0 || (res.code < 100 && res.code > 0)) {
                     setConfig(res.data)
                 } else {
-                    toast.error(res.message || t("error"))
+                    toast.error(res.message || t("ui.common.error"))
                     if (!config) onBack?.()
                 }
             } catch {
-                toast.error(t("error"))
+                toast.error(t("ui.common.error"))
                 if (!config) onBack?.()
             } finally {
                 setLoading(false)
             }
         }
         fetchConfig()
-    }, [token, t]) // 移除对 onBack 的依赖
+    }, [onBack, t, token])
 
-    if (loading) return <div className="p-8 text-center">{t("loading")}</div>
-    if (!config) return <div className="p-8 text-center text-destructive">{t("error")}</div>
+    if (loading) return <div className="p-8 text-center">{t("ui.common.loading")}</div>
+    if (!config) return <div className="p-8 text-center text-destructive">{t("ui.common.error")}</div>
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24 md:pb-4">
@@ -131,7 +131,7 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                 {isDashboard ? (
                     /* 概况页左侧占位 Box */
                     <div className="rounded-xl border border-border bg-card p-6 min-h-[400px] flex items-center justify-center custom-shadow">
-                        <div className="text-muted-foreground text-sm italic">{t("comingSoon")}</div>
+                        <div className="text-muted-foreground text-sm italic">{t("ui.common.comingSoon")}</div>
                     </div>
                 ) : (
                     <>
@@ -149,7 +149,7 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                 {isDashboard ? (
                     /* 概况页右侧占位 Box */
                     <div className="rounded-xl border border-border bg-card p-6 min-h-[400px] flex items-center justify-center custom-shadow">
-                        <div className="text-muted-foreground text-sm italic">{t("comingSoon")}</div>
+                        <div className="text-muted-foreground text-sm italic">{t("ui.common.comingSoon")}</div>
                     </div>
                 ) : (
                     <>
@@ -157,16 +157,16 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                         <div className="rounded-xl border border-border bg-card p-6 space-y-5 custom-shadow">
                             <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
                                 <Settings className="h-5 w-5" />
-                                {t("systemConfig")}
+                                {t("ui.settings.systemConfig")}
                             </h2>
 
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <Type className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("fontSet")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.fontSet")}</span>
                                 </div>
                                 <Input value={config.fontSet} onChange={(e) => updateConfig({ fontSet: e.target.value })} placeholder="e.g. /static/fonts/font.css" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("fontSetDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.fontSetDesc") }} />
                             </div>
 
                             <div className="border-t border-border" />
@@ -174,10 +174,10 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <Lock className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("authTokenKey")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.authTokenKey")}</span>
                                 </div>
                                 <Input value={config.authTokenKey} onChange={(e) => updateConfig({ authTokenKey: e.target.value })} placeholder="e.g. token" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("authTokenKeyDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.authTokenKeyDesc") }} />
                             </div>
 
                             <div className="border-t border-border" />
@@ -185,26 +185,21 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <Clock className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("tokenExpiry")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.tokenExpiry")}</span>
                                 </div>
                                 <Input value={config.tokenExpiry} onChange={(e) => updateConfig({ tokenExpiry: e.target.value })} placeholder="e.g. 365d, 24h, 30m" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("tokenExpiryDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.tokenExpiryDesc") }} />
                             </div>
-                        </div>
+                            <div className="border-t border-border" />
 
-                        <div className="rounded-xl border border-border bg-card p-6 space-y-5 custom-shadow">
-                            <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
-                                <Shield className="h-5 w-5" />
-                                {t("accessAndSecurity")}
-                            </h2>
 
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <Shield className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("shareTokenKey")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.shareTokenKey")}</span>
                                 </div>
                                 <Input value={config.shareTokenKey} onChange={(e) => updateConfig({ shareTokenKey: e.target.value })} placeholder="e.g. fns" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("shareTokenKeyDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.shareTokenKeyDesc") }} />
                             </div>
 
                             <div className="border-t border-border" />
@@ -212,10 +207,10 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <Clock className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("shareTokenExpiry")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.shareTokenExpiry")}</span>
                                 </div>
                                 <Input value={config.shareTokenExpiry} onChange={(e) => updateConfig({ shareTokenExpiry: e.target.value })} placeholder="e.g. 30d, 24h, 30m" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("shareTokenExpiryDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.shareTokenExpiryDesc") }} />
                             </div>
 
                             <div className="border-t border-border" />
@@ -223,13 +218,13 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <UserPlus className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("registerIsEnable")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.registerIsEnable")}</span>
                                 </div>
                                 <div className="flex items-center space-x-2">
                                     <Checkbox id="registerIsEnable" checked={config.registerIsEnable} onCheckedChange={(checked) => updateConfig({ registerIsEnable: !!checked })} />
-                                    <Label htmlFor="registerIsEnable" className="text-sm">{config.registerIsEnable ? t("isEnabled") : t("close")}</Label>
+                                    <Label htmlFor="registerIsEnable" className="text-sm">{config.registerIsEnable ? t("ui.common.isEnabled") : t("ui.common.close")}</Label>
                                 </div>
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("registerIsEnableDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.registerIsEnableDesc") }} />
                             </div>
 
                             <div className="border-t border-border" />
@@ -237,26 +232,21 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <Shield className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("adminUid")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.adminUid")}</span>
                                 </div>
                                 <Input type="number" value={config.adminUid} onChange={(e) => updateConfig({ adminUid: parseInt(e.target.value) || 0 })} placeholder="e.g. 1" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("adminUidDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.adminUidDesc") }} />
                             </div>
-                        </div>
+                            <div className="border-t border-border" />
 
-                        <div className="rounded-xl border border-border bg-card p-6 space-y-5 custom-shadow">
-                            <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
-                                <HardDrive className="h-5 w-5" />
-                                {t("fileAndHistory")}
-                            </h2>
 
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <HardDrive className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("fileChunkSize")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.fileChunkSize")}</span>
                                 </div>
                                 <Input value={config.fileChunkSize} onChange={(e) => updateConfig({ fileChunkSize: e.target.value })} placeholder="e.g. 1MB, 512KB" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("fileChunkSizeDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.fileChunkSizeDesc") }} />
                             </div>
 
                             <div className="border-t border-border" />
@@ -264,10 +254,10 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <Trash2 className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("softDeleteRetentionTime")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.softDeleteRetentionTime")}</span>
                                 </div>
                                 <Input value={config.softDeleteRetentionTime} onChange={(e) => updateConfig({ softDeleteRetentionTime: e.target.value })} placeholder="e.g. 30d, 24h" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("softDeleteRetentionTimeDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.softDeleteRetentionTimeDesc") }} />
                             </div>
 
                             <div className="border-t border-border" />
@@ -275,10 +265,10 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <Clock className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("uploadSessionTimeout")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.uploadSessionTimeout")}</span>
                                 </div>
                                 <Input value={config.uploadSessionTimeout} onChange={(e) => updateConfig({ uploadSessionTimeout: e.target.value })} placeholder="e.g. 1h, 30m" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("uploadSessionTimeoutDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.uploadSessionTimeoutDesc") }} />
                             </div>
 
                             <div className="border-t border-border" />
@@ -286,10 +276,10 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <GitBranch className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("historyKeepVersions")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.historyKeepVersions")}</span>
                                 </div>
                                 <Input type="number" min="100" value={config.historyKeepVersions} onChange={(e) => updateConfig({ historyKeepVersions: parseInt(e.target.value) || 100 })} placeholder="e.g. 100" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("historyKeepVersionsDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.historyKeepVersionsDesc") }} />
                             </div>
 
                             <div className="border-t border-border" />
@@ -297,19 +287,19 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                             <div className="space-y-3">
                                 <div className="flex items-center gap-3">
                                     <Clock className="h-5 w-5 text-muted-foreground" />
-                                    <span className="text-sm font-medium">{t("historySaveDelay")}</span>
+                                    <span className="text-sm font-medium">{t("ui.settings.historySaveDelay")}</span>
                                 </div>
                                 <Input value={config.historySaveDelay} onChange={(e) => updateConfig({ historySaveDelay: e.target.value })} placeholder="e.g. 10s, 1m" className="rounded-xl" />
-                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("historySaveDelayDesc") }} />
+                                <p className="text-xs text-muted-foreground whitespace-pre-line" dangerouslySetInnerHTML={{ __html: t("ui.settings.historySaveDelayDesc") }} />
                             </div>
 
                             <div className="border-t border-border" />
 
                             <Button onClick={handleSaveConfig} disabled={saving} className="w-full rounded-xl">
                                 {saving ? (
-                                    <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t("submitting")}</>
+                                    <><Loader2 className="h-4 w-4 mr-2 animate-spin" />{t("ui.auth.submitting")}</>
                                 ) : (
-                                    <><Save className="h-4 w-4 mr-2" />{t("saveSettings")}</>
+                                    <><Save className="h-4 w-4 mr-2" />{t("ui.settings.saveSettings")}</>
                                 )}
                             </Button>
                         </div>

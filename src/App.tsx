@@ -68,7 +68,7 @@ function App() {
           }
           setVaultsLoaded(true)
         } else {
-          toast.warning(t("pleaseCreateVault"))
+          toast.warning(t("ui.vault.pleaseCreateVault"))
           setModule("vaults")
           setVaultsLoaded(true)
         }
@@ -269,7 +269,7 @@ function App() {
           )
         }
         if (!isAdmin) {
-          toast.warning(t("onlyAdminAccess"))
+          toast.warning(t("ui.settings.onlyAdminAccess"))
           setModule("vaults")
           return null
         }
@@ -283,8 +283,8 @@ function App() {
       case "git":
         return (
           <ComingSoon
-            title={t("menuGit") || "Git 自动化"}
-            description={t("gitComingSoon") || "Git 自动化功能正在开发中，将支持自动提交、推送和版本管理。"}
+            title={t("ui.nav.menuGit")}
+            description={t("ui.common.comingSoonDescription")}
           />
         )
 
