@@ -1,4 +1,4 @@
-import { Database, FileText, Trash2, Settings, RefreshCw, GitBranch } from "lucide-react";
+import { Database, FileText, Trash, Settings, RefreshCw, GitBranch } from "lucide-react";
 import { ProfileButton } from "@/components/navigation/ProfileButton";
 import { useAppStore, type ModuleId } from "@/stores/app-store";
 import { NavItem } from "@/components/navigation/NavItem";
@@ -39,8 +39,7 @@ export function SideRail({ isAdmin, onLogout, className }: SideRailProps) {
   }> = [
       { id: "vaults", icon: Database, labelKey: "ui.nav.menuVaults" },
       { id: "notes", icon: FileText, labelKey: "ui.nav.menuNotes" },
-      { id: "trash", icon: Trash2, labelKey: "ui.nav.menuTrash" },
-      { id: "settings", icon: Settings, labelKey: "ui.nav.menuSettings", adminOnly: true },
+      { id: "trash", icon: Trash, labelKey: "ui.nav.menuTrash" },
     ]
 
   // 计划中的功能
@@ -81,7 +80,6 @@ export function SideRail({ isAdmin, onLogout, className }: SideRailProps) {
               isActive={currentModule === item.id}
               onClick={() => handleNavClick(item.id)}
               tooltipSide="right"
-              showDot={item.id === 'settings' && !!versionInfo?.versionIsNew}
             />
           )
         })}
@@ -101,6 +99,22 @@ export function SideRail({ isAdmin, onLogout, className }: SideRailProps) {
           />
         ))}
       </nav>
+
+
+
+      {/* Bottom Actions */}
+      <div className="flex flex-col items-center gap-2 mb-2">
+        {isAdmin && (
+          <NavItem
+            icon={Settings}
+            label={t("ui.nav.menuSettings")}
+            isActive={currentModule === 'settings'}
+            onClick={() => handleNavClick('settings')}
+            tooltipSide="right"
+            showDot={!!versionInfo?.versionIsNew}
+          />
+        )}
+      </div>
 
       {/* Profile Button */}
       <ProfileButton onLogout={onLogout} />

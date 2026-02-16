@@ -99,6 +99,11 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
 
     useEffect(() => {
         const fetchConfig = async () => {
+            if (isDashboard) {
+                setLoading(false)
+                return
+            }
+
             setLoading(true)
             try {
                 const response = await fetch(addCacheBuster(env.API_URL + "/api/admin/config"), {
@@ -119,10 +124,10 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
             }
         }
         fetchConfig()
-    }, [onBack, t, token])
+    }, [onBack, t, token, isDashboard])
 
     if (loading) return <div className="p-8 text-center">{t("ui.common.loading")}</div>
-    if (!config) return <div className="p-8 text-center text-destructive">{t("ui.common.error")}</div>
+    if (!config && !isDashboard) return <div className="p-8 text-center text-destructive">{t("ui.common.error")}</div>
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24 md:pb-4">
@@ -151,7 +156,7 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                     <div className="rounded-xl border border-border bg-card p-6 min-h-[400px] flex items-center justify-center custom-shadow">
                         <div className="text-muted-foreground text-sm italic">{t("ui.common.comingSoon")}</div>
                     </div>
-                ) : (
+                ) : config ? (
                     <>
                         {/* 系统配置卡片群 */}
                         <div className="rounded-xl border border-border bg-card p-6 space-y-5 custom-shadow">
@@ -304,7 +309,7 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
                             </Button>
                         </div>
                     </>
-                )}
+                ) : null}
             </div>
         </div>
     )

@@ -1,4 +1,4 @@
-import { Database, FileText, Trash2, Settings, RefreshCw, GitBranch, Paperclip, Layout } from "lucide-react";
+import { Database, FileText, Trash, Settings, RefreshCw, GitBranch, Paperclip, Layout } from "lucide-react";
 import { useAppStore, type ModuleId } from "@/stores/app-store";
 import { NavItem } from "@/components/navigation/NavItem";
 import { useTranslation } from "react-i18next";
@@ -32,12 +32,11 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
     labelKey: string
     adminOnly?: boolean
   }> = [
-      { id: "dashboard", icon: Layout, labelKey: "ui.nav.menuDashboard", adminOnly: true },
+      { id: "dashboard", icon: Layout, labelKey: "ui.nav.menuDashboard" },
       { id: "vaults", icon: Database, labelKey: "ui.nav.menuVaults" },
       { id: "notes", icon: FileText, labelKey: "ui.nav.menuNotes" },
       { id: "files", icon: Paperclip, labelKey: "ui.nav.menuFiles" },
-      { id: "trash", icon: Trash2, labelKey: "ui.nav.menuTrash" },
-      { id: "settings", icon: Settings, labelKey: "ui.nav.menuSettings", adminOnly: true },
+      { id: "trash", icon: Trash, labelKey: "ui.nav.menuTrash" },
     ]
 
   // 计划中的功能
@@ -91,6 +90,11 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
       >
         {visibleItems.map((item) => (
           <>
+            {/* 在回收站上方添加分隔线（仅桌面端） */}
+            {item.id === 'trash' && (
+              <div className="hidden md:block w-8 h-px bg-border/50 my-1" />
+            )}
+
             <NavItem
               key={item.id}
               icon={item.icon}
@@ -120,6 +124,23 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
             tooltipSide="right"
           />
         ))}
+
+        {/* 系统设置 - 始终在最下方 */}
+        {isAdmin && (
+          <>
+            {/* 在设置上方添加分隔线（仅桌面端） */}
+            <div className="hidden md:block w-8 h-px bg-border/50 my-1" />
+            <NavItem
+              key="settings"
+              icon={Settings}
+              label={t("ui.nav.menuSettings")}
+              isActive={currentModule === 'settings'}
+              onClick={() => setModule('settings')}
+              tooltipSide="right"
+              showDot={!!versionInfo?.versionIsNew}
+            />
+          </>
+        )}
       </motion.nav>
     </div>
   )
