@@ -46,7 +46,7 @@ export function TopBar({ onLogout, className }: TopBarProps) {
         "h-14 flex items-center justify-between px-4 md:px-6",
         "sticky top-0 z-50",
         "bg-background/80 backdrop-blur-md",
-        "border-b border-border/50 shadow-sm",
+        "border-b border-sidebar-border shadow-md",
         className
       )}
     >

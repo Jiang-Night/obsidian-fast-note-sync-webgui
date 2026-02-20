@@ -1,5 +1,5 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { backupConfigSchema, BackupFormData } from "@/lib/validations/backup-schema";
+import { createBackupConfigSchema, BackupFormData } from "@/lib/validations/backup-schema";
 import { BackupConfig, BackupType, CronStrategy } from "@/lib/types/backup";
 import { useBackupHandle } from "@/components/api-handle/backup-handle";
 import { useVaultHandle } from "@/components/api-handle/vault-handle";
@@ -42,11 +42,12 @@ export function BackupForm({ config, storages, onSubmit, onCancel }: BackupFormP
         handleVaultList(setVaults);
     }, [handleVaultList]);
 
+    const schema = createBackupConfigSchema(t);
+
     const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<BackupFormData>({
-        resolver: zodResolver(backupConfigSchema),
+        resolver: zodResolver(schema),
         defaultValues: {
             vault: config?.vault || "",
-            // @ts-ignore
             type: config?.type,
             cronStrategy: config?.cronStrategy || "daily",
             cronExpression: config?.cronExpression || "0 0 * * *",
@@ -178,18 +179,25 @@ export function BackupForm({ config, storages, onSubmit, onCancel }: BackupFormP
                 <div className="space-y-1.5 md:col-span-2">
                     <Label className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.backup.storages")}</Label>
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 border border-input rounded-md p-3 bg-background/50">
-                        {activeStorages.map((s) => (
-                            <div key={s.id} className="flex items-center space-x-2">
-                                <Checkbox
-                                    id={`storage-${s.id}`}
-                                    checked={selectedStorageIds.includes(Number(s.id))}
-                                    onCheckedChange={() => toggleStorage(Number(s.id))}
-                                />
-                                <Label htmlFor={`storage-${s.id}`} className="text-sm font-normal cursor-pointer truncate">
-                                    {t(`ui.storage.storageType.${s.type}`)} ({s.id})
-                                </Label>
+                        {activeStorages.length === 0 ? (
+                            <div className="col-span-full flex flex-col items-center justify-center p-4 text-center text-muted-foreground bg-muted/30 rounded-md border border-dashed">
+                                <span className="text-sm mb-2">{t("ui.backup.noAvailableStorage")}</span>
+                                <p className="text-xs opacity-70 mb-2">{t("ui.backup.addStorageTip")}</p>
                             </div>
-                        ))}
+                        ) : (
+                            activeStorages.map((s) => (
+                                <div key={s.id} className="flex items-center space-x-2">
+                                    <Checkbox
+                                        id={`storage-${s.id}`}
+                                        checked={selectedStorageIds.includes(Number(s.id))}
+                                        onCheckedChange={() => toggleStorage(Number(s.id))}
+                                    />
+                                    <Label htmlFor={`storage-${s.id}`} className="text-sm font-normal cursor-pointer truncate">
+                                        {t(`ui.storage.storageType.${s.type}`)} ({s.id})
+                                    </Label>
+                                </div>
+                            ))
+                        )}
                     </div>
                     {errors.storageIds && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.storageIds.message}</p>}
                 </div>
