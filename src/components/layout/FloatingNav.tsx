@@ -1,9 +1,10 @@
-import { Database, FileText, Trash, Settings, RefreshCw, GitBranch, Paperclip, Layout } from "lucide-react";
+import { Database, FileText, ArchiveX, Settings, DatabaseBackup, GitBranch, Paperclip, Layers } from "lucide-react";
 import { useAppStore, type ModuleId } from "@/stores/app-store";
 import { NavItem } from "@/components/navigation/NavItem";
 import { useTranslation } from "react-i18next";
 import { useMobile } from "@/hooks/use-mobile";
 import { motion } from "motion/react";
+import { Fragment } from "react";
 import { cn } from "@/lib/utils";
 
 
@@ -32,11 +33,11 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
     labelKey: string
     adminOnly?: boolean
   }> = [
-      { id: "dashboard", icon: Layout, labelKey: "ui.nav.menuDashboard" },
+      { id: "dashboard", icon: Layers, labelKey: "ui.nav.menuDashboard" },
       { id: "vaults", icon: Database, labelKey: "ui.nav.menuVaults" },
       { id: "notes", icon: FileText, labelKey: "ui.nav.menuNotes" },
       { id: "files", icon: Paperclip, labelKey: "ui.nav.menuFiles" },
-      { id: "trash", icon: Trash, labelKey: "ui.nav.menuTrash" },
+      { id: "trash", icon: ArchiveX, labelKey: "ui.nav.menuTrash" },
     ]
 
   // 计划中的功能
@@ -45,7 +46,7 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
     icon: typeof Database
     labelKey: string
   }> = [
-      { id: "sync", icon: RefreshCw, labelKey: "ui.nav.menuSync" },
+      { id: "sync", icon: DatabaseBackup, labelKey: "ui.nav.menuSync" },
       { id: "git", icon: GitBranch, labelKey: "ui.nav.menuGit" },
     ]
 
@@ -89,14 +90,13 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
         }}
       >
         {visibleItems.map((item) => (
-          <>
+          <Fragment key={item.id}>
             {/* 在回收站上方添加分隔线（仅桌面端） */}
             {item.id === 'trash' && (
               <div className="hidden md:block w-8 h-px bg-border/50 my-1" />
             )}
 
             <NavItem
-              key={item.id}
               icon={item.icon}
               label={t(item.labelKey)}
               isActive={currentModule === item.id}
@@ -108,7 +108,7 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
             {item.id === 'dashboard' && (
               <div className="hidden md:block w-8 h-px bg-border/50 my-1" />
             )}
-          </>
+          </Fragment>
         ))}
 
         {/* 计划中的功能 - 桌面端显示 */}
@@ -127,7 +127,7 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
 
         {/* 系统设置 - 始终在最下方 */}
         {isAdmin && (
-          <>
+          <Fragment key="settings-group">
             {/* 在设置上方添加分隔线（仅桌面端） */}
             <div className="hidden md:block w-8 h-px bg-border/50 my-1" />
             <NavItem
@@ -139,7 +139,7 @@ export function FloatingNav({ isAdmin, className }: FloatingNavProps) {
               tooltipSide="right"
               showDot={!!versionInfo?.versionIsNew}
             />
-          </>
+          </Fragment>
         )}
       </motion.nav>
     </div>

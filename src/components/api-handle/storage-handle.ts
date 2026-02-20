@@ -1,5 +1,6 @@
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { StorageConfig } from "@/lib/types/storage";
+import { useCallback } from "react";
 import env from "@/env.ts";
 
 
@@ -20,7 +21,7 @@ export function useStorageHandle() {
     /**
      * 获取存储配置列表
      */
-    const handleStorageList = async (callback: (list: StorageConfig[]) => void) => {
+    const handleStorageList = useCallback(async (callback: (list: StorageConfig[]) => void) => {
         try {
             const response = await fetch(env.API_URL + "/api/storage?limit=100", {
                 method: "GET",
@@ -45,7 +46,7 @@ export function useStorageHandle() {
         } catch (error) {
             openConfirmDialog("获取存储配置列表失败: " + error, "error")
         }
-    }
+    }, [token, openConfirmDialog])
 
     /**
      * 删除存储配置

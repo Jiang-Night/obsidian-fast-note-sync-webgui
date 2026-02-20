@@ -1,4 +1,4 @@
-import { Database, FileText, Trash, Settings, RefreshCw, GitBranch } from "lucide-react";
+import { Database, FileText, ArchiveX, Settings, DatabaseBackup, GitBranch, Layers } from "lucide-react";
 import { ProfileButton } from "@/components/navigation/ProfileButton";
 import { useAppStore, type ModuleId } from "@/stores/app-store";
 import { NavItem } from "@/components/navigation/NavItem";
@@ -37,14 +37,15 @@ export function SideRail({ isAdmin, onLogout, className }: SideRailProps) {
     adminOnly?: boolean
     isPlanned?: boolean
   }> = [
+      { id: "dashboard", icon: Layers, labelKey: "ui.nav.menuDashboard" },
       { id: "vaults", icon: Database, labelKey: "ui.nav.menuVaults" },
       { id: "notes", icon: FileText, labelKey: "ui.nav.menuNotes" },
-      { id: "trash", icon: Trash, labelKey: "ui.nav.menuTrash" },
+      { id: "trash", icon: ArchiveX, labelKey: "ui.nav.menuTrash" },
     ]
 
   // 计划中的功能
   const plannedItems = [
-    { id: "sync", icon: RefreshCw, labelKey: "ui.nav.menuSync", isPlanned: true },
+    { id: "sync", icon: DatabaseBackup, labelKey: "ui.nav.menuSync", isPlanned: true },
     { id: "git", icon: GitBranch, labelKey: "ui.nav.menuGit", isPlanned: true },
   ]
 

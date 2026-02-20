@@ -1,0 +1,173 @@
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useStorageHandle } from "@/components/api-handle/storage-handle";
+import { useBackupHandle } from "@/components/api-handle/backup-handle";
+import { ChevronLeft, ChevronRight, Loader2, Info } from "lucide-react";
+import { useEffect, useState, useCallback } from "react";
+import { StorageConfig } from "@/lib/types/storage";
+import { BackupHistory } from "@/lib/types/backup";
+import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
+
+
+interface BackupHistoryDialogProps {
+    configId: number;
+    open: boolean;
+    onOpenChange: (open: boolean) => void;
+}
+
+export function BackupHistoryDialog({ configId, open, onOpenChange }: BackupHistoryDialogProps) {
+    const { t } = useTranslation();
+    const { handleBackupHistory } = useBackupHandle();
+    const { handleStorageList } = useStorageHandle();
+    const [history, setHistory] = useState<BackupHistory[]>([]);
+    const [storages, setStorages] = useState<StorageConfig[]>([]);
+    const [total, setTotal] = useState(0);
+    const [page, setPage] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
+    const pageSize = 5;
+
+    const loadHistory = useCallback(async (currentPage: number) => {
+        setIsLoading(true);
+        await handleBackupHistory(currentPage, pageSize, configId, (data) => {
+            setHistory(data.list);
+            setTotal(data.total);
+        });
+        setIsLoading(false);
+    }, [configId, handleBackupHistory]);
+
+    useEffect(() => {
+        if (open) {
+            handleStorageList(setStorages);
+            setPage(1);
+            loadHistory(1);
+        }
+    }, [open, loadHistory, handleStorageList]);
+
+    const getStorageType = (storageId: number) => {
+        const storage = storages.find(s => Number(s.id) === storageId);
+        return storage ? storage.type : "-";
+    };
+
+    const formatFileSize = (bytes?: number) => {
+        if (!bytes) return "0 B";
+        const k = 1024;
+        const sizes = ["B", "KB", "MB", "GB", "TB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+    };
+
+    const totalPages = Math.ceil(total / pageSize);
+
+    return (
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            <DialogContent className="max-w-5xl max-h-[85vh] flex flex-col p-6">
+                <DialogHeader className="mb-4">
+                    <DialogTitle className="flex items-center gap-2">
+                        <Info className="h-5 w-5 text-primary" />
+                        {t("ui.backup.history.title")}
+                    </DialogTitle>
+                </DialogHeader>
+
+                <div className="flex-1 overflow-auto border rounded-xl bg-card/50">
+                    <Table>
+                        <TableHeader className="bg-muted/50 sticky top-0 z-10">
+                            <TableRow>
+                                <TableHead className="w-[180px]">{t("ui.backup.history.startTime")}</TableHead>
+                                <TableHead>{t("ui.backup.history.storage")}</TableHead>
+                                <TableHead>{t("ui.backup.history.status")}</TableHead>
+                                <TableHead>{t("ui.backup.history.fileSize")}</TableHead>
+                                <TableHead>{t("ui.backup.history.fileCount")}</TableHead>
+                                <TableHead className="max-w-[200px]">{t("ui.backup.history.message")}</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {isLoading ? (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="h-48">
+                                        <div className="flex flex-col items-center justify-center text-muted-foreground gap-2">
+                                            <Loader2 className="h-8 w-8 animate-spin opacity-50" />
+                                            <span className="text-xs">{t("ui.common.loading")}</span>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ) : history.length > 0 ? (
+                                history.map((item) => (
+                                    <TableRow key={item.id} className="text-xs hover:bg-muted/30 transition-colors">
+                                        <TableCell className="font-mono text-muted-foreground">{item.startTime}</TableCell>
+                                        <TableCell>
+                                            {getStorageType(item.storageId) !== "-"
+                                                ? `#${item.storageId} ${t(`ui.storage.storageType.${getStorageType(item.storageId)}`)}`
+                                                : "-"}
+                                        </TableCell>
+                                        <TableCell>
+                                            <span className={cn(
+                                                "px-2 py-0.5 rounded-full font-medium inline-block",
+                                                item.status === 2 ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" :
+                                                    item.status === 3 ? "bg-destructive/10 text-destructive dark:bg-destructive/20" :
+                                                        "bg-muted text-muted-foreground"
+                                            )}>
+                                                {t(`ui.backup.status.${item.status}`)}
+                                            </span>
+                                        </TableCell>
+                                        <TableCell>{formatFileSize(item.fileSize)}</TableCell>
+                                        <TableCell>{item.fileCount || 0}</TableCell>
+                                        <TableCell className="max-w-[200px] truncate opacity-70" title={item.message}>
+                                            {item.message || "-"}
+                                        </TableCell>
+                                    </TableRow>
+                                ))
+                            ) : (
+                                <TableRow>
+                                    <TableCell colSpan={6} className="h-48 text-center text-muted-foreground">
+                                        {t("ui.backup.history.noData")}
+                                    </TableCell>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </div>
+
+                {(totalPages > 1 || (total === -1 && (history.length === pageSize || page > 1))) && (
+                    <div className="flex items-center justify-between mt-4 px-1">
+                        <div className="text-xs text-muted-foreground">
+                            {total !== -1 && `${t("ui.common.total")} ${total} ${t("ui.common.items")}`}
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                                onClick={() => {
+                                    const newPage = page - 1;
+                                    setPage(newPage);
+                                    loadHistory(newPage);
+                                }}
+                                disabled={page <= 1 || isLoading}
+                            >
+                                <ChevronLeft className="h-4 w-4" />
+                            </Button>
+                            <span className="text-xs font-medium px-2">
+                                {total !== -1 ? `${page} / ${totalPages}` : `${t("ui.common.page")} ${page}`}
+                            </span>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 w-8 p-0"
+                                onClick={() => {
+                                    const newPage = page + 1;
+                                    setPage(newPage);
+                                    loadHistory(newPage);
+                                }}
+                                disabled={(total !== -1 ? page >= totalPages : history.length < pageSize) || isLoading}
+                            >
+                                <ChevronRight className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    </div>
+                )}
+            </DialogContent>
+        </Dialog>
+    );
+}

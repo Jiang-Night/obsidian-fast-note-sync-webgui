@@ -52,7 +52,7 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
                 {/* 存储类型 */}
                 <div className="space-y-1.5">
-                    <Label htmlFor="type" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.type")}</Label>
+                    <Label htmlFor="type" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.type")}</Label>
                     <Select
                         name="type"
                         onValueChange={(value) => {
@@ -60,7 +60,7 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                             setStorageType(value as StorageConfig["type"])
                         }}
                         defaultValue={config?.type}>
-                        <SelectTrigger id="type" className="bg-white/50 border-gray-200 focus:ring-primary/20">
+                        <SelectTrigger id="type" className="bg-background border-input focus:ring-primary/20">
                             <SelectValue placeholder={t("ui.storage.selectType")} />
                         </SelectTrigger>
                         <SelectContent>
@@ -71,78 +71,78 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                             ))}
                         </SelectContent>
                     </Select>
-                    {errors.type && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.type.message}</p>}
+                    {errors.type && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.type.message}</p>}
                 </div>
 
                 {/* OSS 端点 */}
                 {storageType === "oss" && (
                     <div className="space-y-1.5">
-                        <Label htmlFor="endpoint" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.endpoint")}</Label>
-                        <Input id="endpoint" autoComplete="off" className="bg-white/50 border-gray-200" {...register("endpoint")} />
-                        {errors.endpoint && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.endpoint.message}</p>}
+                        <Label htmlFor="endpoint" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.endpoint")}</Label>
+                        <Input id="endpoint" autoComplete="off" className="bg-background border-input" {...register("endpoint")} />
+                        {errors.endpoint && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.endpoint.message}</p>}
                     </div>
                 )}
 
                 {/* S3 区域 */}
                 {storageType === "s3" && (
                     <div className="space-y-1.5">
-                        <Label htmlFor="region" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.region")}</Label>
-                        <Input id="region" autoComplete="off" className="bg-white/50 border-gray-200" {...register("region")} />
-                        {errors.region && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.region.message}</p>}
+                        <Label htmlFor="region" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.region")}</Label>
+                        <Input id="region" autoComplete="off" className="bg-background border-input" {...register("region")} />
+                        {errors.region && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.region.message}</p>}
                     </div>
                 )}
 
                 {/* R2 账户 ID */}
                 {storageType === "r2" && (
                     <div className="space-y-1.5">
-                        <Label htmlFor="accountId" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.accountId")}</Label>
-                        <Input id="accountId" autoComplete="off" className="bg-white/50 border-gray-200" {...register("accountId")} />
-                        {errors.accountId && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.accountId.message}</p>}
+                        <Label htmlFor="accountId" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.accountId")}</Label>
+                        <Input id="accountId" autoComplete="off" className="bg-background border-input" {...register("accountId")} />
+                        {errors.accountId && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.accountId.message}</p>}
                     </div>
                 )}
 
                 {/* WebDAV URL */}
                 {storageType === "webdav" && (
                     <div className="space-y-1.5">
-                        <Label htmlFor="endpoint" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.webdavUrl")}</Label>
-                        <Input id="endpoint" autoComplete="off" className="bg-white/50 border-gray-200" {...register("endpoint")} />
-                        {errors.endpoint && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.endpoint.message}</p>}
+                        <Label htmlFor="endpoint" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.webdavUrl")}</Label>
+                        <Input id="endpoint" autoComplete="off" className="bg-background border-input" {...register("endpoint")} />
+                        {errors.endpoint && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.endpoint.message}</p>}
                     </div>
                 )}
 
                 {/* WebDAV 用户名 */}
                 {storageType === "webdav" && (
                     <div className="space-y-1.5">
-                        <Label htmlFor="user" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.webdavUser")}</Label>
-                        <Input id="user" autoComplete="off" className="bg-white/50 border-gray-200" {...register("user")} />
-                        {errors.user && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.user.message}</p>}
+                        <Label htmlFor="user" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.webdavUser")}</Label>
+                        <Input id="user" autoComplete="off" className="bg-background border-input" {...register("user")} />
+                        {errors.user && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.user.message}</p>}
                     </div>
                 )}
 
                 {/* WebDAV 密码 */}
                 {storageType === "webdav" && (
                     <div className="space-y-1.5">
-                        <Label htmlFor="password" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.webdavPassword")}</Label>
-                        <Input id="password" type="text" className="bg-white/50 border-gray-200 no-password-prompt" {...register("password")} />
-                        {errors.password && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.password.message}</p>}
+                        <Label htmlFor="password" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.webdavPassword")}</Label>
+                        <Input id="password" type="text" className="bg-background border-input no-password-prompt" {...register("password")} />
+                        {errors.password && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.password.message}</p>}
                     </div>
                 )}
 
                 {/* MinIO 端点 */}
                 {storageType === "minio" && (
                     <div className="space-y-1.5">
-                        <Label htmlFor="endpoint" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.endpoint")}</Label>
-                        <Input id="endpoint" autoComplete="off" className="bg-white/50 border-gray-200" {...register("endpoint")} />
-                        {errors.endpoint && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.endpoint.message}</p>}
+                        <Label htmlFor="endpoint" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.endpoint")}</Label>
+                        <Input id="endpoint" autoComplete="off" className="bg-background border-input" {...register("endpoint")} />
+                        {errors.endpoint && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.endpoint.message}</p>}
                     </div>
                 )}
 
                 {/* 存储桶名称 (非 LocalFS 和 WebDAV) */}
                 {storageType !== "localfs" && storageType !== "webdav" && storageType !== undefined && (
                     <div className="space-y-1.5">
-                        <Label htmlFor="bucketName" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.bucketName")}</Label>
-                        <Input id="bucketName" autoComplete="off" className="bg-white/50 border-gray-200" {...register("bucketName")} />
-                        {errors.bucketName && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.bucketName.message}</p>}
+                        <Label htmlFor="bucketName" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.bucketName")}</Label>
+                        <Input id="bucketName" autoComplete="off" className="bg-background border-input" {...register("bucketName")} />
+                        {errors.bucketName && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.bucketName.message}</p>}
                     </div>
                 )}
 
@@ -150,38 +150,38 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {/* Access Key ID (非 LocalFS 和 WebDAV) */}
                 {storageType !== "localfs" && storageType !== "webdav" && (
                     <div className="space-y-1.5">
-                        <Label htmlFor="accessKeyId" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.accessKeyId")}</Label>
-                        <Input id="accessKeyId" autoComplete="off" className="bg-white/50 border-gray-200" {...register("accessKeyId")} />
-                        {errors.accessKeyId && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.accessKeyId.message}</p>}
+                        <Label htmlFor="accessKeyId" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.accessKeyId")}</Label>
+                        <Input id="accessKeyId" autoComplete="off" className="bg-background border-input" {...register("accessKeyId")} />
+                        {errors.accessKeyId && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.accessKeyId.message}</p>}
                     </div>
                 )}
 
                 {/* Access Key Secret (非 LocalFS 和 WebDAV) */}
                 {storageType !== "localfs" && storageType !== "webdav" && (
                     <div className="space-y-1.5">
-                        <Label htmlFor="accessKeySecret" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.accessKeySecret")}</Label>
-                        <Input id="accessKeySecret" type="text" className="bg-white/50 border-gray-200 no-password-prompt" {...register("accessKeySecret")} />
-                        {errors.accessKeySecret && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.accessKeySecret.message}</p>}
+                        <Label htmlFor="accessKeySecret" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.accessKeySecret")}</Label>
+                        <Input id="accessKeySecret" type="text" className="bg-background border-input no-password-prompt" {...register("accessKeySecret")} />
+                        {errors.accessKeySecret && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.accessKeySecret.message}</p>}
                     </div>
                 )}
 
                 {/* 自定义路径 (所有类型) */}
                 <div className="space-y-1.5">
-                    <Label htmlFor="customPath" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.customPath")}</Label>
-                    <Input id="customPath" autoComplete="off" className="bg-white/50 border-gray-200" {...register("customPath")} />
-                    {errors.customPath && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.customPath.message}</p>}
+                    <Label htmlFor="customPath" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.customPath")}</Label>
+                    <Input id="customPath" autoComplete="off" className="bg-background border-input" {...register("customPath")} />
+                    {errors.customPath && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.customPath.message}</p>}
                 </div>
 
 
                 {/* 访问 URL 前缀 */}
                 <div className="space-y-1.5">
-                    <Label htmlFor="accessUrlPrefix" className="text-xs font-semibold text-gray-500 ml-1">{t("ui.storage.accessUrlPrefix")}</Label>
-                    <Input id="accessUrlPrefix" autoComplete="off" className="bg-white/50 border-gray-200" {...register("accessUrlPrefix")} />
-                    {errors.accessUrlPrefix && <p className="text-[11px] text-red-500 mt-1 ml-1">{errors.accessUrlPrefix.message}</p>}
+                    <Label htmlFor="accessUrlPrefix" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.accessUrlPrefix")}</Label>
+                    <Input id="accessUrlPrefix" autoComplete="off" className="bg-background border-input" {...register("accessUrlPrefix")} />
+                    {errors.accessUrlPrefix && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.accessUrlPrefix.message}</p>}
                 </div>
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+            <div className="flex items-center justify-between pt-3 border-t border-border">
                 {/* 是否启用 */}
                 <div className="flex items-center space-x-2">
                     <Checkbox
@@ -189,9 +189,9 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                         name="isEnabled"
                         defaultChecked={config ? (config.isEnabled ? true : false) : true}
                         onCheckedChange={(checked) => setValue("isEnabled", Boolean(checked))}
-                        className="border-gray-300 data-[state=checked]:bg-green-500 data-[state=checked]:border-green-500"
+                        className="border-input data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                     />
-                    <Label htmlFor="isEnabled" className="text-sm font-medium text-gray-600">{t("ui.common.isEnabled")}</Label>
+                    <Label htmlFor="isEnabled" className="text-sm font-medium text-foreground">{t("ui.common.isEnabled")}</Label>
                 </div>
 
                 <div className="flex items-center gap-3">
