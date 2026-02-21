@@ -53,7 +53,7 @@ export function BackupForm({ config, storages, onSubmit, onCancel }: BackupFormP
             cronExpression: config?.cronExpression || "0 0 * * *",
             storageIds: JSON.stringify(initialStorageIds),
             isEnabled: config?.isEnabled ?? true,
-            retentionDays: config?.retentionDays || 7,
+            retentionDays: config?.retentionDays ?? 30,
         },
     });
 

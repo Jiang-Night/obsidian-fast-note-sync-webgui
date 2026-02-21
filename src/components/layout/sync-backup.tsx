@@ -1,4 +1,4 @@
-import { Plus, Pencil, Trash2, Check, Cloud, HardDrive, Share2, Server, DatabaseBackup, Play, Calendar, ShieldCheck, Clock, RefreshCw, History } from "lucide-react";
+import { Plus, Pencil, Trash2, Check, Cloud, HardDrive, Share2, Server, DatabaseBackup, Play, Calendar, ShieldCheck, Clock, RefreshCw, History, CheckCircle2, AlertCircle, XCircle, Loader2 } from "lucide-react";
 import { BackupHistoryDialog } from "@/components/layout/backup-history-dialog";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { useStorageHandle } from "@/components/api-handle/storage-handle";
@@ -33,6 +33,7 @@ export function SyncBackup() {
     const [editingBackupId, setEditingBackupId] = useState<number | null>(null)
     const [isAddingBackup, setIsAddingBackup] = useState(false)
     const [historyConfigId, setHistoryConfigId] = useState<number | null>(null)
+    const [historyConfigType, setHistoryConfigType] = useState<string | undefined>(undefined)
     const [isShowHistory, setIsShowHistory] = useState(false)
 
     const { handleStorageList, handleStorageDelete, handleStorageTypes } = useStorageHandle()
@@ -157,6 +158,7 @@ export function SyncBackup() {
                                     <div className="flex items-center justify-between mb-2">
                                         <div className="flex items-center gap-2">
                                             <ShieldCheck className={cn("h-4 w-4", config.isEnabled ? "text-blue-500" : "text-muted-foreground")} />
+                                            <span className="text-sm tabular-nums text-muted-foreground font-mono font-bold">#{config.id}</span>
                                             <span className="font-bold text-sm">{config.vault}</span>
                                             <span className="text-[10px] px-1.5 py-0.5 bg-accent rounded text-accent-foreground uppercase">
                                                 {t(`ui.backup.backupType.${config.type}`)}
@@ -169,6 +171,7 @@ export function SyncBackup() {
                                                 className="h-7 w-7 text-muted-foreground hover:text-primary rounded-md"
                                                 onClick={() => {
                                                     setHistoryConfigId(config.id!)
+                                                    setHistoryConfigType(config.type)
                                                     setIsShowHistory(true)
                                                 }}
                                                 title={t("ui.backup.history.title")}
@@ -213,11 +216,25 @@ export function SyncBackup() {
                                                     <span>{t("ui.backup.noBackup")}</span>
                                                 )}
                                             </div>
-                                            <div className="flex items-center gap-1.5">
-                                                <Clock className="h-3 w-3 opacity-50" />
+                                            <div className="flex items-center gap-1.5 min-w-[3.5rem] justify-end">
+                                                {config.lastStatus === 1 ? (
+                                                    <Loader2 className="h-3 w-3 animate-spin text-blue-500" />
+                                                ) : config.lastStatus === 2 ? (
+                                                    <CheckCircle2 className="h-3 w-3 text-green-500" />
+                                                ) : config.lastStatus === 3 ? (
+                                                    <AlertCircle className="h-3 w-3 text-destructive" />
+                                                ) : config.lastStatus === 4 ? (
+                                                    <XCircle className="h-3 w-3 text-muted-foreground" />
+                                                ) : config.lastStatus === 5 ? (
+                                                    <CheckCircle2 className="h-3 w-3 text-blue-400" />
+                                                ) : (
+                                                    <Clock className="h-3 w-3 opacity-50" />
+                                                )}
                                                 <span className={cn(
                                                     "font-medium",
-                                                    config.lastStatus === 2 ? "text-green-500" : config.lastStatus === 3 ? "text-destructive" : ""
+                                                    config.lastStatus === 2 ? "text-green-500" :
+                                                        config.lastStatus === 3 ? "text-destructive" :
+                                                            config.lastStatus === 5 ? "text-blue-400 dark:text-blue-300" : ""
                                                 )}>
                                                     {config.lastStatus !== undefined ? t(`ui.backup.status.${config.lastStatus}`) : t("ui.common.unknown")}
                                                 </span>
@@ -377,6 +394,7 @@ export function SyncBackup() {
             {historyConfigId && (
                 <BackupHistoryDialog
                     configId={historyConfigId}
+                    configType={historyConfigType as import("@/lib/types/backup").BackupType}
                     open={isShowHistory}
                     onOpenChange={setIsShowHistory}
                 />

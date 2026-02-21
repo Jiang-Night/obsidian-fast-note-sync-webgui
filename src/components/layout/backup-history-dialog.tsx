@@ -1,11 +1,11 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ChevronLeft, ChevronRight, Loader2, Info, ExternalLink } from "lucide-react";
 import { useStorageHandle } from "@/components/api-handle/storage-handle";
 import { useBackupHandle } from "@/components/api-handle/backup-handle";
-import { ChevronLeft, ChevronRight, Loader2, Info } from "lucide-react";
+import { BackupHistory, BackupType } from "@/lib/types/backup";
 import { useEffect, useState, useCallback } from "react";
 import { StorageConfig } from "@/lib/types/storage";
-import { BackupHistory } from "@/lib/types/backup";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
@@ -13,11 +13,12 @@ import { cn } from "@/lib/utils";
 
 interface BackupHistoryDialogProps {
     configId: number;
+    configType?: BackupType;
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }
 
-export function BackupHistoryDialog({ configId, open, onOpenChange }: BackupHistoryDialogProps) {
+export function BackupHistoryDialog({ configId, configType, open, onOpenChange }: BackupHistoryDialogProps) {
     const { t } = useTranslation();
     const { handleBackupHistory } = useBackupHandle();
     const { handleStorageList } = useStorageHandle();
@@ -50,6 +51,21 @@ export function BackupHistoryDialog({ configId, open, onOpenChange }: BackupHist
         return storage ? storage.type : "-";
     };
 
+    const getFileUrl = (storageId: number, filePath: string) => {
+        const storage = storages.find(s => Number(s.id) === storageId);
+        if (!storage || !storage.accessUrlPrefix) return null;
+
+        let url = storage.accessUrlPrefix.endsWith('/') ? storage.accessUrlPrefix.slice(0, -1) : storage.accessUrlPrefix;
+        if (storage.customPath) {
+            let cp = storage.customPath.startsWith('/') ? storage.customPath.substring(1) : storage.customPath;
+            cp = cp.endsWith('/') ? cp.slice(0, -1) : cp;
+            if (cp) url += '/' + cp;
+        }
+        let fp = filePath.startsWith('/') ? filePath.substring(1) : filePath;
+        url += '/' + fp;
+        return url;
+    };
+
     const formatFileSize = (bytes?: number) => {
         if (!bytes) return "0 B";
         const k = 1024;
@@ -77,8 +93,12 @@ export function BackupHistoryDialog({ configId, open, onOpenChange }: BackupHist
                                 <TableHead className="w-[180px]">{t("ui.backup.history.startTime")}</TableHead>
                                 <TableHead>{t("ui.backup.history.storage")}</TableHead>
                                 <TableHead>{t("ui.backup.history.status")}</TableHead>
-                                <TableHead>{t("ui.backup.history.fileSize")}</TableHead>
-                                <TableHead>{t("ui.backup.history.fileCount")}</TableHead>
+                                <TableHead>
+                                    {configType === "sync"
+                                        ? t("ui.backup.history.syncStats")
+                                        : t("ui.backup.history.backupStats")}
+                                </TableHead>
+                                <TableHead>{t("ui.backup.history.backupFile")}</TableHead>
                                 <TableHead className="max-w-[200px]">{t("ui.backup.history.message")}</TableHead>
                             </TableRow>
                         </TableHeader>
@@ -106,13 +126,36 @@ export function BackupHistoryDialog({ configId, open, onOpenChange }: BackupHist
                                                 "px-2 py-0.5 rounded-full font-medium inline-block",
                                                 item.status === 2 ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" :
                                                     item.status === 3 ? "bg-destructive/10 text-destructive dark:bg-destructive/20" :
-                                                        "bg-muted text-muted-foreground"
+                                                        item.status === 5 ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400" :
+                                                            "bg-muted text-muted-foreground"
                                             )}>
                                                 {t(`ui.backup.status.${item.status}`)}
                                             </span>
                                         </TableCell>
-                                        <TableCell>{formatFileSize(item.fileSize)}</TableCell>
-                                        <TableCell>{item.fileCount || 0}</TableCell>
+                                        <TableCell>
+                                            <div className="flex flex-col gap-0.5">
+                                                <span>{formatFileSize(item.fileSize)}</span>
+                                                <span className="text-muted-foreground opacity-70 text-[10px]">{item.fileCount || 0} {t("ui.backup.fileCountUnit")}</span>
+                                            </div>
+                                        </TableCell>
+                                        <TableCell className="max-w-[150px] truncate">
+                                            {item.type !== 'sync' && item.filePath ? (
+                                                (() => {
+                                                    const url = getFileUrl(item.storageId, item.filePath);
+                                                    const fileName = item.filePath.split('/').pop() || item.filePath;
+                                                    return url ? (
+                                                        <a href={url} target="_blank" rel="noopener noreferrer" className="text-primary hover:text-blue-500 hover:underline flex items-center gap-1 transition-colors" title={item.filePath}>
+                                                            <span className="truncate">{fileName}</span>
+                                                            <ExternalLink className="h-3 w-3 shrink-0 opacity-50" />
+                                                        </a>
+                                                    ) : (
+                                                        <span title={item.filePath} className="truncate inline-block max-w-full">{fileName}</span>
+                                                    );
+                                                })()
+                                            ) : (
+                                                <span className="text-muted-foreground">-</span>
+                                            )}
+                                        </TableCell>
                                         <TableCell className="max-w-[200px] truncate opacity-70" title={item.message}>
                                             {item.message || "-"}
                                         </TableCell>

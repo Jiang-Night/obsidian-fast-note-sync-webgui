@@ -13,7 +13,7 @@ export function getBrowserLang(): string {
   if (localStorage.getItem("lang")) {
     lang = localStorage.getItem("lang")
   } else {
-    lang = navigator.language.toLowerCase()
+    lang = navigator.language
   }
   let to = lang?.toString()
 
