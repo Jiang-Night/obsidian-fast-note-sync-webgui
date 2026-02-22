@@ -1,4 +1,4 @@
-import { Plus, Pencil, Trash2, Check, Cloud, HardDrive, Share2, Server, DatabaseBackup, Play, Calendar, ShieldCheck, Clock, RefreshCw, History, CheckCircle2, AlertCircle, XCircle, Loader2 } from "lucide-react";
+import { Plus, Pencil, Trash2, Check, Cloud, HardDrive, Share2, Server, DatabaseBackup, Play, ShieldCheck, Clock, RefreshCw, History as HistoryIcon, CheckCircle2, AlertCircle, XCircle, Loader2 } from "lucide-react";
 import { BackupHistoryDialog } from "@/components/layout/backup-history-dialog";
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { useStorageHandle } from "@/components/api-handle/storage-handle";
@@ -176,7 +176,7 @@ export function SyncBackup() {
                                                 }}
                                                 title={t("ui.backup.history.title")}
                                             >
-                                                <History className="h-3 w-3" />
+                                                <HistoryIcon className="h-3 w-3" />
                                             </Button>
                                             <Button
                                                 variant="ghost"

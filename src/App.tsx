@@ -17,7 +17,7 @@ const SystemSettings = lazy(() => import("@/components/layout/system-settings").
 const VaultList = lazy(() => import("@/components/vault/vault-list").then(m => ({ default: m.VaultList })));
 const AuthForm = lazy(() => import("@/components/user/auth-form").then(m => ({ default: m.AuthForm })));
 const SyncBackup = lazy(() => import("@/components/layout/sync-backup").then(m => ({ default: m.SyncBackup })));
-const ComingSoon = lazy(() => import("@/components/common/ComingSoon").then(m => ({ default: m.ComingSoon })));
+const GitAutomation = lazy(() => import("@/components/layout/git-automation").then(m => ({ default: m.GitAutomation })));
 
 // 加载占位符
 const PageLoading = () => (
@@ -281,12 +281,7 @@ function App() {
         return <SyncBackup />
 
       case "git":
-        return (
-          <ComingSoon
-            title={t("ui.nav.menuGit")}
-            description={t("ui.common.comingSoonDescription")}
-          />
-        )
+        return <GitAutomation />
 
       case "vaults":
       default:

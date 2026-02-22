@@ -373,4 +373,14 @@ export default {
     "ui.backup.history.backupFile": "Backup File",
     "ui.backup.history.message": "Message",
     "ui.backup.history.noData": "No task records yet",
+
+    // --- ui.git ---
+    "ui.git.title": "Git Automation Management",
+    "ui.git.config": "Git Repository Config",
+    "ui.git.status": "Git Status Overview",
+    "ui.git.history": "Automation History",
+    "ui.git.comingSoon": "Git automation feature is under development...",
+    "ui.git.configDesc": "Configure your Git repository URL, branch, and authentication.",
+    "ui.git.statusDesc": "Real-time monitoring of commit status and sync progress.",
+    "ui.git.historyDesc": "View recent automatic commits, pushes, and pulls.",
 };

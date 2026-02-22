@@ -2,6 +2,7 @@ import { BackupConfig, BackupHistory, BackupConfigRequest } from "@/lib/types/ba
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { addCacheBuster } from "@/lib/utils/cache-buster";
 import { toast } from "@/components/common/Toast";
+import { useTranslation } from "react-i18next";
 import { getBrowserLang } from "@/i18n/utils";
 import { useCallback, useMemo } from "react";
 import env from "@/env.ts";
@@ -11,6 +12,7 @@ import env from "@/env.ts";
  * 备份管理 API 处理钩子
  */
 export function useBackupHandle() {
+    const { t } = useTranslation()
     const { openConfirmDialog } = useConfirmDialog()
     const token = localStorage.getItem("token")!
 
@@ -40,9 +42,9 @@ export function useBackupHandle() {
                 openConfirmDialog(res.message + ": " + res.details, "error")
             }
         } catch (error) {
-            openConfirmDialog("获取备份配置列表失败: " + error, "error")
+            openConfirmDialog(t("api.backup.configList.error") + ": " + error, "error")
         }
-    }, [token, openConfirmDialog])
+    }, [token, openConfirmDialog, t])
 
     /**
      * 删除备份配置
@@ -64,14 +66,14 @@ export function useBackupHandle() {
 
             const res = await response.json()
             if (res.code < 100 && res.code > 0) {
-                toast.success("删除成功")
+                toast.success(res.message || t("api.backup.delete.success"))
             } else {
                 openConfirmDialog(res.message + ": " + res.details, "error")
             }
         } catch (error) {
-            openConfirmDialog("删除备份配置失败: " + error, "error")
+            openConfirmDialog(t("api.backup.delete.error") + ": " + error, "error")
         }
-    }, [token, openConfirmDialog])
+    }, [token, openConfirmDialog, t])
 
     /**
      * 新增或更新备份配置
@@ -95,15 +97,15 @@ export function useBackupHandle() {
 
             const res = await response.json()
             if (res.code < 100 && res.code > 0) {
-                toast.success(res.message || "保存成功")
+                toast.success(res.message || t("api.backup.save.success"))
                 callback(res.data)
             } else {
                 openConfirmDialog(res.message + ": " + res.details, "error")
             }
         } catch (error) {
-            openConfirmDialog("保存备份配置失败: " + error, "error")
+            openConfirmDialog(t("api.backup.save.error") + ": " + error, "error")
         }
-    }, [token, openConfirmDialog])
+    }, [token, openConfirmDialog, t])
 
     /**
      * 手动触发备份执行
@@ -127,21 +129,15 @@ export function useBackupHandle() {
 
             const res = await response.json()
             if (res.code < 100 && res.code > 0) {
-                toast.success(res.message || "手动触发成功")
+                toast.success(res.message || t("api.backup.execute.success"))
             } else {
                 openConfirmDialog(res.message + ": " + res.details, "error")
             }
         } catch (error) {
-            openConfirmDialog("触发备份失败: " + error, "error")
+            openConfirmDialog(t("api.backup.execute.error") + ": " + error, "error")
         }
-    }, [token, openConfirmDialog])
+    }, [token, openConfirmDialog, t])
 
-    /**
-     * 获取备份历史记录
-     */
-    /**
-     * 获取备份历史记录
-     */
     /**
      * 获取备份历史记录
      */
@@ -181,9 +177,9 @@ export function useBackupHandle() {
                 openConfirmDialog(res.message + ": " + res.details, "error")
             }
         } catch (error) {
-            openConfirmDialog("获取备份历史失败: " + error, "error")
+            openConfirmDialog(t("api.backup.history.error") + ": " + error, "error")
         }
-    }, [token, openConfirmDialog])
+    }, [token, openConfirmDialog, t])
 
     return useMemo(() => ({
         handleBackupConfigList,

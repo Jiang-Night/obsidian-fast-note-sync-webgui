@@ -1,9 +1,13 @@
-import * as z from "zod"
-import { StorageTypeValue, type StorageType } from "@/lib/types/storage"
+import { StorageTypeValue, type StorageType } from "@/lib/types/storage";
+import * as z from "zod";
 
-export const storageSchema = z.object({
+
+/**
+ * 云存储配置校验 Schema（工厂函数，支持 i18n）
+ */
+export const createStorageSchema = (t: (key: string) => string) => z.object({
   type: z.enum(StorageTypeValue as [StorageType], {
-    required_error: "请选择存储类型",
+    required_error: t("ui.validation.storage.typeRequired"),
   }),
   endpoint: z.string().optional(),
   region: z.string().optional(),
@@ -14,7 +18,7 @@ export const storageSchema = z.object({
   user: z.string().optional(),
   password: z.string().optional(),
   customPath: z.string().optional(),
-  accessUrlPrefix: z.string().min(1, "访问地址前缀不能为空"),
+  accessUrlPrefix: z.string().min(1, t("ui.validation.storage.accessUrlPrefixRequired")),
   isEnabled: z
     .union([z.boolean(), z.number()])
     .transform((val) => Boolean(val))
@@ -22,4 +26,4 @@ export const storageSchema = z.object({
     .optional(),
 })
 
-export type StorageFormData = z.infer<typeof storageSchema>
+export type StorageFormData = z.infer<ReturnType<typeof createStorageSchema>>

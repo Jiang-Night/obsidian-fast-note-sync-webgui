@@ -1,6 +1,6 @@
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useStorageHandle } from "@/components/api-handle/storage-handle";
-import { storageSchema } from "@/lib/validations/storage-schema";
+import { createStorageSchema } from "@/lib/validations/storage-schema";
 import type { StorageConfig } from "@/lib/types/storage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -8,8 +8,8 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
 
 
 interface StorageFormProps {
@@ -33,8 +33,10 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
 
     const { handleStorageUpdate } = useStorageHandle()
 
+    const schema = useMemo(() => createStorageSchema(t), [t])
+
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<StorageConfig>({
-        resolver: zodResolver(storageSchema),
+        resolver: zodResolver(schema),
         defaultValues: config || { isEnabled: true },
     })
 

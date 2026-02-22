@@ -1,5 +1,6 @@
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { StorageConfig } from "@/lib/types/storage";
+import { useTranslation } from "react-i18next";
 import { useCallback } from "react";
 import env from "@/env.ts";
 
@@ -8,6 +9,7 @@ import env from "@/env.ts";
  * 存储配置 API 处理钩子
  */
 export function useStorageHandle() {
+    const { t } = useTranslation()
     const { openConfirmDialog } = useConfirmDialog()
     const token = localStorage.getItem("token")!
 
@@ -44,9 +46,9 @@ export function useStorageHandle() {
                 openConfirmDialog(res.message + ": " + res.details, "error")
             }
         } catch (error) {
-            openConfirmDialog("获取存储配置列表失败: " + error, "error")
+            openConfirmDialog(t("api.storage.list.error") + ": " + error, "error")
         }
-    }, [token, openConfirmDialog])
+    }, [token, openConfirmDialog, t])
 
     /**
      * 删除存储配置
@@ -70,12 +72,12 @@ export function useStorageHandle() {
 
             const res = await response.json()
             if (res.code < 100 && res.code > 0) {
-                openConfirmDialog("删除成功", "success")
+                openConfirmDialog(res.message || t("api.storage.delete.success"), "success")
             } else {
                 openConfirmDialog(res.message + ": " + res.details, "error")
             }
         } catch (error) {
-            openConfirmDialog("删除存储配置失败: " + error, "error")
+            openConfirmDialog(t("api.storage.delete.error") + ": " + error, "error")
         }
     }
 
@@ -113,7 +115,7 @@ export function useStorageHandle() {
                 openConfirmDialog(res.message + ": " + res.details, "error")
             }
         } catch (error) {
-            openConfirmDialog("保存存储配置失败: " + error, "error")
+            openConfirmDialog(t("api.storage.save.error") + ": " + error, "error")
         }
     }
 
@@ -143,7 +145,7 @@ export function useStorageHandle() {
                 openConfirmDialog(res.message + ": " + res.details, "error")
             }
         } catch (error) {
-            openConfirmDialog("获取存储类型失败: " + error, "error")
+            openConfirmDialog(t("api.storage.types.error") + ": " + error, "error")
         }
     }
 
