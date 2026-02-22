@@ -383,4 +383,8 @@ export default {
     "ui.git.configDesc": "Configure your Git repository URL, branch, and authentication.",
     "ui.git.statusDesc": "Real-time monitoring of commit status and sync progress.",
     "ui.git.historyDesc": "View recent automatic commits, pushes, and pulls.",
+    "ui.git.validate.title": "Test Connection",
+    "ui.git.validate.loading": "Testing...",
+    "api.git.validate.success": "Git repository connection test successful",
+    "api.git.validate.error": "Git repository connection test failed",
 };

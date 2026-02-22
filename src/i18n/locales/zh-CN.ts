@@ -379,7 +379,8 @@ export default {
 
     // --- ui.git ---
     "ui.git.title": "Git 自动化管理",
-    "ui.git.config": "Git 仓库配置 (不支持 ssh 地址 )",
+    "ui.git.config": "Git 仓库配置",
+    "ui.git.repoUrl": "Git 仓库地址 (不支持 ssh 地址)",
     "ui.git.status": "Git 状态概览",
     "ui.git.history": "自动化提交记录",
     "ui.git.comingSoon": "Git 自动化功能开发中...",
@@ -417,6 +418,8 @@ export default {
     "ui.git.status.2": "成功",
     "ui.git.status.3": "失败",
     "ui.git.status.4": "已停止",
+    "ui.git.validate.title": "检测连接",
+    "ui.git.validate.loading": "检测中...",
 
     // --- ui.validation ---
     "ui.validation.git.vaultRequired": "请选择笔记本",
@@ -440,6 +443,8 @@ export default {
     "api.git.clean.success": "清理工作区成功",
     "api.git.clean.error": "清理工作区失败",
     "api.git.history.error": "获取历史记录失败",
+    "api.git.validate.success": "Git 仓库连接测试成功",
+    "api.git.validate.error": "Git 仓库连接测试失败",
     "api.backup.configList.error": "获取备份配置列表失败",
     "api.backup.delete.success": "删除成功",
     "api.backup.delete.error": "删除备份配置失败",

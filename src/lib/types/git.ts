@@ -33,6 +33,16 @@ export interface GitSyncConfigRequest {
 }
 
 /**
+ * Git 同步验证请求 (Request)
+ */
+export interface GitSyncValidateRequest {
+    repoUrl: string
+    branch?: string
+    username?: string
+    password?: string
+}
+
+/**
  * Git 同步历史记录 (DTO)
  */
 export interface GitSyncHistoryDTO {

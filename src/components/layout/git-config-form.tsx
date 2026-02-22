@@ -2,6 +2,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import type { GitSyncConfigRequest, GitSyncConfigDTO } from "@/lib/types/git";
 import { createGitSyncSchema } from "@/lib/validations/git-sync-schema";
 import { useGitHandle } from "@/components/api-handle/git-handle";
+import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
@@ -9,7 +10,6 @@ import { useTranslation } from "react-i18next";
 import { VaultType } from "@/lib/types/vault";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { Eye, EyeOff } from "lucide-react";
 import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -30,13 +30,14 @@ interface GitConfigFormProps {
  */
 export function GitConfigForm({ config, vaults, onSubmit, onCancel }: GitConfigFormProps) {
     const { t } = useTranslation()
-    const { handleGitSyncUpdate } = useGitHandle()
+    const { handleGitSyncUpdate, handleGitSyncValidate } = useGitHandle()
 
     const [showPassword, setShowPassword] = useState(false)
+    const [isValidating, setIsValidating] = useState(false)
 
     const schema = useMemo(() => createGitSyncSchema(t), [t])
 
-    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue } = useForm<GitSyncConfigRequest>({
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue, getValues } = useForm<GitSyncConfigRequest>({
         resolver: zodResolver(schema),
         defaultValues: config ? {
             id: config.id,
@@ -46,13 +47,13 @@ export function GitConfigForm({ config, vaults, onSubmit, onCancel }: GitConfigF
             username: config.username,
             password: config.password,
             delay: config.delay,
-            retentionDays: config.retentionDays ?? 0,
+            retentionDays: config.retentionDays ?? 30,
             isEnabled: config.isEnabled,
         } : {
             isEnabled: true,
             branch: "main",
             delay: 10,
-            retentionDays: 0,
+            retentionDays: 30,
         },
     })
 
@@ -95,7 +96,7 @@ export function GitConfigForm({ config, vaults, onSubmit, onCancel }: GitConfigF
 
                 {/* 仓库协议地址 */}
                 <div className="md:col-span-2 space-y-1.5">
-                    <Label htmlFor="repoUrl" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.git.config")}</Label>
+                    <Label htmlFor="repoUrl" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.git.repoUrl")}</Label>
                     <Input id="repoUrl" placeholder="https://github.com/user/repo.git" autoComplete="off" className="bg-background border-input" {...register("repoUrl")} />
                     {errors.repoUrl && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.repoUrl.message}</p>}
                 </div>
@@ -168,11 +169,35 @@ export function GitConfigForm({ config, vaults, onSubmit, onCancel }: GitConfigF
 
                 <div className="flex items-center gap-3">
                     {onCancel && (
-                        <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting}>
+                        <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting || isValidating}>
                             {t("ui.common.cancel")}
                         </Button>
                     )}
-                    <Button type="submit" size="sm" className="px-8 rounded-lg shadow-sm" disabled={isSubmitting}>
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="px-6 rounded-lg"
+                        disabled={isSubmitting || isValidating}
+                        onClick={async () => {
+                            const values = getValues()
+                            if (!values.repoUrl) {
+                                return
+                            }
+                            setIsValidating(true)
+                            await handleGitSyncValidate({
+                                repoUrl: values.repoUrl,
+                                branch: values.branch,
+                                username: values.username,
+                                password: values.password,
+                            }, () => { })
+                            setIsValidating(false)
+                        }}
+                    >
+                        <ShieldCheck className="h-4 w-4 mr-1.5" />
+                        {isValidating ? t("ui.git.validate.loading") : t("ui.git.validate.title")}
+                    </Button>
+                    <Button type="submit" size="sm" className="px-8 rounded-lg shadow-sm" disabled={isSubmitting || isValidating}>
                         {config ? t("ui.common.save") : t("ui.common.add")}
                     </Button>
                 </div>

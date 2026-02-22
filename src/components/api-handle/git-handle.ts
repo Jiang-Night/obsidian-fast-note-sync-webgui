@@ -1,4 +1,4 @@
-import { GitSyncConfigDTO, GitSyncConfigRequest, GitSyncHistoryDTO } from "@/lib/types/git";
+import { GitSyncConfigDTO, GitSyncConfigRequest, GitSyncValidateRequest, GitSyncHistoryDTO } from "@/lib/types/git";
 import { toast } from "@/components/common/Toast";
 import { useTranslation } from "react-i18next";
 import { getBrowserLang } from "@/i18n/utils";
@@ -206,6 +206,36 @@ export function useGitHandle() {
         }
     }, [getHeaders, t]);
 
+    /**
+     * 验证 Git 同步参数
+     * Validate git sync parameters
+     */
+    const handleGitSyncValidate = useCallback(async (params: GitSyncValidateRequest, callback: () => void) => {
+        try {
+            const response = await fetch(`${env.API_URL}/api/git-sync/validate`, {
+                method: "POST",
+                headers: getHeaders(),
+                body: JSON.stringify(params),
+            });
+
+            if (!response.ok) {
+                throw new Error(t("api.git.validate.error"));
+            }
+
+            const res = await response.json();
+            if (res.code > 0 && res.code <= 200) {
+                toast.success(t("api.git.validate.success"));
+                callback();
+            } else {
+                const detail = res.details || res.message || "";
+                toast.error(detail ? `${t("api.git.validate.error")}: ${detail}` : t("api.git.validate.error"));
+            }
+        } catch (error) {
+            console.error("GitSyncValidate error:", error);
+            toast.error(error instanceof Error ? error.message : t("api.git.validate.error"));
+        }
+    }, [getHeaders, t]);
+
     return useMemo(() => ({
         handleGitSyncList,
         handleGitSyncUpdate,
@@ -213,6 +243,7 @@ export function useGitHandle() {
         handleGitSyncExecute,
         handleGitSyncClean,
         handleGitSyncHistories,
+        handleGitSyncValidate,
     }), [
         handleGitSyncList,
         handleGitSyncUpdate,
@@ -220,5 +251,6 @@ export function useGitHandle() {
         handleGitSyncExecute,
         handleGitSyncClean,
         handleGitSyncHistories,
+        handleGitSyncValidate,
     ]);
 }
