@@ -186,23 +186,23 @@ export function GitAutomation() {
                                             : "border-l-4 border-l-muted border-y-border border-r-border"
                                     )}
                                 >
-                                    <div className="flex items-center justify-between mb-3">
-                                        <div className="flex items-center gap-3">
-                                            <ShieldCheck className={cn("h-5 w-5", config.isEnabled ? "text-orange-500" : "text-muted-foreground")} />
-                                            <div>
-                                                <div className="flex items-center gap-2">
+                                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                                        <div className="flex items-center gap-3 min-w-0">
+                                            <ShieldCheck className={cn("h-5 w-5 shrink-0", config.isEnabled ? "text-orange-500" : "text-muted-foreground")} />
+                                            <div className="min-w-0">
+                                                <div className="flex items-center gap-2 flex-wrap">
                                                     <span className="text-[12px] px-1.5 py-0.5 bg-muted rounded font-mono text-muted-foreground">#{config.id}</span>
                                                     <span className="font-bold">{config.vault}</span>
                                                     <span className="text-[12px] px-1.5 py-0.5 bg-accent rounded font-mono text-muted-foreground">
                                                         {config.branch}
                                                     </span>
                                                 </div>
-                                                <p className="text-[10px] text-muted-foreground font-mono truncate max-w-[200px] sm:max-w-[300px]">
+                                                <a href={config.repoUrl} target="_blank" rel="noopener noreferrer" className="text-[10px] text-muted-foreground hover:text-primary font-mono truncate max-w-[200px] sm:max-w-[300px] block hover:underline">
                                                     {config.repoUrl}
-                                                </p>
+                                                </a>
                                             </div>
                                         </div>
-                                        <div className="flex items-center gap-1">
+                                        <div className="flex items-center gap-1 flex-wrap shrink-0">
                                             <Button
                                                 variant="ghost"
                                                 size="icon"
@@ -250,13 +250,11 @@ export function GitAutomation() {
                                     </div>
 
                                     <div className="flex items-center justify-between pt-2 border-t border-border/50 text-[11px]">
-                                        <div className="flex items-center gap-2 text-muted-foreground">
-                                            <Clock className="h-3 w-3" />
-                                            <span>{t("ui.git.lastCommit")}: {config.lastSyncTime || t("ui.git.neverRun")}</span>
-                                            <RefreshCw className="h-3 w-3" />
-                                            <span>{t("ui.git.checkTime")}: {config.updatedAt || t("ui.git.neverRun")}</span>
+                                        <div className="flex items-center gap-x-2 gap-y-1 text-muted-foreground flex-wrap">
+                                            <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{t("ui.git.lastCommit")}: {config.lastSyncTime || t("ui.git.neverRun")}</span>
+                                            <span className="flex items-center gap-1"><RefreshCw className="h-3 w-3" />{t("ui.git.checkTime")}: {config.updatedAt || t("ui.git.neverRun")}</span>
                                         </div>
-                                        <div className="flex items-center gap-1.5 font-medium">
+                                        <div className="flex items-center gap-1.5 font-medium whitespace-nowrap shrink-0">
                                             {config.lastStatus === 1 ? (
                                                 <Loader2 className="h-3 w-3 animate-spin text-orange-500" />
                                             ) : config.lastStatus === 2 ? (

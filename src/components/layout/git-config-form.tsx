@@ -4,13 +4,13 @@ import { createGitSyncSchema } from "@/lib/validations/git-sync-schema";
 import { useGitHandle } from "@/components/api-handle/git-handle";
 import { Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useMemo, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { VaultType } from "@/lib/types/vault";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 
@@ -34,6 +34,18 @@ export function GitConfigForm({ config, vaults, onSubmit, onCancel }: GitConfigF
 
     const [showPassword, setShowPassword] = useState(false)
     const [isValidating, setIsValidating] = useState(false)
+
+    // ESC 键取消
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape" && onCancel) {
+                e.preventDefault()
+                onCancel()
+            }
+        }
+        document.addEventListener("keydown", handleKeyDown)
+        return () => document.removeEventListener("keydown", handleKeyDown)
+    }, [onCancel])
 
     const schema = useMemo(() => createGitSyncSchema(t), [t])
 
@@ -156,7 +168,7 @@ export function GitConfigForm({ config, vaults, onSubmit, onCancel }: GitConfigF
 
             <div className="flex items-center justify-between pt-3 border-t border-border">
                 {/* 是否启用 */}
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 whitespace-nowrap shrink-0">
                     <Checkbox
                         id="isEnabled"
                         name="isEnabled"
@@ -167,7 +179,7 @@ export function GitConfigForm({ config, vaults, onSubmit, onCancel }: GitConfigF
                     <Label htmlFor="isEnabled" className="text-sm font-medium text-foreground">{t("ui.common.isEnabled")}</Label>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-wrap justify-end">
                     {onCancel && (
                         <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting || isValidating}>
                             {t("ui.common.cancel")}

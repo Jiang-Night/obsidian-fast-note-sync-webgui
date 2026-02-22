@@ -42,6 +42,18 @@ export function BackupForm({ config, storages, onSubmit, onCancel }: BackupFormP
         handleVaultList(setVaults);
     }, [handleVaultList]);
 
+    // ESC 键取消
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape" && onCancel) {
+                e.preventDefault()
+                onCancel()
+            }
+        }
+        document.addEventListener("keydown", handleKeyDown)
+        return () => document.removeEventListener("keydown", handleKeyDown)
+    }, [onCancel])
+
     const schema = createBackupConfigSchema(t);
 
     const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm<BackupFormData>({

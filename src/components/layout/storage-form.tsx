@@ -3,12 +3,12 @@ import { useStorageHandle } from "@/components/api-handle/storage-handle";
 import { createStorageSchema } from "@/lib/validations/storage-schema";
 import type { StorageConfig } from "@/lib/types/storage";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useMemo, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 
 
@@ -39,6 +39,18 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
         resolver: zodResolver(schema),
         defaultValues: config || { isEnabled: true },
     })
+
+    // ESC 键取消
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape" && onCancel) {
+                e.preventDefault()
+                onCancel()
+            }
+        }
+        document.addEventListener("keydown", handleKeyDown)
+        return () => document.removeEventListener("keydown", handleKeyDown)
+    }, [onCancel])
 
     const onFormSubmit = (data: StorageConfig) => {
         if (config) {

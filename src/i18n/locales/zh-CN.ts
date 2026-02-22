@@ -21,7 +21,7 @@ export default {
     "ui.common.warning": "警告",
     "ui.common.info": "信息",
     "ui.common.total": "总计",
-    "ui.common.isEnabled": "已启用",
+    "ui.common.isEnabled": "启用",
     "ui.common.isDisabled": "已禁用",
     "ui.common.switchLanguage": "切换语言",
     "ui.common.comingSoon": "敬请期待...",
