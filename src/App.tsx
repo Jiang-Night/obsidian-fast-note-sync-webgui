@@ -3,10 +3,12 @@ import { useVaultHandle } from "@/components/api-handle/vault-handle";
 import { useUserHandle } from "@/components/api-handle/user-handle";
 import { useAuth } from "@/components/context/auth-context";
 import { AppLayout } from "@/components/layout/AppLayout";
+import { addCacheBuster } from "@/lib/utils/cache-buster";
 import { useUrlSync } from "@/hooks/use-url-sync";
 import { toast } from "@/components/common/Toast";
 import { useAppStore } from "@/stores/app-store";
 import { useTranslation } from "react-i18next";
+import { getBrowserLang } from "@/i18n/utils";
 import env from "@/env.ts";
 
 
@@ -134,7 +136,11 @@ function App() {
     const fetchConfig = async () => {
       try {
         const apiUrl = env.API_URL.endsWith("/") ? env.API_URL.slice(0, -1) : env.API_URL
-        const response = await fetch(`${apiUrl}/api/webgui/config`)
+        const response = await fetch(addCacheBuster(`${apiUrl}/api/webgui/config`), {
+          headers: {
+            "Lang": getBrowserLang()
+          }
+        })
         if (response.ok && isMounted) {
           const res = await response.json()
           if (res.code > 0 && res.data) {

@@ -171,7 +171,7 @@ export function GitAutomation() {
 
                     <div className="flex flex-col gap-3">
                         {isLoading && configs.length === 0 ? (
-                            <div className="py-12 flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed border-border/50 rounded-xl bg-muted/20">
+                            <div className="h-[220px] flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed border-border/50 rounded-xl bg-muted/20">
                                 <Loader2 className="h-8 w-8 animate-spin mb-2 opacity-50" />
                                 <p className="text-sm">{t("ui.git.loading")}</p>
                             </div>
@@ -280,7 +280,7 @@ export function GitAutomation() {
                                 </div>
                             ))
                         ) : (
-                            <div className="py-12 flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed border-border/50 rounded-xl bg-muted/20">
+                            <div className="h-[220px] flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed border-border/50 rounded-xl bg-muted/20">
                                 <GitBranch className="h-12 w-12 mb-3 opacity-20" />
                                 <p className="text-sm opacity-70 font-medium">{t("ui.git.noConfig")}</p>
                                 <Button variant="link" size="sm" onClick={() => setIsAdding(true)} className="mt-2">
@@ -319,7 +319,7 @@ export function GitAutomation() {
                     {/* 历史记录列表 */}
                     <div className="flex flex-col gap-2">
                         {isHistoryLoading && globalHistories.length === 0 ? (
-                            <div className="py-12 flex flex-col items-center justify-center text-muted-foreground">
+                            <div className="h-[220px] flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed border-border/50 rounded-xl bg-muted/20">
                                 <Loader2 className="h-8 w-8 animate-spin mb-2 opacity-50" />
                                 <p className="text-sm">{t("ui.common.loading")}</p>
                             </div>
@@ -409,7 +409,7 @@ export function GitAutomation() {
                                 )}
                             </>
                         ) : (
-                            <div className="py-12 flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed border-border/50 rounded-xl bg-muted/20">
+                            <div className="h-[220px] flex flex-col items-center justify-center text-muted-foreground border-2 border-dashed border-border/50 rounded-xl bg-muted/20">
                                 <History className="h-12 w-12 mb-3 opacity-10" />
                                 <p className="text-sm font-medium opacity-60">{t("ui.git.history.noData")}</p>
                             </div>

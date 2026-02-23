@@ -1,6 +1,6 @@
-import { GitBranch, UserPlus, HardDrive, Trash2, Clock, Shield, Loader2, Type, Lock, Save, Settings } from "lucide-react";
+import { GitBranch, UserPlus, HardDrive, Trash2, Clock, Shield, Loader2, Type, Lock, Save, Settings, Search, Info, Globe, Database, ShieldCheck, Cpu, LayoutDashboard, ChevronRight, HelpCircle, Github, Send } from "lucide-react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { addCacheBuster } from "@/lib/utils/cache-buster";
-import { useState, useEffect, useCallback } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/components/common/Toast";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import { getBrowserLang } from "@/i18n/utils";
 import env from "@/env.ts";
 
 import { VersionOverview } from "./version-overview";
+import { SupportList } from "./support-list";
 import { Overview } from "./overview";
 
 
@@ -133,28 +134,59 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pb-24 md:pb-4">
             {/* 左列 */}
             <div className="flex flex-col gap-4">
-                {isDashboard ? (
-                    /* 概况页左侧占位 Box */
-                    <div className="rounded-xl border border-border bg-card p-6 min-h-[400px] flex items-center justify-center custom-shadow">
-                        <div className="text-muted-foreground text-sm italic">{t("ui.common.comingSoon")}</div>
-                    </div>
-                ) : (
-                    <>
-                        {/* 版本信息 */}
-                        <VersionOverview />
+                {/* 版本信息 */}
+                <VersionOverview />
 
-                        {/* 服务器系统信息 */}
-                        <Overview />
-                    </>
+                {/* 服务器系统信息 */}
+                {!isDashboard && <Overview />}
+
+                {/* 看板模式下的 帮助与建议 Box */}
+                {isDashboard && (
+                    <div className="rounded-xl border border-border bg-card p-6 space-y-4 custom-shadow">
+                        <h2 className="text-lg font-bold text-card-foreground flex items-center gap-2">
+                            <HelpCircle className="h-5 w-5" />
+                            {t("ui.common.helpAndSupport")}
+                        </h2>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            <a
+                                href="https://github.com/haierkeys/fast-note-sync-service/issues/new"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-primary/5 border border-border/50 hover:border-primary/20 transition-all group"
+                            >
+                                <div className="p-2 rounded-lg bg-background border border-border group-hover:border-primary/20 transition-colors">
+                                    <Github className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-sm font-medium truncate">{t("ui.common.githubIssue")}</p>
+                                    <p className="text-xs text-muted-foreground truncate">{t("ui.common.githubIssueDesc")}</p>
+                                </div>
+                            </a>
+                            <a
+                                href="https://t.me/obsidian_users"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-primary/5 border border-border/50 hover:border-primary/20 transition-all group"
+                            >
+                                <div className="p-2 rounded-lg bg-background border border-border group-hover:border-primary/20 transition-colors">
+                                    <Send className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                                </div>
+                                <div className="min-w-0">
+                                    <p className="text-sm font-medium truncate">{t("ui.common.telegramGroup")}</p>
+                                    <p className="text-xs text-muted-foreground truncate">{t("ui.common.telegramGroupDesc")}</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
                 )}
             </div>
 
             {/* 右列 */}
             <div className="flex flex-col gap-4">
                 {isDashboard ? (
-                    /* 概况页右侧占位 Box */
-                    <div className="rounded-xl border border-border bg-card p-6 min-h-[400px] flex items-center justify-center custom-shadow">
-                        <div className="text-muted-foreground text-sm italic">{t("ui.common.comingSoon")}</div>
+                    /* 概况页右侧支持列表 Box */
+                    <div className="rounded-xl border border-border bg-card p-4 custom-shadow">
+                        <SupportList />
                     </div>
                 ) : config ? (
                     <>

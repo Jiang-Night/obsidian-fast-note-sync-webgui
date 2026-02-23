@@ -1,4 +1,5 @@
 import { GitSyncConfigDTO, GitSyncConfigRequest, GitSyncValidateRequest, GitSyncHistoryDTO } from "@/lib/types/git";
+import { addCacheBuster } from "@/lib/utils/cache-buster";
 import { toast } from "@/components/common/Toast";
 import { useTranslation } from "react-i18next";
 import { getBrowserLang } from "@/i18n/utils";
@@ -30,7 +31,7 @@ export function useGitHandle() {
      */
     const handleGitSyncList = useCallback(async (callback: (data: GitSyncConfigDTO[]) => void) => {
         try {
-            const response = await fetch(`${env.API_URL}/api/git-sync/configs`, {
+            const response = await fetch(addCacheBuster(`${env.API_URL}/api/git-sync/configs`), {
                 method: "GET",
                 headers: getHeaders(),
             });
@@ -56,7 +57,7 @@ export function useGitHandle() {
      */
     const handleGitSyncUpdate = useCallback(async (config: GitSyncConfigRequest, callback: (res: GitSyncConfigDTO) => void) => {
         try {
-            const response = await fetch(`${env.API_URL}/api/git-sync/config`, {
+            const response = await fetch(addCacheBuster(`${env.API_URL}/api/git-sync/config`), {
                 method: "POST",
                 headers: getHeaders(),
                 body: JSON.stringify(config),
@@ -84,7 +85,7 @@ export function useGitHandle() {
      */
     const handleGitSyncDelete = useCallback(async (id: number, callback: () => void) => {
         try {
-            const response = await fetch(`${env.API_URL}/api/git-sync/config?id=${id}`, {
+            const response = await fetch(addCacheBuster(`${env.API_URL}/api/git-sync/config?id=${id}`), {
                 method: "DELETE",
                 headers: getHeaders(false),
             });
@@ -111,7 +112,7 @@ export function useGitHandle() {
      */
     const handleGitSyncExecute = useCallback(async (id: number, callback: () => void) => {
         try {
-            const response = await fetch(`${env.API_URL}/api/git-sync/config/execute`, {
+            const response = await fetch(addCacheBuster(`${env.API_URL}/api/git-sync/config/execute`), {
                 method: "POST",
                 headers: getHeaders(),
                 body: JSON.stringify({ id }),
@@ -139,7 +140,7 @@ export function useGitHandle() {
      */
     const handleGitSyncClean = useCallback(async (id: number, callback: () => void) => {
         try {
-            const response = await fetch(`${env.API_URL}/api/git-sync/config/clean?configId=${id}`, {
+            const response = await fetch(addCacheBuster(`${env.API_URL}/api/git-sync/config/clean?configId=${id}`), {
                 method: "DELETE",
                 headers: getHeaders(false),
             });
@@ -182,7 +183,7 @@ export function useGitHandle() {
             if (configId !== undefined) {
                 params.set("configId", String(configId));
             }
-            const response = await fetch(`${env.API_URL}/api/git-sync/histories?${params.toString()}`, {
+            const response = await fetch(addCacheBuster(`${env.API_URL}/api/git-sync/histories?${params.toString()}`), {
                 method: "GET",
                 headers: getHeaders(false),
             });
@@ -212,7 +213,7 @@ export function useGitHandle() {
      */
     const handleGitSyncValidate = useCallback(async (params: GitSyncValidateRequest, callback: () => void) => {
         try {
-            const response = await fetch(`${env.API_URL}/api/git-sync/validate`, {
+            const response = await fetch(addCacheBuster(`${env.API_URL}/api/git-sync/validate`), {
                 method: "POST",
                 headers: getHeaders(),
                 body: JSON.stringify(params),

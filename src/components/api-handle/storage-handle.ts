@@ -1,6 +1,8 @@
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
+import { addCacheBuster } from "@/lib/utils/cache-buster";
 import { StorageConfig } from "@/lib/types/storage";
 import { useTranslation } from "react-i18next";
+import { getBrowserLang } from "@/i18n/utils";
 import { useCallback } from "react";
 import env from "@/env.ts";
 
@@ -14,24 +16,17 @@ export function useStorageHandle() {
     const token = localStorage.getItem("token")!
 
     /**
-     * 获取当前语言
-     */
-    const getLang = () => {
-        return localStorage.getItem("i18nextLng") || "zh-CN"
-    }
-
-    /**
      * 获取存储配置列表
      */
     const handleStorageList = useCallback(async (callback: (list: StorageConfig[]) => void) => {
         try {
-            const response = await fetch(env.API_URL + "/api/storage?limit=100", {
+            const response = await fetch(addCacheBuster(env.API_URL + "/api/storage?limit=100"), {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                     Domain: window.location.origin,
-                    Token: token,
-                    Lang: getLang(),
+                    Lang: getBrowserLang(),
                 },
             })
 
@@ -55,14 +50,14 @@ export function useStorageHandle() {
      */
     const handleStorageDelete = async (id: string) => {
         try {
-            const response = await fetch(env.API_URL + "/api/storage", {
+            const response = await fetch(addCacheBuster(env.API_URL + "/api/storage"), {
                 method: "DELETE",
                 body: JSON.stringify({ id }),
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                     Domain: window.location.origin,
-                    Token: token,
-                    Lang: getLang(),
+                    Lang: getBrowserLang(),
                 },
             })
 
@@ -91,14 +86,14 @@ export function useStorageHandle() {
                 isEnabled: data.isEnabled ? 1 : 0
             }
 
-            const response = await fetch(env.API_URL + "/api/storage", {
+            const response = await fetch(addCacheBuster(env.API_URL + "/api/storage"), {
                 method: "POST",
                 body: JSON.stringify(formData),
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                     Domain: window.location.origin,
-                    Token: token,
-                    Lang: getLang(),
+                    Lang: getBrowserLang(),
                 },
             })
 
@@ -124,13 +119,13 @@ export function useStorageHandle() {
      */
     const handleStorageTypes = async (callback: (types: string[]) => void) => {
         try {
-            const response = await fetch(env.API_URL + "/api/storage/enabled_types", {
+            const response = await fetch(addCacheBuster(env.API_URL + "/api/storage/enabled_types"), {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
                     Domain: window.location.origin,
-                    Token: token,
-                    Lang: getLang(),
+                    Lang: getBrowserLang(),
                 },
             })
 

@@ -29,11 +29,17 @@ export function VersionOverview() {
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     <GitBranch className="h-5 w-5 text-muted-foreground" />
-                    <span className="text-sm font-medium">{t("ui.system.githubRepo")}</span>
+                    <span className="text-sm font-medium">{t("ui.system.repo")}</span>
                 </div>
-                <a href="https://github.com/haierkeys/fast-note-sync-service" target="_blank" rel="noopener noreferrer" className="text-sm text-primary hover:underline truncate max-w-[200px] sm:max-w-none">
-                    fast-note-sync-service
-                </a>
+                <div className="flex items-center gap-2 text-sm">
+                    <a href="https://github.com/haierkeys/fast-note-sync-service" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate max-w-[150px] sm:max-w-none">
+                        {t("ui.system.githubRepo")}
+                    </a>
+                    <span className="text-muted-foreground">/</span>
+                    <a href="https://cnb.cool/haierkeys/fast-note-sync-service" target="_blank" rel="noopener noreferrer" className="text-primary hover:underline truncate max-w-[150px] sm:max-w-none">
+                        {t("ui.system.cnbMirror")}
+                    </a>
+                </div>
             </div>
             <div className="flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -62,7 +68,7 @@ export function VersionOverview() {
                             <div className="flex-1 space-y-2">
                                 <div className="flex items-center justify-between">
                                     <span className="text-sm font-medium">{(updateResult?.hasUpdate || versionInfo?.versionIsNew) ? t("ui.system.newVersionAvailable") : t("ui.system.alreadyLatest")}</span>
-                                    {(updateResult?.latestVersion || versionInfo?.versionNewName) && <code className="text-xs font-mono bg-background px-2 py-0.5 rounded">{updateResult?.latestVersion || versionInfo?.versionNewName}</code>}
+                                    {(updateResult?.latestVersion || versionInfo?.versionNewName || versionInfo?.version) && <code className="text-xs font-mono bg-background px-2 py-0.5 rounded">{updateResult?.latestVersion || versionInfo?.versionNewName || versionInfo?.version}</code>}
                                 </div>
                                 {(updateResult?.hasUpdate || versionInfo?.versionIsNew) && (updateResult?.releaseUrl || versionInfo?.versionNewLink) && (
                                     <a href={updateResult?.releaseUrl || versionInfo?.versionNewLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-sm text-primary hover:underline">

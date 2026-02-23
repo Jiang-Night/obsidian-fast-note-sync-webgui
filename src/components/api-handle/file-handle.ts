@@ -177,7 +177,8 @@ export function useFileHandle() {
     const getRawFileUrl = useCallback((vault: string, path: string, pathHash?: string) => {
         const apiUrl = env.API_URL.endsWith("/") ? env.API_URL.slice(0, -1) : env.API_URL;
         const currentToken = localStorage.getItem("token") || "";
-        let url = `${apiUrl}/api/file?vault=${encodeURIComponent(vault)}&path=${encodeURIComponent(path)}&token=${encodeURIComponent(currentToken)}`;
+        const lang = getBrowserLang();
+        let url = `${apiUrl}/api/file?vault=${encodeURIComponent(vault)}&path=${encodeURIComponent(path)}&token=${encodeURIComponent(currentToken)}&lang=${lang}`;
         if (pathHash) {
             url += `&pathHash=${pathHash}`;
         }

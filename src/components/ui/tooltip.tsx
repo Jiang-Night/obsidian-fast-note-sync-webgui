@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from "react"
-import { createPortal } from "react-dom"
-import { cn } from "@/lib/utils"
+import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { cn } from "@/lib/utils";
+
 
 type TooltipSide = "top" | "right" | "bottom" | "left"
 type TooltipAlign = "start" | "center" | "end"
@@ -9,7 +10,7 @@ interface TooltipProps {
   /** 触发元素 */
   children: React.ReactNode
   /** 提示文本内容 */
-  content: string
+  content: React.ReactNode
   /** 显示延迟（毫秒） */
   delay?: number
   /** 提示框位置 */
@@ -24,13 +25,6 @@ interface TooltipProps {
 
 /**
  * Tooltip - 优化的提示框组件
- *
- * 特性：
- * - 智能位置计算，支持四个方向
- * - Portal 渲染，避免 z-index 和溢出问题
- * - 完整的无障碍支持 (ARIA)
- * - 键盘支持 (ESC 关闭)
- * - 移动端友好
  */
 export function Tooltip({
   children,
@@ -44,7 +38,9 @@ export function Tooltip({
   const [isVisible, setIsVisible] = useState(false)
   const timerRef = useRef<number | null>(null)
   const triggerRef = useRef<HTMLDivElement>(null)
+  const tooltipRef = useRef<HTMLDivElement>(null)
   const [position, setPosition] = useState({ top: 0, left: 0 })
+  const [effectiveSide, setEffectiveSide] = useState<TooltipSide>(side)
 
   // 计算提示框位置
   useEffect(() => {
@@ -52,11 +48,23 @@ export function Tooltip({
       const rect = triggerRef.current.getBoundingClientRect()
       const offset = 8 // 提示框与触发元素的距离
 
+      let currentSide = side
+
+      // 如果指定了顶部显示，检查空间是否足够
+      if (side === "top") {
+        // 尝试获取提示框的大致高度（如果还没渲染，预估一个值，或者等下一次渲染调整）
+        const estimatedHeight = tooltipRef.current?.offsetHeight || 200
+        if (rect.top - estimatedHeight - offset < 0) {
+          currentSide = "bottom"
+        }
+      }
+      setEffectiveSide(currentSide)
+
       let top = 0
       let left = 0
 
       // 计算基础位置
-      switch (side) {
+      switch (currentSide) {
         case "top":
           top = rect.top - offset
           break
@@ -74,7 +82,7 @@ export function Tooltip({
       }
 
       // 计算对齐方式
-      if (side === "top" || side === "bottom") {
+      if (currentSide === "top" || currentSide === "bottom") {
         switch (align) {
           case "start":
             left = rect.left
@@ -137,7 +145,7 @@ export function Tooltip({
 
   // 计算 transform 原点
   const getTransformOrigin = () => {
-    switch (side) {
+    switch (effectiveSide) {
       case "top":
         return "bottom center"
       case "bottom":
@@ -151,7 +159,7 @@ export function Tooltip({
 
   // 计算 transform 位移
   const getTransform = () => {
-    switch (side) {
+    switch (effectiveSide) {
       case "top":
         return "translate(-50%, -100%)"
       case "bottom":
@@ -165,6 +173,7 @@ export function Tooltip({
 
   const tooltipElement = isVisible && !disabled ? (
     <div
+      ref={tooltipRef}
       className={cn(
         "fixed z-[9999] px-2 py-1 text-xs font-medium whitespace-nowrap",
         "bg-popover text-popover-foreground",

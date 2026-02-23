@@ -13,6 +13,7 @@ export interface VersionInfo {
     versionIsNew?: boolean;
     versionNewLink?: string;
     versionNewName?: string;
+    versionNewChangelog?: string;
 }
 
 export function useVersion() {

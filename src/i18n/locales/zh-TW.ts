@@ -267,6 +267,7 @@ export default {
     "ui.system.serviceInfo": "服務資訊",
     "ui.system.versionInfo": "版本資訊",
     "ui.system.githubRepo": "GitHub 倉庫",
+    "ui.system.cnbMirror": "CNB 鏡像庫",
     "ui.system.currentVersion": "目前版本",
     "ui.system.checkUpdate": "檢查更新",
     "ui.system.checkNow": "立即檢查",
