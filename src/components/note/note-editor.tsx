@@ -81,8 +81,8 @@ export function NoteEditor({
     // 是否为新建笔记模式
     const isNewNote = !note;
 
-    // 记录初始 note id，用于判断是否需要重新加载
-    const initialNoteIdRef = useRef(note?.id);
+    // 记录上一次加载的笔记标识，用于判断是否需要重新加载
+    const lastNoteKeyRef = useRef<string>("");
 
     const loadNote = useCallback(() => {
         if (note) {
@@ -100,16 +100,14 @@ export function NoteEditor({
         }
     }, [note, vault, handleGetNote, isRecycle]);
 
-    // 当 note.id 变化时（首次进入或切换笔记）或从有笔记切换到新建笔记时加载
+    // 当 note 关键信息变化时进行加载
     useEffect(() => {
-        if (note?.id !== initialNoteIdRef.current) {
-            initialNoteIdRef.current = note?.id;
-            loadNote();
-        } else if (!note && initialNoteIdRef.current !== undefined) {
-            initialNoteIdRef.current = undefined;
+        const currentKey = note ? `${note.id}-${note.pathHash}-${note.path}` : "new-note";
+        if (currentKey !== lastNoteKeyRef.current) {
+            lastNoteKeyRef.current = currentKey;
             loadNote();
         }
-    }, [note?.id, loadNote, note]);
+    }, [note, loadNote]);
 
     // 清理定时器
     useEffect(() => {
@@ -308,7 +306,7 @@ export function NoteEditor({
                     {folder && (
                         <div className="hidden sm:flex items-center gap-2 shrink-0">
                             <Folder className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-muted-foreground truncate max-w-[150px]">{folder}</span>
+                            <span className="text-muted-foreground truncate max-w-37.5">{folder}</span>
                             <span className="text-muted-foreground">/</span>
                         </div>
                     )}
@@ -340,7 +338,7 @@ export function NoteEditor({
                     {folder && (
                         <div className="hidden sm:flex items-center gap-2 shrink-0">
                             <Folder className="h-4 w-4 text-muted-foreground" />
-                            <span className="text-muted-foreground truncate max-w-[150px]">{folder}</span>
+                            <span className="text-muted-foreground truncate max-w-37.5">{folder}</span>
                             <span className="text-muted-foreground">/</span>
                         </div>
                     )}
