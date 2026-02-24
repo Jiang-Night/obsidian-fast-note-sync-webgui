@@ -1,10 +1,12 @@
-import i18n from "i18next";
+import i18n, { ensureResourceLoaded } from "./translations";
 
 
 // 切换语言
-export const changeLang = (lang: string) => {
+export const changeLang = async (lang: string) => {
   localStorage.setItem("lang", lang)
-  i18n.changeLanguage(lang) // 切换语言
+  // 先把资源预加载好
+  await ensureResourceLoaded(lang);
+  await i18n.changeLanguage(lang) // 切换语言
 }
 
 // 获取语言
@@ -17,5 +19,5 @@ export function getBrowserLang(): string {
   }
   let to = lang?.toString()
 
-  return to ? to: "en"
+  return to ? to : "en"
 }
