@@ -97,8 +97,8 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                     </div>
                 )}
 
-                {/* S3 区域 */}
-                {storageType === "s3" && (
+                {/* 区域 (S3 和 MinIO) */}
+                {(storageType === "s3" || storageType === "minio") && (
                     <div className="space-y-1.5">
                         <Label htmlFor="region" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.region")}</Label>
                         <Input id="region" autoComplete="off" className="bg-background border-input" {...register("region")} />
