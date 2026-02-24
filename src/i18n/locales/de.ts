@@ -434,7 +434,7 @@ export default {
     "ui.validation.git.branchRequired": "Bitte Branch-Namen eingeben",
     "ui.validation.git.delayMin": "Verzögerung darf nicht negativ sein",
     "ui.validation.git.retentionDaysMin": "Aufbewahrungstage müssen ≥ -1 sein",
-    "ui.settings.softDeleteRetentionTimeDesc": "Aufbewahrungszeit nach Löschen (z.B. 30d, 24h), 0 = kein autom. Löschen. Zu kurz verhindert Sync bei Offline-Geräten. Standard: 7d",
+    "ui.validation.storage.typeRequired": "Bitte Speichertyp auswählen",
     "ui.validation.storage.accessUrlPrefixRequired": "Zugriffsadressen-Präfix darf nicht leer sein",
     "ui.validation.vault.nameRequired": "Vault-Name darf nicht leer sein",
 
