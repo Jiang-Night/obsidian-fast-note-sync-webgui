@@ -92,7 +92,8 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {storageType === "oss" && (
                     <div className="space-y-1.5">
                         <Label htmlFor="endpoint" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.endpoint")}</Label>
-                        <Input id="endpoint" autoComplete="off" className="bg-background border-input" {...register("endpoint")} />
+                        <Input id="endpoint" autoComplete="off" placeholder={t("ui.storage.placeholder.endpoint.oss")} className="bg-background border-input" {...register("endpoint")} />
+                        <p className="text-[11px] text-muted-foreground ml-1">{t("ui.storage.help.endpoint.oss")}</p>
                         {errors.endpoint && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.endpoint.message}</p>}
                     </div>
                 )}
@@ -101,7 +102,8 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {(storageType === "s3" || storageType === "minio") && (
                     <div className="space-y-1.5">
                         <Label htmlFor="region" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.region")}</Label>
-                        <Input id="region" autoComplete="off" className="bg-background border-input" {...register("region")} />
+                        <Input id="region" autoComplete="off" placeholder={t("ui.storage.placeholder.region")} className="bg-background border-input" {...register("region")} />
+                        <p className="text-[11px] text-muted-foreground ml-1">{t("ui.storage.help.region")}</p>
                         {errors.region && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.region.message}</p>}
                     </div>
                 )}
@@ -110,7 +112,8 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {storageType === "r2" && (
                     <div className="space-y-1.5">
                         <Label htmlFor="accountId" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.accountId")}</Label>
-                        <Input id="accountId" autoComplete="off" className="bg-background border-input" {...register("accountId")} />
+                        <Input id="accountId" autoComplete="off" placeholder={t("ui.storage.placeholder.accountId")} className="bg-background border-input" {...register("accountId")} />
+                        <p className="text-[11px] text-muted-foreground ml-1">{t("ui.storage.help.accountId")}</p>
                         {errors.accountId && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.accountId.message}</p>}
                     </div>
                 )}
@@ -119,7 +122,8 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {storageType === "webdav" && (
                     <div className="space-y-1.5">
                         <Label htmlFor="endpoint" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.webdavUrl")}</Label>
-                        <Input id="endpoint" autoComplete="off" className="bg-background border-input" {...register("endpoint")} />
+                        <Input id="endpoint" autoComplete="off" placeholder={t("ui.storage.placeholder.webdavUrl")} className="bg-background border-input" {...register("endpoint")} />
+                        <p className="text-[11px] text-muted-foreground ml-1">{t("ui.storage.help.webdavUrl")}</p>
                         {errors.endpoint && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.endpoint.message}</p>}
                     </div>
                 )}
@@ -128,7 +132,8 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {storageType === "webdav" && (
                     <div className="space-y-1.5">
                         <Label htmlFor="user" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.webdavUser")}</Label>
-                        <Input id="user" autoComplete="off" className="bg-background border-input" {...register("user")} />
+                        <Input id="user" autoComplete="off" placeholder={t("ui.storage.placeholder.webdavUser")} className="bg-background border-input" {...register("user")} />
+                        <p className="text-[11px] text-muted-foreground ml-1">{t("ui.storage.help.webdavUser")}</p>
                         {errors.user && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.user.message}</p>}
                     </div>
                 )}
@@ -137,7 +142,8 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {storageType === "webdav" && (
                     <div className="space-y-1.5">
                         <Label htmlFor="password" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.webdavPassword")}</Label>
-                        <Input id="password" type="text" className="bg-background border-input no-password-prompt" {...register("password")} />
+                        <Input id="password" type="text" placeholder={t("ui.storage.placeholder.webdavPassword")} className="bg-background border-input no-password-prompt" {...register("password")} />
+                        <p className="text-[11px] text-muted-foreground ml-1">{t("ui.storage.help.webdavPassword")}</p>
                         {errors.password && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.password.message}</p>}
                     </div>
                 )}
@@ -146,7 +152,8 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {storageType === "minio" && (
                     <div className="space-y-1.5">
                         <Label htmlFor="endpoint" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.endpoint")}</Label>
-                        <Input id="endpoint" autoComplete="off" className="bg-background border-input" {...register("endpoint")} />
+                        <Input id="endpoint" autoComplete="off" placeholder={t("ui.storage.placeholder.endpoint.minio")} className="bg-background border-input" {...register("endpoint")} />
+                        <p className="text-[11px] text-muted-foreground ml-1">{t("ui.storage.help.endpoint.minio")}</p>
                         {errors.endpoint && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.endpoint.message}</p>}
                     </div>
                 )}
@@ -155,7 +162,7 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {storageType !== "localfs" && storageType !== "webdav" && storageType !== undefined && (
                     <div className="space-y-1.5">
                         <Label htmlFor="bucketName" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.bucketName")}</Label>
-                        <Input id="bucketName" autoComplete="off" className="bg-background border-input" {...register("bucketName")} />
+                        <Input id="bucketName" autoComplete="off" placeholder={t("ui.storage.placeholder.bucketName")} className="bg-background border-input" {...register("bucketName")} />
                         {errors.bucketName && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.bucketName.message}</p>}
                     </div>
                 )}
@@ -165,7 +172,7 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {storageType !== "localfs" && storageType !== "webdav" && (
                     <div className="space-y-1.5">
                         <Label htmlFor="accessKeyId" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.accessKeyId")}</Label>
-                        <Input id="accessKeyId" autoComplete="off" className="bg-background border-input" {...register("accessKeyId")} />
+                        <Input id="accessKeyId" autoComplete="off" placeholder={t("ui.storage.placeholder.accessKeyId")} className="bg-background border-input" {...register("accessKeyId")} />
                         {errors.accessKeyId && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.accessKeyId.message}</p>}
                     </div>
                 )}
@@ -174,7 +181,7 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {storageType !== "localfs" && storageType !== "webdav" && (
                     <div className="space-y-1.5">
                         <Label htmlFor="accessKeySecret" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.accessKeySecret")}</Label>
-                        <Input id="accessKeySecret" type="text" className="bg-background border-input no-password-prompt" {...register("accessKeySecret")} />
+                        <Input id="accessKeySecret" type="text" placeholder={t("ui.storage.placeholder.accessKeySecret")} className="bg-background border-input no-password-prompt" {...register("accessKeySecret")} />
                         {errors.accessKeySecret && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.accessKeySecret.message}</p>}
                     </div>
                 )}
@@ -182,7 +189,8 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {/* 自定义路径 (所有类型) */}
                 <div className="space-y-1.5">
                     <Label htmlFor="customPath" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.customPath")}</Label>
-                    <Input id="customPath" autoComplete="off" className="bg-background border-input" {...register("customPath")} />
+                    <Input id="customPath" autoComplete="off" placeholder={t("ui.storage.placeholder.customPath")} className="bg-background border-input" {...register("customPath")} />
+                    <p className="text-[11px] text-muted-foreground ml-1">{t("ui.storage.help.customPath")}</p>
                     {errors.customPath && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.customPath.message}</p>}
                 </div>
 
@@ -190,7 +198,8 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                 {/* 访问 URL 前缀 */}
                 <div className="space-y-1.5">
                     <Label htmlFor="accessUrlPrefix" className="text-xs font-semibold text-muted-foreground ml-1">{t("ui.storage.accessUrlPrefix")}</Label>
-                    <Input id="accessUrlPrefix" autoComplete="off" className="bg-background border-input" {...register("accessUrlPrefix")} />
+                    <Input id="accessUrlPrefix" autoComplete="off" placeholder={t("ui.storage.placeholder.accessUrlPrefix")} className="bg-background border-input" {...register("accessUrlPrefix")} />
+                    <p className="text-[11px] text-muted-foreground ml-1">{t("ui.storage.help.accessUrlPrefix")}</p>
                     {errors.accessUrlPrefix && <p className="text-[11px] text-destructive mt-1 ml-1">{errors.accessUrlPrefix.message}</p>}
                 </div>
             </div>
