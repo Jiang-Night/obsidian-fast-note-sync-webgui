@@ -6,6 +6,7 @@ import { useBackupHandle } from "@/components/api-handle/backup-handle";
 import { StorageConfig, StorageTypeValue } from "@/lib/types/storage";
 import { StorageForm } from "@/components/layout/storage-form";
 import { BackupForm } from "@/components/layout/backup-form";
+import { mapError } from "@/lib/utils/error-mapper";
 import { BackupConfig } from "@/lib/types/backup";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -240,6 +241,14 @@ export function SyncBackup() {
                                                 </span>
                                             </div>
                                         </div>
+                                        {config.lastStatus === 3 && config.lastMessage && (() => {
+                                            const errorKey = mapError(config.lastMessage);
+                                            return (
+                                                <div className="text-[10px] text-destructive/80 truncate" title={config.lastMessage}>
+                                                    {errorKey ? t(errorKey) : config.lastMessage}
+                                                </div>
+                                            );
+                                        })()}
                                     </div>
                                 </div>
                             ))

@@ -1,6 +1,7 @@
 import { useConfirmDialog } from "@/components/context/confirm-dialog-context";
 import { addCacheBuster } from "@/lib/utils/cache-buster";
 import { StorageConfig } from "@/lib/types/storage";
+import { toast } from "@/components/common/Toast";
 import { useTranslation } from "react-i18next";
 import { getBrowserLang } from "@/i18n/utils";
 import { useCallback } from "react";
@@ -144,10 +145,51 @@ export function useStorageHandle() {
         }
     }
 
+    /**
+     * 验证存储连接
+     */
+    const handleStorageValidate = useCallback(async (params: Partial<StorageConfig>, callback: () => void) => {
+        try {
+            const formData = {
+                ...params,
+                isEnabled: params.isEnabled ? 1 : 0,
+                accessUrlPrefix: params.accessUrlPrefix || "http://placeholder",
+            }
+
+            const response = await fetch(addCacheBuster(env.API_URL + "/api/storage/validate"), {
+                method: "POST",
+                body: JSON.stringify(formData),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`,
+                    Domain: window.location.origin,
+                    Lang: getBrowserLang(),
+                },
+            })
+
+            if (!response.ok) {
+                throw new Error(t("api.storage.validate.error"))
+            }
+
+            const res = await response.json()
+            if (res.code > 0 && res.code <= 200) {
+                toast.success(t("api.storage.validate.success"))
+                callback()
+            } else {
+                const detail = res.details || res.message || ""
+                toast.error(detail ? `${t("api.storage.validate.error")}: ${detail}` : t("api.storage.validate.error"))
+            }
+        } catch (error) {
+            console.error("StorageValidate error:", error)
+            toast.error(error instanceof Error ? error.message : t("api.storage.validate.error"))
+        }
+    }, [token, t])
+
     return {
         handleStorageList,
         handleStorageDelete,
         handleStorageUpdate,
         handleStorageTypes,
+        handleStorageValidate,
     }
 }
