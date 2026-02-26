@@ -9,6 +9,7 @@ export interface UpdateCheckResult {
     latestVersion: string | null;
     releaseUrl: string | null;
     releaseNotes: string | null;
+    releaseNotesContent: string | null;
     publishedAt: string | null;
 }
 
@@ -54,6 +55,7 @@ export function useUpdateCheck() {
                 latestVersion: (release.versionIsNew ? release.versionNewName : release.version) || release.gitTag,
                 releaseUrl: release.versionNewLink,
                 releaseNotes: release.versionNewChangelog,
+                releaseNotesContent: release.versionNewChangelogContent,
                 publishedAt: release.buildTime,
             };
 

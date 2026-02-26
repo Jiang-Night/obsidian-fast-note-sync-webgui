@@ -281,6 +281,12 @@ export default {
     "ui.system.newVersionAvailable": "Nouvelle version détectée",
     "ui.system.alreadyLatest": "Déjà à la dernière version",
     "ui.system.viewRelease": "Voir la page de sortie",
+    "ui.system.upgradeNow": "Upgrade Now",
+    "ui.system.upgrading": "Upgrading...",
+    "ui.system.upgradeSuccess": "Upgrade triggered, page will refresh shortly",
+    "ui.system.upgradeFailed": "Failed to trigger upgrade",
+    "ui.system.changelog": "Changelog",
+    "ui.system.viewChangelog": "View Changelog",
     "ui.system.getVersionError": "Échec de l'obtention des informations de version",
     "ui.system.getWebGuiConfigError": "Échec de l'obtention de la configuration WebGui :",
     "ui.system.serverSystemInfo": "Informations sur le serveur",
@@ -479,5 +485,5 @@ export default {
     "ui.support.sortTime": "Par temps",
     "ui.support.sort": "Trier par",
     "ui.support.buyMeACoffee": "M'offrir un café",
-    "ui.support.wechatReward": "Récompense WeChat",
+    "ui.support.wechatReward": "Récompense WeChat"
 };

@@ -135,7 +135,7 @@ export function SystemSettings({ onBack, isDashboard = false }: { onBack?: () =>
             {/* 左列 */}
             <div className="flex flex-col gap-4">
                 {/* 版本信息 */}
-                <VersionOverview />
+                <VersionOverview showUpgrade={!isDashboard} />
 
                 {/* 服务器系统信息 */}
                 {!isDashboard && <Overview />}

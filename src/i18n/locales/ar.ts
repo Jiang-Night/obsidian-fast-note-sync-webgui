@@ -281,6 +281,12 @@ export default {
     "ui.system.newVersionAvailable": "تم اكتشاف إصدار جديد",
     "ui.system.alreadyLatest": "أنت تستخدم أحدث إصدار بالفعل",
     "ui.system.viewRelease": "عرض صفحة الإصدارات",
+    "ui.system.upgradeNow": "Upgrade Now",
+    "ui.system.upgrading": "Upgrading...",
+    "ui.system.upgradeSuccess": "Upgrade triggered, page will refresh shortly",
+    "ui.system.upgradeFailed": "Failed to trigger upgrade",
+    "ui.system.changelog": "Changelog",
+    "ui.system.viewChangelog": "View Changelog",
     "ui.system.getVersionError": "فشل في جلب معلومات الإصدار",
     "ui.system.getWebGuiConfigError": "فشل في جلب تكوين WebGui:",
     "ui.system.serverSystemInfo": "معلومات الخادم",
@@ -479,5 +485,5 @@ export default {
     "ui.support.sortTime": "حسب الوقت",
     "ui.support.sort": "فرز حسب",
     "ui.support.buyMeACoffee": "اشترِ كوب قهوة للمؤلف",
-    "ui.support.wechatReward": "تبرع عبر WeChat",
+    "ui.support.wechatReward": "تبرع عبر WeChat"
 };

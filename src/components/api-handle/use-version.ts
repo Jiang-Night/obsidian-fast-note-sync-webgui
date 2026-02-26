@@ -14,6 +14,7 @@ export interface VersionInfo {
     versionNewLink?: string;
     versionNewName?: string;
     versionNewChangelog?: string;
+    versionNewChangelogContent?: string;
 }
 
 export function useVersion() {
