@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "Jalur subdirektori penyimpanan file, tanpa garis miring di awal/akhir",
     "ui.storage.help.accessUrlPrefix": "Awalan URL untuk membuat tautan akses file, hanya untuk tampilan",
     "ui.storage.confirmDelete": "Apakah Anda yakin ingin menghapus konfigurasi penyimpanan ini?",
+    "ui.storage.validate.title": "Uji Koneksi",
+    "ui.storage.validate.loading": "Menguji...",
 
     // --- ui.backup ---
     "ui.backup.management": "Manajemen Tugas",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "Gagal menghapus konfigurasi penyimpanan",
     "api.storage.save.error": "Gagal menyimpan konfigurasi penyimpanan",
     "api.storage.types.error": "Gagal mendapatkan jenis penyimpanan",
+    "api.storage.validate.success": "Uji koneksi penyimpanan berhasil",
+    "api.storage.validate.error": "Uji koneksi penyimpanan gagal",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "Autentikasi WebDAV gagal. Silakan periksa nama pengguna dan kata sandi",

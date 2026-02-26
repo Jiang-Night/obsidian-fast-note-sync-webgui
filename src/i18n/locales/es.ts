@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "Ruta del subdirectorio de almacenamiento, sin barras al inicio/final",
     "ui.storage.help.accessUrlPrefix": "Prefijo de URL para generar enlaces de acceso a archivos, solo visualizacion",
     "ui.storage.confirmDelete": "¿Está seguro de que desea eliminar esta configuración de almacenamiento?",
+    "ui.storage.validate.title": "Probar conexión",
+    "ui.storage.validate.loading": "Probando...",
 
     // --- ui.backup ---
     "ui.backup.management": "Gestión de tareas",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "Error al eliminar la configuración de almacenamiento",
     "api.storage.save.error": "Error al guardar la configuración de almacenamiento",
     "api.storage.types.error": "Error al obtener los tipos de almacenamiento",
+    "api.storage.validate.success": "Prueba de conexión de almacenamiento exitosa",
+    "api.storage.validate.error": "Prueba de conexión de almacenamiento fallida",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "Error de autenticación WebDAV. Verifique el nombre de usuario y la contraseña",

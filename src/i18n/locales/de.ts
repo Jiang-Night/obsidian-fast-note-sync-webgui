@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "Unterverzeichnispfad fuer Dateispeicherung, ohne fuehrende/abschliessende Schraegstriche",
     "ui.storage.help.accessUrlPrefix": "URL-Praefix zur Generierung von Dateizugriffslinks, nur zur Anzeige",
     "ui.storage.confirmDelete": "Möchten Sie diese Speicherkonfiguration wirklich löschen?",
+    "ui.storage.validate.title": "Verbindung testen",
+    "ui.storage.validate.loading": "Teste...",
 
     // --- ui.backup ---
     "ui.backup.management": "Aufgabenverwaltung",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "Löschen der Speicherkonfiguration fehlgeschlagen",
     "api.storage.save.error": "Speichern der Speicherkonfiguration fehlgeschlagen",
     "api.storage.types.error": "Speichertypen konnten nicht abgerufen werden",
+    "api.storage.validate.success": "Speicherverbindungstest erfolgreich",
+    "api.storage.validate.error": "Speicherverbindungstest fehlgeschlagen",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "WebDAV-Authentifizierung fehlgeschlagen. Bitte Benutzername und Passwort prüfen",

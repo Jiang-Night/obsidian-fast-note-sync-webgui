@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "檔案存放的子目錄路徑，無需首尾斜線",
     "ui.storage.help.accessUrlPrefix": "用於產生檔案存取連結的前綴位址，僅展示用途",
     "ui.storage.confirmDelete": "確定要刪除這個存儲配置嗎？",
+    "ui.storage.validate.title": "æ¸¬è©¦é£çµ",
+    "ui.storage.validate.loading": "æ¸¬è©¦ä¸­...",
 
     // --- ui.backup ---
     "ui.backup.management": "任務管理",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "刪除存儲配置失敗",
     "api.storage.save.error": "保存存儲配置失敗",
     "api.storage.types.error": "獲取存儲類型失敗",
+    "api.storage.validate.success": "å­å²é£æ¥æ¸¬è©¦æå",
+    "api.storage.validate.error": "å­å²é£æ¥æ¸¬è©¦å¤±æ",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "WebDAV 認證失敗，請檢查使用者名稱和密碼",

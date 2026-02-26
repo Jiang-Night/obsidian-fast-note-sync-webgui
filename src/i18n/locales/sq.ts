@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "Rruga e nendrejtorise per ruajtjen e skedareve, pa vija te pjerreta ne fillim/fund",
     "ui.storage.help.accessUrlPrefix": "Prefiksi URL per gjenerimin e lidhjeve te aksesit te skedareve, vetem per shfaqje",
     "ui.storage.confirmDelete": "A jeni të sigurt që dëshironi të fshini këtë konfigurim rregullimi?",
+    "ui.storage.validate.title": "Testo lidhjen",
+    "ui.storage.validate.loading": "Duke testuar...",
 
     // --- ui.backup ---
     "ui.backup.management": "Menaxhimi i detyrave",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "Fshirja e konfigurimit të rregullimit dështoi",
     "api.storage.save.error": "Ruajtja e konfigurimit të rregullimit dështoi",
     "api.storage.types.error": "Marrja e llojeve të rregullimit dështoi",
+    "api.storage.validate.success": "Testi i lidhjes sÃ« ruajtjes me sukses",
+    "api.storage.validate.error": "Testi i lidhjes sÃ« ruajtjes dÃ«shtoi",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "Autentifikimi WebDAV dështoi. Kontrolloni emrin e përdoruesit dhe fjalëkalimin",

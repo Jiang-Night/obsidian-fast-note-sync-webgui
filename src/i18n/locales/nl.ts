@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "Submap voor bestandsopslag, zonder voor-/achterliggende schuine strepen",
     "ui.storage.help.accessUrlPrefix": "URL-prefix voor het genereren van bestandstoegangslinks, alleen voor weergave",
     "ui.storage.confirmDelete": "Weet u zeker dat u deze opslagconfiguratie wilt verwijderen?",
+    "ui.storage.validate.title": "Verbinding testen",
+    "ui.storage.validate.loading": "Testen...",
 
     // --- ui.backup ---
     "ui.backup.management": "Taakbeheer",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "Verwijderen van opslagconfiguratie mislukt",
     "api.storage.save.error": "Opslaan van opslagconfiguratie mislukt",
     "api.storage.types.error": "Ophalen opslagtypes mislukt",
+    "api.storage.validate.success": "Opslagverbindingstest geslaagd",
+    "api.storage.validate.error": "Opslagverbindingstest mislukt",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "WebDAV-authenticatie mislukt. Controleer gebruikersnaam en wachtwoord",

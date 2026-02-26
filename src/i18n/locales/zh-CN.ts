@@ -360,6 +360,8 @@ export default {
     "ui.storage.help.customPath": "文件存放的子目录路径，无需首尾斜杠",
     "ui.storage.help.accessUrlPrefix": "用于生成文件访问链接的前缀地址，仅展示用途",
     "ui.storage.confirmDelete": "确定要删除这个存储配置吗？",
+    "ui.storage.validate.title": "测试链接",
+    "ui.storage.validate.loading": "测试中...",
 
     // --- ui.backup ---
     "ui.backup.management": "任务管理",
@@ -495,6 +497,8 @@ export default {
     "api.storage.delete.error": "删除存储配置失败",
     "api.storage.save.error": "保存存储配置失败",
     "api.storage.types.error": "获取存储类型失败",
+    "api.storage.validate.success": "存储连接测试成功",
+    "api.storage.validate.error": "存储连接测试失败",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "WebDAV 认证失败，请检查用户名和密码",

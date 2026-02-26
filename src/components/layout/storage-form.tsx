@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useMemo, useState } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
+import { ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -31,11 +32,12 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
 
     const [storageType, setStorageType] = useState<StorageConfig["type"] | undefined>(config?.type)
 
-    const { handleStorageUpdate } = useStorageHandle()
+    const { handleStorageUpdate, handleStorageValidate } = useStorageHandle()
+    const [isValidating, setIsValidating] = useState(false)
 
     const schema = useMemo(() => createStorageSchema(t), [t])
 
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm<StorageConfig>({
+    const { register, handleSubmit, formState: { errors, isSubmitting }, setValue, getValues } = useForm<StorageConfig>({
         resolver: zodResolver(schema),
         defaultValues: config || { isEnabled: true },
     })
@@ -217,13 +219,33 @@ export function StorageForm({ config, types, onSubmit, onCancel }: StorageFormPr
                     <Label htmlFor="isEnabled" className="text-sm font-medium text-foreground">{t("ui.common.isEnabled")}</Label>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 flex-wrap justify-end">
                     {onCancel && (
-                        <Button type="button" variant="ghost" onClick={onCancel}>
+                        <Button type="button" variant="ghost" onClick={onCancel} disabled={isSubmitting || isValidating}>
                             {t("ui.common.cancel")}
                         </Button>
                     )}
-                    <Button type="submit" size="sm" className="px-8 rounded-lg shadow-sm">
+                    <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        className="px-6 rounded-lg"
+                        disabled={isSubmitting || isValidating || !storageType}
+                        onClick={async () => {
+                            const values = getValues()
+                            if (!values.type) return
+                            setIsValidating(true)
+                            try {
+                                await handleStorageValidate(values, () => { })
+                            } finally {
+                                setIsValidating(false)
+                            }
+                        }}
+                    >
+                        <ShieldCheck className="h-4 w-4 mr-1.5" />
+                        {isValidating ? t("ui.storage.validate.loading") : t("ui.storage.validate.title")}
+                    </Button>
+                    <Button type="submit" size="sm" className="px-8 rounded-lg shadow-sm" disabled={isSubmitting || isValidating}>
                         {config ? t("ui.common.save") : t("ui.common.add")}
                     </Button>
                 </div>

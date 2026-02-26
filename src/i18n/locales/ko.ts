@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "파일 저장을 위한 하위 디렉터리 경로, 앞뒤 슬래시 불필요",
     "ui.storage.help.accessUrlPrefix": "파일 액세스 링크 생성을 위한 접두사 주소, 표시 전용",
     "ui.storage.confirmDelete": "이 저장소 설정을 삭제하시겠습니까?",
+    "ui.storage.validate.title": "연결 테스트",
+    "ui.storage.validate.loading": "테스트 중...",
 
     // --- ui.backup ---
     "ui.backup.management": "작업 관리",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "저장소 설정 삭제 실패",
     "api.storage.save.error": "저장소 설정 저장 실패",
     "api.storage.types.error": "저장소 유형 가져오기 실패",
+    "api.storage.validate.success": "스토리지 연결 테스트 성공",
+    "api.storage.validate.error": "스토리지 연결 테스트 실패",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "WebDAV 인증 실패. 사용자 이름과 비밀번호를 확인하세요",

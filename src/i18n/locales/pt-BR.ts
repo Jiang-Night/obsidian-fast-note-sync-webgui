@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "Caminho do subdiretorio de armazenamento, sem barras no inicio/fim",
     "ui.storage.help.accessUrlPrefix": "Prefixo de URL para gerar links de acesso a arquivos, apenas para visualizacao",
     "ui.storage.confirmDelete": "Tem certeza que deseja excluir esta configuração de armazenamento?",
+    "ui.storage.validate.title": "Testar conexão",
+    "ui.storage.validate.loading": "Testando...",
 
     // --- ui.backup ---
     "ui.backup.management": "Gestão de Tarefas",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "Falha ao excluir configuração de armazenamento",
     "api.storage.save.error": "Falha ao salvar configuração de armazenamento",
     "api.storage.types.error": "Falha ao obter tipos de armazenamento",
+    "api.storage.validate.success": "Teste de conexão de armazenamento bem-sucedido",
+    "api.storage.validate.error": "Teste de conexão de armazenamento falhou",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "Falha na autenticação WebDAV. Verifique o nome de usuário e a senha",

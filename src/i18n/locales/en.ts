@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "Sub-directory path for file storage, no leading/trailing slashes",
     "ui.storage.help.accessUrlPrefix": "URL prefix for generating file access links, display only",
     "ui.storage.confirmDelete": "Are you sure you want to delete this storage config?",
+    "ui.storage.validate.title": "Test Connection",
+    "ui.storage.validate.loading": "Testing...",
 
     // --- ui.backup ---
     "ui.backup.management": "Task Management",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "Failed to delete storage config",
     "api.storage.save.error": "Failed to save storage config",
     "api.storage.types.error": "Failed to get storage types",
+    "api.storage.validate.success": "Storage connection test successful",
+    "api.storage.validate.error": "Storage connection test failed",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "WebDAV authentication failed. Please check username and password",

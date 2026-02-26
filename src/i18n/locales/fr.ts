@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "Chemin du sous-repertoire de stockage, sans barres obliques en debut/fin",
     "ui.storage.help.accessUrlPrefix": "Prefixe d'URL pour generer les liens d'acces aux fichiers, affichage uniquement",
     "ui.storage.confirmDelete": "Êtes-vous sûr de vouloir supprimer cette configuration de stockage ?",
+    "ui.storage.validate.title": "Tester la connexion",
+    "ui.storage.validate.loading": "Test en cours...",
 
     // --- ui.backup ---
     "ui.backup.management": "Gestion des tâches",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "Échec de la suppression de la configuration de stockage",
     "api.storage.save.error": "Échec de l'enregistrement de la configuration de stockage",
     "api.storage.types.error": "Échec d'obtention des types de stockage",
+    "api.storage.validate.success": "Test de connexion au stockage rÃ©ussi",
+    "api.storage.validate.error": "Ãchec du test de connexion au stockage",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "Échec de l'authentification WebDAV. Veuillez vérifier le nom d'utilisateur et le mot de passe",

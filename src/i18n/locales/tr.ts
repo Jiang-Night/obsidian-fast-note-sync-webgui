@@ -359,6 +359,8 @@ export default {
     "ui.storage.help.customPath": "Dosya depolama alt dizin yolu, basta/sonda egikcizgi olmadan",
     "ui.storage.help.accessUrlPrefix": "Dosya erisim baglantilari olusturmak icin URL oneki, yalnizca goruntuleme",
     "ui.storage.confirmDelete": "Bu depolama yapılandırmasını silmek istediğinizden emin misiniz?",
+    "ui.storage.validate.title": "BaÄlantÄ± Testi",
+    "ui.storage.validate.loading": "Test ediliyor...",
 
     // --- ui.backup ---
     "ui.backup.management": "Görev Yönetimi",
@@ -494,6 +496,8 @@ export default {
     "api.storage.delete.error": "Depolama yapılandırması silinemedi",
     "api.storage.save.error": "Depolama yapılandırması kaydedilemedi",
     "api.storage.types.error": "Depolama türleri alınamadı",
+    "api.storage.validate.success": "Depolama baÄlantÄ± testi baÅarÄ±lÄ±",
+    "api.storage.validate.error": "Depolama baÄlantÄ± testi baÅarÄ±sÄ±z",
 
     // --- error.storage / error.backup / error.network (error-mapper) ---
     "error.storage.webdav.unauthorized": "WebDAV kimlik doğrulaması başarısız. Kullanıcı adı ve şifreyi kontrol edin",
