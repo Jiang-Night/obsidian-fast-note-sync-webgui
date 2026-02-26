@@ -349,7 +349,7 @@ export default {
     "ui.storage.placeholder.webdavPassword": "",
     "ui.storage.placeholder.customPath": "data/obsidian",
     "ui.storage.placeholder.accessUrlPrefix": "http://192.168.1.100:5244",
-    // --- ui.storage help text ---
+    // --- ≈ ---
     "ui.storage.help.endpoint.oss": "阿里云 OSS 的 Endpoint 地址，不含 Bucket 名称",
     "ui.storage.help.endpoint.minio": "MinIO 服务地址，需包含协议前缀和端口",
     "ui.storage.help.region": "S3 存储桶所在区域",
@@ -411,6 +411,7 @@ export default {
     "ui.backup.history.syncStats": "同步统计",
     "ui.backup.history.backupFile": "备份文件",
     "ui.backup.history.message": "消息",
+    "ui.backup.history.copyError": "复制错误信息",
     "ui.backup.history.noData": "暂无任务记录",
 
     // --- ui.git ---
@@ -494,6 +495,33 @@ export default {
     "api.storage.delete.error": "删除存储配置失败",
     "api.storage.save.error": "保存存储配置失败",
     "api.storage.types.error": "获取存储类型失败",
+
+    // --- error.storage / error.backup / error.network (error-mapper) ---
+    "error.storage.webdav.unauthorized": "WebDAV 认证失败，请检查用户名和密码",
+    "error.storage.webdav.forbidden": "WebDAV 权限不足，请检查账户写入权限",
+    "error.storage.webdav.notFound": "WebDAV 路径不存在，请检查自定义路径配置",
+    "error.storage.webdav.methodNotAllowed": "WebDAV 方法不被允许，请确认服务端已启用 WebDAV",
+    "error.storage.webdav.unreachable": "WebDAV 地址无法访问，请检查存储配置中的地址",
+    "error.storage.webdav.connectionRefused": "WebDAV 连接被拒绝，请确认服务是否运行",
+    "error.storage.webdav.timeout": "WebDAV 连接超时，请检查网络或服务状态",
+    "error.storage.webdav.generic": "WebDAV 操作失败，请检查存储配置",
+    "error.storage.s3.noSuchBucket": "S3 存储桶不存在，请检查桶名配置",
+    "error.storage.s3.accessDenied": "S3 访问被拒绝，请检查 Access Key 权限",
+    "error.storage.s3.unreachable": "S3 端点无法访问，请检查 Endpoint 地址",
+    "error.storage.s3.timeout": "S3 连接超时，请检查网络或端点配置",
+    "error.storage.oss.noSuchBucket": "OSS 存储桶不存在，请检查 Bucket 名称",
+    "error.storage.oss.accessDenied": "OSS 访问被拒绝，请检查 AccessKey 权限",
+    "error.storage.oss.unreachable": "OSS 端点无法访问，请检查 Endpoint 地址",
+    "error.storage.local.noPermission": "本地存储无写入权限",
+    "error.storage.local.createDirFailed": "本地存储目录创建失败",
+    "error.storage.local.permissionDenied": "本地存储权限被拒绝",
+    "error.backup.partialFailure": "部分文件同步失败，请查看详细错误信息",
+    "error.backup.uploadFailed": "备份文件上传失败",
+    "error.backup.openFileFailed": "备份文件打开失败",
+    "error.backup.vaultNotExist": "笔记仓库不存在，请检查配置",
+    "error.network.unreachable": "目标地址无法访问，请检查网络配置",
+    "error.network.connectionRefused": "连接被拒绝，请确认目标服务是否运行",
+    "error.network.timeout": "连接超时，请检查网络状态",
 
     // --- ui.support ---
     "ui.support.title": "支持该项目",

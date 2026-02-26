@@ -1,9 +1,11 @@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { ChevronLeft, ChevronRight, Loader2, Info, ExternalLink } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, Info, ExternalLink, Copy } from "lucide-react";
 import { useStorageHandle } from "@/components/api-handle/storage-handle";
 import { useBackupHandle } from "@/components/api-handle/backup-handle";
 import { BackupHistory, BackupType } from "@/lib/types/backup";
+import { mapError } from "@/lib/utils/error-mapper";
+import { toast } from "@/components/common/Toast";
 import { useEffect, useState, useCallback } from "react";
 import { StorageConfig } from "@/lib/types/storage";
 import { Button } from "@/components/ui/button";
@@ -156,8 +158,58 @@ export function BackupHistoryDialog({ configId, configType, open, onOpenChange }
                                                 <span className="text-muted-foreground">-</span>
                                             )}
                                         </TableCell>
-                                        <TableCell className="max-w-[200px] truncate opacity-70" title={item.message}>
-                                            {item.message || "-"}
+                                        <TableCell className="max-w-[250px]">
+                                            {(() => {
+                                                if (!item.message) return <span className="opacity-70">-</span>;
+                                                const errorKey = item.status === 3 ? mapError(item.message) : null;
+                                                if (errorKey) {
+                                                    return (
+                                                        <div className="flex items-center gap-1">
+                                                            <span className="truncate text-destructive/90" title={item.message}>
+                                                                {t(errorKey)}
+                                                            </span>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-5 w-5 shrink-0 text-muted-foreground hover:text-primary"
+                                                                onClick={() => {
+                                                                    navigator.clipboard.writeText(item.message!).then(
+                                                                        () => toast.success(t("ui.common.copied")),
+                                                                        () => toast.error(t("ui.common.error"))
+                                                                    );
+                                                                }}
+                                                                title={t("ui.backup.history.copyError")}
+                                                            >
+                                                                <Copy className="h-3 w-3" />
+                                                            </Button>
+                                                        </div>
+                                                    );
+                                                }
+                                                if (item.status === 3) {
+                                                    return (
+                                                        <div className="flex items-center gap-1">
+                                                            <span className="truncate opacity-70" title={item.message}>
+                                                                {item.message}
+                                                            </span>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-5 w-5 shrink-0 text-muted-foreground hover:text-primary"
+                                                                onClick={() => {
+                                                                    navigator.clipboard.writeText(item.message!).then(
+                                                                        () => toast.success(t("ui.common.copied")),
+                                                                        () => toast.error(t("ui.common.error"))
+                                                                    );
+                                                                }}
+                                                                title={t("ui.backup.history.copyError")}
+                                                            >
+                                                                <Copy className="h-3 w-3" />
+                                                            </Button>
+                                                        </div>
+                                                    );
+                                                }
+                                                return <span className="truncate opacity-70" title={item.message}>{item.message}</span>;
+                                            })()}
                                         </TableCell>
                                     </TableRow>
                                 ))

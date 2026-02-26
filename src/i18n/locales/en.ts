@@ -410,6 +410,7 @@ export default {
     "ui.backup.history.syncStats": "Sync Stats",
     "ui.backup.history.backupFile": "Backup File",
     "ui.backup.history.message": "Message",
+    "ui.backup.history.copyError": "Copy error message",
     "ui.backup.history.noData": "No task records yet",
 
     // --- ui.git ---
@@ -493,6 +494,33 @@ export default {
     "api.storage.delete.error": "Failed to delete storage config",
     "api.storage.save.error": "Failed to save storage config",
     "api.storage.types.error": "Failed to get storage types",
+
+    // --- error.storage / error.backup / error.network (error-mapper) ---
+    "error.storage.webdav.unauthorized": "WebDAV authentication failed. Please check username and password",
+    "error.storage.webdav.forbidden": "WebDAV permission denied. Please check account write permissions",
+    "error.storage.webdav.notFound": "WebDAV path not found. Please check the custom path configuration",
+    "error.storage.webdav.methodNotAllowed": "WebDAV method not allowed. Please verify WebDAV is enabled on the server",
+    "error.storage.webdav.unreachable": "WebDAV server unreachable. Please check the endpoint URL",
+    "error.storage.webdav.connectionRefused": "WebDAV connection refused. Please verify the service is running",
+    "error.storage.webdav.timeout": "WebDAV connection timed out. Please check network or service status",
+    "error.storage.webdav.generic": "WebDAV operation failed. Please check storage configuration",
+    "error.storage.s3.noSuchBucket": "S3 bucket does not exist. Please check the bucket name",
+    "error.storage.s3.accessDenied": "S3 access denied. Please check Access Key permissions",
+    "error.storage.s3.unreachable": "S3 endpoint unreachable. Please check the endpoint URL",
+    "error.storage.s3.timeout": "S3 connection timed out. Please check network or endpoint configuration",
+    "error.storage.oss.noSuchBucket": "OSS bucket does not exist. Please check the bucket name",
+    "error.storage.oss.accessDenied": "OSS access denied. Please check AccessKey permissions",
+    "error.storage.oss.unreachable": "OSS endpoint unreachable. Please check the endpoint URL",
+    "error.storage.local.noPermission": "Local storage: no write permission",
+    "error.storage.local.createDirFailed": "Local storage: failed to create directory",
+    "error.storage.local.permissionDenied": "Local storage: permission denied",
+    "error.backup.partialFailure": "Some files failed to sync. Check error details below",
+    "error.backup.uploadFailed": "Backup file upload failed",
+    "error.backup.openFileFailed": "Failed to open backup file",
+    "error.backup.vaultNotExist": "Note vault does not exist. Please check configuration",
+    "error.network.unreachable": "Target address unreachable. Please check network configuration",
+    "error.network.connectionRefused": "Connection refused. Please verify the target service is running",
+    "error.network.timeout": "Connection timed out. Please check network status",
 
     // --- ui.support ---
     "ui.support.title": "Support Project",
