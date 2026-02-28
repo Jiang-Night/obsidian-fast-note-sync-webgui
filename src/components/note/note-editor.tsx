@@ -10,11 +10,11 @@ import { Input } from "@/components/ui/input";
 import { hashCode } from "@/lib/utils/hash";
 import { format } from "date-fns";
 
-import type { VditorEditorRef } from "./vditor-editor";
+import type { MarkdownEditorRef } from "./markdown-editor";
 
 
 // 懒加载编辑器组件
-const VditorEditor = lazy(() => import("./vditor-editor").then(m => ({ default: m.VditorEditor })));
+const MarkdownEditor = lazy(() => import("./markdown-editor").then(m => ({ default: m.MarkdownEditor })));
 
 // 编辑器加载占位符
 const EditorLoading = () => (
@@ -59,7 +59,7 @@ export function NoteEditor({
     void _onToggleMaximize;
     const { t } = useTranslation();
     const { handleGetNote, handleSaveNote } = useNoteHandle();
-    const editorRef = useRef<VditorEditorRef>(null);
+    const editorRef = useRef<MarkdownEditorRef>(null);
     const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
 
@@ -467,7 +467,7 @@ export function NoteEditor({
                 ) : (
                     <div className="h-full overflow-visible rounded-xl border border-border bg-card">
                         <Suspense fallback={<EditorLoading />}>
-                            <VditorEditor
+                            <MarkdownEditor
                                 ref={editorRef}
                                 key={`${note?.id}-${isPreviewMode}`}
                                 value={content}
@@ -476,7 +476,7 @@ export function NoteEditor({
                                 placeholder={t("ui.note.noteContentPlaceholder")}
                                 vault={vault}
                                 fileLinks={originalNote?.fileLinks}
-                                initialMode={isPreviewMode ? "preview" : "sv"}
+                                initialMode={isPreviewMode ? "preview" : "edit"}
                             />
                         </Suspense>
                     </div>

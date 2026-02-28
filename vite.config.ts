@@ -26,10 +26,7 @@ export default defineConfig({
         manualChunks(id) {
           if (id.includes('node_modules')) {
             // 每一个分类拆分为独立文件，减小单个包体积
-            if (id.includes('vditor')) {
-              return 'vendor-vditor';
-            }
-            if (id.includes('lucide') || id.includes('react-icons')) {
+if (id.includes('lucide') || id.includes('react-icons')) {
               return 'vendor-icons';
             }
             if (id.includes('motion') || id.includes('framer-motion')) {

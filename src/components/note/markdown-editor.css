@@ -1,0 +1,83 @@
+/* CodeMirror 6 编辑器样式 */
+.cm-editor {
+  background-color: transparent !important;
+  font-family: inherit !important;
+}
+
+.cm-editor .cm-content {
+  font-family: inherit !important;
+  padding: 16px !important;
+}
+
+.cm-editor .cm-scroller {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease;
+}
+
+.cm-editor .cm-scroller:hover {
+  scrollbar-color: rgba(128, 128, 128, 0.3) transparent;
+}
+
+/* Webkit 浏览器滚动条 */
+.cm-editor .cm-scroller::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.cm-editor .cm-scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cm-editor .cm-scroller::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.cm-editor .cm-scroller:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.3);
+}
+
+.cm-editor .cm-scroller::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(128, 128, 128, 0.5);
+}
+
+/* 去除 CM6 默认边框和聚焦轮廓 */
+.cm-editor.cm-focused {
+  outline: none !important;
+}
+
+/* Markdown 预览区滚动条 */
+.markdown-preview {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s ease;
+}
+
+.markdown-preview:hover {
+  scrollbar-color: rgba(128, 128, 128, 0.3) transparent;
+}
+
+.markdown-preview::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.markdown-preview::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.markdown-preview::-webkit-scrollbar-thumb {
+  background-color: transparent;
+  border-radius: 3px;
+  transition: background-color 0.3s ease;
+}
+
+.markdown-preview:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.3);
+}
+
+.markdown-preview::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(128, 128, 128, 0.5);
+}
